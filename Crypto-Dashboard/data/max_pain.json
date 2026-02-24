@@ -1,0 +1,12 @@
+{
+  "BTC": {
+    "expiry": "—",
+    "max_pain": null,
+    "candidates": []
+  },
+  "ETH": {
+    "expiry": "—",
+    "max_pain": null,
+    "candidates": []
+  }
+}

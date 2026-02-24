@@ -1,0 +1,28 @@
+{
+  "BTC": {
+    "total_oi": null,
+    "oi_change_7d": null,
+    "put_call_ratio": null,
+    "call_oi": null,
+    "put_oi": null,
+    "atm_iv": null,
+    "iv_term": null,
+    "oi_concentration": null,
+    "nearest_expiry_share": null,
+    "spot_price": null,
+    "spot_source": "CryptoDataDownload"
+  },
+  "ETH": {
+    "total_oi": null,
+    "oi_change_7d": null,
+    "put_call_ratio": null,
+    "call_oi": null,
+    "put_oi": null,
+    "atm_iv": null,
+    "iv_term": null,
+    "oi_concentration": null,
+    "nearest_expiry_share": null,
+    "spot_price": null,
+    "spot_source": "CryptoDataDownload"
+  }
+}

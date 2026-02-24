@@ -1,0 +1,20 @@
+{
+  "BTC": [
+    { "date": "2026-02-18", "open_interest": 0 },
+    { "date": "2026-02-19", "open_interest": 0 },
+    { "date": "2026-02-20", "open_interest": 0 },
+    { "date": "2026-02-21", "open_interest": 0 },
+    { "date": "2026-02-22", "open_interest": 0 },
+    { "date": "2026-02-23", "open_interest": 0 },
+    { "date": "2026-02-24", "open_interest": 0 }
+  ],
+  "ETH": [
+    { "date": "2026-02-18", "open_interest": 0 },
+    { "date": "2026-02-19", "open_interest": 0 },
+    { "date": "2026-02-20", "open_interest": 0 },
+    { "date": "2026-02-21", "open_interest": 0 },
+    { "date": "2026-02-22", "open_interest": 0 },
+    { "date": "2026-02-23", "open_interest": 0 },
+    { "date": "2026-02-24", "open_interest": 0 }
+  ]
+}

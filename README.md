@@ -1,10 +1,13 @@
-# VVV Unstaking Queue Dashboard
+# Crypto Analytics Dashboard
 
-Static GitHub Pages dashboard that refreshes every 12 hours via GitHub Actions and Dune API.
+Static GitHub Pages dashboard for crypto options analytics. The main UI lives in `Crypto-Dashboard/` and refreshes via CryptoDataDownload API.
 
 ## Data
-- `data/daily.json`: daily initiated/unlocks/queue (30d)
-- `data/summary.json`: current queue vs averages
+- `Crypto-Dashboard/data/oi_history.json`: 7-day open interest history
+- `Crypto-Dashboard/data/max_pain.json`: max pain strike and candidates
+- `Crypto-Dashboard/data/options_snapshot.json`: options KPI snapshot
+- `Crypto-Dashboard/data/trader_focus.json`: short-term trader metrics
+- `Crypto-Dashboard/data/metadata.json`: refresh timestamp + sources
 
 ## Refresh
-GitHub Actions runs every 12 hours and overwrites the JSON files.
+GitHub Actions runs on schedule to update the JSON outputs.

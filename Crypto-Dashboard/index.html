@@ -1,0 +1,594 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crypto Options Pulse</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
+      --gradient-hover: linear-gradient(135deg, #ff5252 0%, #e91e7b 100%);
+      --accent-solid: #ff4d7d;
+      --black-deep: #000000;
+      --black-rich: #0a0a0b;
+      --black-elevated: #121214;
+      --gray-dark: #1a1a1e;
+      --gray-mid: #2a2a30;
+      --gray-muted: #6b6b76;
+      --gray-light: #9999a5;
+      --white-soft: #e8e8ed;
+      --white-pure: #ffffff;
+      --success: #00d26a;
+      --warning: #ffb800;
+      --info: #00b4d8;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 30px #ff4d7d30;
+      --glow-ring: 0 0 0 4px #ff4d7d20;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
+      color: var(--white-soft);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white-pure);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 700px;
+      color: var(--gray-light);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 24px 0 32px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      gap: 8px;
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      color: var(--gray-light);
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 200ms ease-out;
+      letter-spacing: 0.02em;
+    }
+
+    .toggle-btn.active {
+      background: var(--gradient-primary);
+      color: var(--white-pure);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .toggle-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--glow-ring);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid #ff4d7d40;
+      background: linear-gradient(135deg, #ff6b6b20 0%, #ff2d9220 100%);
+      color: var(--accent-solid);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .kpis {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .panel {
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .panel.glow {
+      border: 1px solid transparent;
+      background: linear-gradient(var(--black-rich), var(--black-rich)) padding-box,
+        var(--gradient-primary) border-box;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      margin-top: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .kpi-accent {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .chart-panel {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .chart-header {
+      padding: 24px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white-pure);
+    }
+
+    .chart-subtitle {
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .chart-wrap {
+      padding: 16px 24px 24px;
+    }
+
+    canvas { max-height: 320px; }
+
+    .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--black-elevated);
+      border: 1px solid var(--gray-dark);
+    }
+
+    .list-item span {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #1a1a1e;
+      color: var(--gray-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--black-elevated);
+      border-radius: 12px;
+      border: 1px solid var(--gray-dark);
+    }
+
+    .info-label {
+      color: var(--gray-light);
+      font-size: 13px;
+    }
+
+    .info-value {
+      font-weight: 700;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .footer {
+      margin-top: 32px;
+      color: var(--gray-muted);
+      font-size: 12px;
+    }
+
+    @media (max-width: 1024px) {
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+      .controls { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 40px 18px 64px; }
+      .hero h1 { font-size: 30px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="hero">
+      <span class="badge">Options Pulse</span>
+      <h1>Crypto Options Pulse</h1>
+      <p>Track 7-day open interest momentum and max pain pressure for BTC and ETH. Built from CryptoDataDownload options data with a short-term trader focus.</p>
+    </header>
+
+    <section class="controls">
+      <div class="toggle-group" role="tablist" aria-label="Asset selection">
+        <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
+        <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
+      </div>
+      <span class="pill" id="dataStamp">Updated —</span>
+    </section>
+
+    <section class="grid kpis">
+      <div class="panel glow">
+        <div class="kpi-label">Max Pain (Nearest Expiry)</div>
+        <div class="kpi-value kpi-accent" id="maxPainValue">—</div>
+        <div class="kpi-sub" id="maxPainExpiry">Expiry: —</div>
+      </div>
+      <div class="panel">
+        <div class="kpi-label">Total Options OI</div>
+        <div class="kpi-value" id="totalOi">—</div>
+        <div class="kpi-sub" id="oiChange">7d change: —</div>
+      </div>
+      <div class="panel">
+        <div class="kpi-label">Put/Call OI Ratio</div>
+        <div class="kpi-value" id="putCall">—</div>
+        <div class="kpi-sub" id="callPutMix">Calls vs Puts</div>
+      </div>
+      <div class="panel">
+        <div class="kpi-label">Spot Price</div>
+        <div class="kpi-value" id="spotPrice">—</div>
+        <div class="kpi-sub" id="spotSource">CryptoDataDownload</div>
+      </div>
+    </section>
+
+    <section class="panel chart-panel" style="margin-top: 24px;">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">7-Day Open Interest Momentum</div>
+          <div class="chart-subtitle" id="oiSubtitle">Nearest expiry options open interest</div>
+        </div>
+        <span class="pill" id="oiRange">Last 7 days</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="oiChart"></canvas>
+      </div>
+    </section>
+
+    <section class="grid two-col" style="margin-top: 24px;">
+      <div class="panel">
+        <div class="chart-title">Max Pain Strike Map</div>
+        <div class="chart-subtitle">Highest combined ITM payout by strike</div>
+        <ul class="list" id="maxPainList"></ul>
+      </div>
+      <div class="panel">
+        <div class="chart-title">Options Snapshot</div>
+        <div class="chart-subtitle">Key short-term positioning signals</div>
+        <div class="info-grid" id="snapshotGrid"></div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top: 24px;">
+      <div class="chart-title">Expiry Pressure Radar</div>
+      <div class="chart-subtitle">Upcoming days with the highest options expiring</div>
+      <ul class="list" id="expiryList"></ul>
+    </section>
+
+    <section class="panel" style="margin-top: 24px;">
+      <div class="chart-title">30-Day Trader Focus</div>
+      <div class="chart-subtitle">Short-hold metrics to watch</div>
+      <div class="info-grid" id="traderGrid"></div>
+    </section>
+
+    <footer class="footer" id="footerNote">
+      Data sources: CryptoDataDownload. Max pain computed with nearest expiry only.
+    </footer>
+  </div>
+
+  <script>
+    const state = {
+      asset: 'BTC',
+      data: {}
+    };
+
+    async function loadJSON(path) {
+      const res = await fetch(path, { cache: 'no-cache' });
+      return res.json();
+    }
+
+    function fmtNumber(value, suffix = '') {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const abs = Math.abs(value);
+      if (abs >= 1e9) return (value / 1e9).toFixed(2) + 'B' + suffix;
+      if (abs >= 1e6) return (value / 1e6).toFixed(2) + 'M' + suffix;
+      if (abs >= 1e3) return (value / 1e3).toFixed(2) + 'K' + suffix;
+      return Number(value).toFixed(2) + suffix;
+    }
+
+    function fmtPercent(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const sign = value >= 0 ? '+' : '';
+      return sign + (value * 100).toFixed(1) + '%';
+    }
+
+    function fmtCurrency(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+
+    function updateToggle(asset) {
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        const active = btn.dataset.asset === asset;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    function updateKPIs(assetData) {
+      document.getElementById('maxPainValue').textContent = fmtCurrency(assetData.maxPain?.max_pain);
+      document.getElementById('maxPainExpiry').textContent = `Expiry: ${assetData.maxPain?.expiry || '—'}`;
+      document.getElementById('totalOi').textContent = fmtNumber(assetData.snapshot?.total_oi);
+      document.getElementById('oiChange').textContent = `7d change: ${fmtPercent(assetData.snapshot?.oi_change_7d)}`;
+      document.getElementById('putCall').textContent = assetData.snapshot?.put_call_ratio ? assetData.snapshot.put_call_ratio.toFixed(2) : '—';
+      document.getElementById('callPutMix').textContent = `Calls ${fmtNumber(assetData.snapshot?.call_oi)} · Puts ${fmtNumber(assetData.snapshot?.put_oi)}`;
+      document.getElementById('spotPrice').textContent = fmtCurrency(assetData.snapshot?.spot_price);
+      document.getElementById('spotSource').textContent = assetData.snapshot?.spot_source || 'CryptoDataDownload';
+    }
+
+    function updateMaxPainList(assetData) {
+      const list = document.getElementById('maxPainList');
+      list.innerHTML = '';
+      (assetData.maxPain?.candidates || []).forEach((item, idx) => {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        li.innerHTML = `<span>#${idx + 1} Strike ${fmtCurrency(item.strike)}</span><span>${fmtNumber(item.pain, '')}</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    function updateSnapshot(assetData) {
+      const grid = document.getElementById('snapshotGrid');
+      grid.innerHTML = '';
+      const rows = [
+        { label: 'ATM IV', value: assetData.snapshot?.atm_iv ? (assetData.snapshot.atm_iv * 100).toFixed(1) + '%' : '—' },
+        { label: 'IV Term Structure (7d/30d)', value: assetData.snapshot?.iv_term ? assetData.snapshot.iv_term : '—' },
+        { label: 'OI Concentration (Top 5)', value: assetData.snapshot?.oi_concentration ? (assetData.snapshot.oi_concentration * 100).toFixed(1) + '%' : '—' },
+        { label: 'Nearest Expiry OI Share', value: assetData.snapshot?.nearest_expiry_share ? (assetData.snapshot.nearest_expiry_share * 100).toFixed(1) + '%' : '—' }
+      ];
+      rows.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.innerHTML = `<span class="info-label">${row.label}</span><span class="info-value">${row.value}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function updateTraderGrid(assetData) {
+      const grid = document.getElementById('traderGrid');
+      grid.innerHTML = '';
+      const rows = [
+        { label: 'Funding Rate (Current)', value: assetData.trader?.funding_rate || '—' },
+        { label: 'Perp Basis (Annualized)', value: assetData.trader?.perp_basis || '—' },
+        { label: 'Realized vs Implied Vol', value: assetData.trader?.rv_iv || '—' },
+        { label: '24h Liquidations', value: assetData.trader?.liquidations || '—' }
+      ];
+      rows.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.innerHTML = `<span class="info-label">${row.label}</span><span class="info-value">${row.value}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function updateExpiryList(assetData) {
+      const list = document.getElementById('expiryList');
+      list.innerHTML = '';
+      const rows = assetData.expiry || [];
+      if (!rows.length) {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        li.textContent = 'No expiry data yet.';
+        list.appendChild(li);
+        return;
+      }
+      rows.forEach((item) => {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        const label = `${item.date} · ${item.asset} ${fmtCurrency(item.notional)} expiring`;
+        const detail = `${fmtPercent(item.delta_vs_avg)} vs daily avg`;
+        li.innerHTML = `<span>${label}</span><span>${detail}</span>`;
+        list.appendChild(li);
+      });
+    }
+
+    function updateMetadata(meta) {
+      document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
+      document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Max pain computed with nearest expiry only.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Max pain computed with nearest expiry only.';
+    }
+
+    function buildChart(history, asset) {
+      const ctx = document.getElementById('oiChart');
+      const labels = history.map(item => item.date);
+      const values = history.map(item => item.open_interest);
+      if (state.chart) state.chart.destroy();
+      state.chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: `${asset} Open Interest`,
+              data: values,
+              borderColor: '#ff4d7d',
+              backgroundColor: 'rgba(255, 77, 125, 0.15)',
+              fill: true,
+              tension: 0.35,
+              borderWidth: 2,
+              pointRadius: 3,
+              pointBackgroundColor: '#ff6b6b'
+            }
+          ]
+        },
+        options: {
+          plugins: {
+            legend: {
+              labels: { color: '#e8e8ed' }
+            }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#9999a5', maxRotation: 0 },
+              grid: { color: '#1a1a1e' }
+            },
+            y: {
+              ticks: { color: '#9999a5' },
+              grid: { color: '#1a1a1e' }
+            }
+          }
+        }
+      });
+    }
+
+    function render(asset) {
+      const assetData = state.data[asset];
+      if (!assetData) return;
+      updateToggle(asset);
+      updateKPIs(assetData);
+      updateMaxPainList(assetData);
+      updateSnapshot(assetData);
+      updateTraderGrid(assetData);
+      updateExpiryList(assetData);
+      buildChart(assetData.history, asset);
+    }
+
+    async function init() {
+      const [history, maxPain, snapshot, trader, expiryPressure, meta] = await Promise.all([
+        loadJSON('data/oi_history.json'),
+        loadJSON('data/max_pain.json'),
+        loadJSON('data/options_snapshot.json'),
+        loadJSON('data/trader_focus.json'),
+        loadJSON('data/expiry_pressure.json'),
+        loadJSON('data/metadata.json')
+      ]);
+      state.data = {
+        BTC: {
+          history: history.BTC || [],
+          maxPain: maxPain.BTC || {},
+          snapshot: snapshot.BTC || {},
+          trader: trader.BTC || {},
+          expiry: expiryPressure.BTC || []
+        },
+        ETH: {
+          history: history.ETH || [],
+          maxPain: maxPain.ETH || {},
+          snapshot: snapshot.ETH || {},
+          trader: trader.ETH || {},
+          expiry: expiryPressure.ETH || []
+        }
+      };
+      updateMetadata(meta);
+      render(state.asset);
+    }
+
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.asset = btn.dataset.asset;
+        render(state.asset);
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>
