@@ -324,19 +324,20 @@ def main():
         if len(history) >= 7:
             history = history[-7:]
 
-        futures_metrics = load_binance_futures_metrics(underlying, 7)
+        futures_metrics = load_binance_futures_metrics(underlying, 200)
         futures_metrics = futures_metrics if isinstance(futures_metrics, list) else []
-        futures_series = []
+        futures_series_map = {}
         for row in futures_metrics:
             date = row.get("date")
             if not date:
                 continue
+            day = date.split(" ")[0]
             try:
                 oi_value = float(row.get("sum_open_interest_value", 0))
             except (TypeError, ValueError):
                 oi_value = 0.0
-            futures_series.append({"date": date.split(" ")[0], "open_interest": oi_value})
-        futures_series.sort(key=lambda x: x["date"])
+            futures_series_map[day] = oi_value
+        futures_series = [{"date": k, "open_interest": v} for k, v in sorted(futures_series_map.items())]
         if futures_series:
             history = futures_series[-7:]
         oi_history[asset] = history
