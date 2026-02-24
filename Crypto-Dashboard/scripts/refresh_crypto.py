@@ -40,7 +40,10 @@ def load_cdd(path, params=None):
     url = f"{CRYPTO_API_BASE}{path}"
     if query:
         url = f"{url}?{query}"
-    return fetch_json(url, headers=build_headers())
+    data = fetch_json(url, headers=build_headers())
+    if isinstance(data, dict) and "result" in data:
+        return data["result"]
+    return data
 
 
 def load_binance_options_oi_summary(underlying, limit=5000):
@@ -57,6 +60,15 @@ def load_binance_oi_maturity(underlying, limit=5000):
         "limit": limit,
         "return": "JSON"
     })
+
+
+def maturity_to_yymmdd(date_str):
+    """Convert YYYY-MM-DD to YYMMDD integer for CDD options API."""
+    try:
+        dt = datetime.datetime.strptime(date_str, "%Y-%m-%d")
+        return int(dt.strftime("%y%m%d"))
+    except (ValueError, TypeError):
+        return None
 
 
 def load_binance_options_ohlc(underlying, maturity, limit=5000):
@@ -88,10 +100,13 @@ def load_spot_price(symbol):
     except Exception:
         return None
     if isinstance(data, list) and data:
-        row = data[-1]
-        for key in ("Close", "close"):
+        row = data[-1] if isinstance(data[-1], dict) else data[0]
+        for key in ("close", "Close"):
             if key in row:
-                return row.get(key)
+                try:
+                    return float(row[key])
+                except (TypeError, ValueError):
+                    pass
     return None
 
 
@@ -153,15 +168,15 @@ def build_history(rows):
 def extract_latest_by_symbol(options_rows):
     latest = {}
     for row in options_rows:
-        symbol = row.get("Symbol") or row.get("symbol")
+        symbol = row.get("symbol") or row.get("Symbol")
         if not symbol:
             continue
-        date = row.get("Date") or row.get("date") or ""
-        hour = row.get("Hour") or row.get("hour") or ""
+        date = row.get("date") or row.get("Date") or ""
+        hour = row.get("hour") or row.get("Hour") or ""
         stamp = f"{date} {hour}".strip()
         existing = latest.get(symbol)
-        if not existing or stamp > existing.get("stamp", ""):
-            row["stamp"] = stamp
+        if not existing or stamp > existing.get("_stamp", ""):
+            row["_stamp"] = stamp
             latest[symbol] = row
     return latest
 
@@ -226,13 +241,20 @@ def main():
 
         maturities = load_binance_oi_maturity(underlying)
         maturity_rows = maturities if isinstance(maturities, list) else []
-        maturity_values = []
+        # Get the latest date's rows only (API returns newest first)
+        latest_date = None
         for row in maturity_rows:
-            maturity = row.get("Maturity") or row.get("maturity")
+            d = row.get("date")
+            if d and (latest_date is None or d > latest_date):
+                latest_date = d
+        latest_maturity_rows = [r for r in maturity_rows if r.get("date") == latest_date] if latest_date else []
+        maturity_values = []
+        for row in latest_maturity_rows:
+            maturity = row.get("maturity")
             parsed = parse_maturity(maturity)
             if parsed:
                 maturity_values.append(parsed)
-        maturity_values.sort()
+        maturity_values = sorted(set(maturity_values))
         nearest_maturity = maturity_values[0].strftime("%Y-%m-%d") if maturity_values else None
 
         strikes = []
@@ -244,8 +266,8 @@ def main():
 
             for symbol, row in latest_by_symbol.items():
                 strike = parse_symbol_strike(symbol)
-                opt_type = parse_symbol_type(symbol, row.get("Type") or row.get("type"))
-                oi = row.get("Open Interest Contracts") or row.get("open_interest_contracts")
+                opt_type = parse_symbol_type(symbol, row.get("type"))
+                oi = row.get("openinterest_contracts")
                 try:
                     oi_value = float(oi) if oi is not None else 0.0
                 except (TypeError, ValueError):
@@ -258,16 +280,21 @@ def main():
                         "open_interest": oi_value
                     })
 
-        for row in maturity_rows:
-            maturity = row.get("Maturity") or row.get("maturity")
-            calls = row.get("Total Calls OI") or row.get("total_calls_oi") or 0
-            puts = row.get("Total Puts OI") or row.get("total_puts_oi") or 0
+        # Aggregate OI per maturity from the latest date's rows
+        maturity_oi = {}
+        for row in latest_maturity_rows:
+            maturity = row.get("maturity")
+            if not maturity:
+                continue
+            calls = row.get("calls_oi") or row.get("total_calls_oi") or 0
+            puts = row.get("puts_oi") or row.get("total_puts_oi") or 0
             try:
                 total = float(calls) + float(puts)
             except (TypeError, ValueError):
                 total = 0.0
-            if maturity:
-                expiry_totals.append({"date": maturity, "total": total})
+            maturity_oi[maturity] = maturity_oi.get(maturity, 0.0) + total
+        for maturity, total in maturity_oi.items():
+            expiry_totals.append({"date": maturity, "total": total})
 
         avg_total = None
         if expiry_totals:
@@ -286,15 +313,15 @@ def main():
             expiry_rows.sort(key=lambda x: x["notional"], reverse=True)
             expiry_rows = expiry_rows[:5]
 
-            for row in expiry_rows:
-                options_rows = load_binance_options_ohlc(underlying, row["date"])
+            for erow in expiry_rows:
+                options_rows = load_binance_options_ohlc(underlying, erow["date"])
                 options_rows = options_rows if isinstance(options_rows, list) else []
                 latest_by_symbol = extract_latest_by_symbol(options_rows)
                 expiry_strikes = []
                 for symbol, opt_row in latest_by_symbol.items():
                     strike = parse_symbol_strike(symbol)
-                    opt_type = parse_symbol_type(symbol, opt_row.get("Type") or opt_row.get("type"))
-                    oi = opt_row.get("Open Interest Contracts") or opt_row.get("open_interest_contracts")
+                    opt_type = parse_symbol_type(symbol, opt_row.get("type"))
+                    oi = opt_row.get("openinterest_contracts")
                     try:
                         oi_value = float(oi) if oi is not None else 0.0
                     except (TypeError, ValueError):
@@ -308,7 +335,7 @@ def main():
                         })
                 expiry_points = sorted({s["strike"] for s in expiry_strikes})
                 best_expiry, _ = compute_max_pain(expiry_strikes, expiry_points)
-                row["max_pain"] = best_expiry["strike"] if best_expiry else None
+                erow["max_pain"] = best_expiry["strike"] if best_expiry else None
 
         expiry_pressure[asset] = expiry_rows
 
@@ -323,19 +350,18 @@ def main():
         total_oi, call_oi, put_oi, put_call = aggregate_open_interest(strikes)
 
         if not strikes and nearest_maturity:
-            for row in maturity_rows:
-                maturity = row.get("Maturity") or row.get("maturity")
+            for row in latest_maturity_rows:
+                maturity = row.get("maturity")
                 if maturity == nearest_maturity:
-                    calls = row.get("Total Calls OI") or row.get("total_calls_oi") or 0
-                    puts = row.get("Total Puts OI") or row.get("total_puts_oi") or 0
+                    calls = row.get("calls_oi") or 0
+                    puts = row.get("puts_oi") or 0
                     try:
-                        call_oi = float(calls)
-                        put_oi = float(puts)
-                        total_oi = call_oi + put_oi
-                        put_call = (put_oi / call_oi) if call_oi else None
+                        call_oi += float(calls)
+                        put_oi += float(puts)
                     except (TypeError, ValueError):
                         pass
-                    break
+            total_oi = call_oi + put_oi
+            put_call = (put_oi / call_oi) if call_oi else None
 
         oi_change = None
         if len(history) >= 2 and history[0]["open_interest"]:
