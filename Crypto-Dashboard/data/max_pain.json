@@ -1,12 +1,54 @@
 {
   "BTC": {
-    "expiry": "2023-10-27",
-    "max_pain": null,
-    "candidates": []
+    "expiry": "2026-02-25",
+    "max_pain": 76000.0,
+    "candidates": [
+      {
+        "strike": 76000.0,
+        "pain": 16284350.0
+      },
+      {
+        "strike": 75000.0,
+        "pain": 13984250.0
+      },
+      {
+        "strike": 74000.0,
+        "pain": 11779650.0
+      },
+      {
+        "strike": 73000.0,
+        "pain": 10109550.0
+      },
+      {
+        "strike": 72000.0,
+        "pain": 8486150.0
+      }
+    ]
   },
   "ETH": {
-    "expiry": "2023-10-27",
-    "max_pain": null,
-    "candidates": []
+    "expiry": "2026-02-25",
+    "max_pain": 2300.0,
+    "candidates": [
+      {
+        "strike": 2300.0,
+        "pain": 4942300.0
+      },
+      {
+        "strike": 2200.0,
+        "pain": 3627000.0
+      },
+      {
+        "strike": 2100.0,
+        "pain": 2313300.0
+      },
+      {
+        "strike": 2075.0,
+        "pain": 1998375.0
+      },
+      {
+        "strike": 2050.0,
+        "pain": 1699075.0
+      }
+    ]
   }
 }
