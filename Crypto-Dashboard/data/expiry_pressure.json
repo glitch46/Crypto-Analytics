@@ -3,36 +3,36 @@
     {
       "date": "2026-03-27",
       "asset": "BTC",
-      "notional": 140629.70000000004,
-      "delta_vs_avg": 2.4915450020281322,
+      "notional": 140607.7,
+      "delta_vs_avg": 2.4927125289853187,
       "max_pain": 340000.0
     },
     {
       "date": "2026-02-27",
       "asset": "BTC",
-      "notional": 115243.60000000002,
-      "delta_vs_avg": 1.8612605701052425,
+      "notional": 115192.30000000002,
+      "delta_vs_avg": 1.861390872993695,
       "max_pain": 170000.0
     },
     {
       "date": "2026-04-24",
       "asset": "BTC",
-      "notional": 32785.999999999985,
-      "delta_vs_avg": -0.18599133443010787,
+      "notional": 32746.599999999988,
+      "delta_vs_avg": -0.1865704360310951,
       "max_pain": 120000.0
     },
     {
       "date": "2026-03-06",
       "asset": "BTC",
-      "notional": 20237.7,
-      "delta_vs_avg": -0.49753970685036863,
+      "notional": 20195.4,
+      "delta_vs_avg": -0.4983437848149845,
       "max_pain": 50000.0
     },
     {
       "date": "2026-03-13",
       "asset": "BTC",
       "notional": 5914.1,
-      "delta_vs_avg": -0.8531651116620844,
+      "delta_vs_avg": -0.8530930299857542,
       "max_pain": 80000.0
     }
   ],
@@ -40,36 +40,36 @@
     {
       "date": "2026-03-27",
       "asset": "ETH",
-      "notional": 779485.0,
-      "delta_vs_avg": 3.1282181986693587,
+      "notional": 779539.0,
+      "delta_vs_avg": 3.1277800392503385,
       "max_pain": 14000.0
     },
     {
       "date": "2026-02-27",
       "asset": "ETH",
-      "notional": 471845.0,
-      "delta_vs_avg": 1.4989308530005627,
+      "notional": 471841.0,
+      "delta_vs_avg": 1.4984713548647584,
       "max_pain": 7000.0
     },
     {
       "date": "2026-04-24",
       "asset": "ETH",
       "notional": 100708.0,
-      "delta_vs_avg": -0.46664195160703054,
+      "delta_vs_avg": -0.46673550368509714,
       "max_pain": 5000.0
     },
     {
       "date": "2026-03-06",
       "asset": "ETH",
-      "notional": 93802.0,
-      "delta_vs_avg": -0.5032167091456754,
+      "notional": 93817.0,
+      "delta_vs_avg": -0.5032244186084994,
       "max_pain": 2600.0
     },
     {
       "date": "2026-02-25",
       "asset": "ETH",
-      "notional": 25695.0,
-      "delta_vs_avg": -0.8639171162821488,
+      "notional": 25895.0,
+      "delta_vs_avg": -0.8628819544418079,
       "max_pain": 2300.0
     }
   ]
