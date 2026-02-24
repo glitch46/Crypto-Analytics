@@ -27,11 +27,16 @@ def fetch_json(url, headers=None):
 def build_headers():
     if not CRYPTO_API_KEY:
         raise RuntimeError("CRYPTODATADOWNLOAD_API_KEY is required")
-    return {"Authorization": f"Bearer {CRYPTO_API_KEY}"}
+    return {
+        "Authorization": f"Token {CRYPTO_API_KEY}",
+        "User-Agent": "crypto-analytics-dashboard/1.0"
+    }
 
 
 def load_cdd(path, params=None):
-    query = urllib.parse.urlencode(params or {})
+    payload = dict(params or {})
+    payload.setdefault("auth_token", CRYPTO_API_KEY)
+    query = urllib.parse.urlencode(payload)
     url = f"{CRYPTO_API_BASE}{path}"
     if query:
         url = f"{url}?{query}"
