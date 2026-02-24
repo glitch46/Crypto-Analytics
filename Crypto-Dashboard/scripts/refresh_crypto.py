@@ -160,6 +160,24 @@ def load_binance_basis(symbol, limit=2):
     })
 
 
+def load_binance_futures_metrics(symbol, limit=2):
+    return load_cdd("/summary/binance/futures/metrics/", {
+        "symbol": symbol,
+        "limit": limit,
+        "return": "JSON"
+    })
+
+
+def load_deribit_options_greeks_maturity(underlying, date, limit=5000):
+    return load_cdd("/summary/deribit/options/greeks/maturities/", {
+        "underlying": underlying,
+        "startdate": date,
+        "enddate": date,
+        "limit": limit,
+        "return": "JSON"
+    })
+
+
 def compute_max_pain(strikes, price_points):
     best = None
     candidates = []
@@ -305,6 +323,22 @@ def main():
         history = build_history(oi_summary if isinstance(oi_summary, list) else [])
         if len(history) >= 7:
             history = history[-7:]
+
+        futures_metrics = load_binance_futures_metrics(underlying, 7)
+        futures_metrics = futures_metrics if isinstance(futures_metrics, list) else []
+        futures_series = []
+        for row in futures_metrics:
+            date = row.get("date")
+            if not date:
+                continue
+            try:
+                oi_value = float(row.get("sum_open_interest_value", 0))
+            except (TypeError, ValueError):
+                oi_value = 0.0
+            futures_series.append({"date": date.split(" ")[0], "open_interest": oi_value})
+        futures_series.sort(key=lambda x: x["date"])
+        if futures_series:
+            history = futures_series[-7:]
         oi_history[asset] = history
 
         maturities = load_binance_oi_maturity(underlying)
@@ -328,6 +362,9 @@ def main():
         strikes = []
         deribit_strikes = []
         expiry_strikes_map = {}
+        total_oi_usd = 0.0
+        nearest_oi_usd = 0.0
+        oi_total_by_expiry = {}
         if nearest_maturity:
             options_rows = load_binance_options_ohlc(underlying, nearest_maturity)
             options_rows = options_rows if isinstance(options_rows, list) else []
@@ -375,6 +412,10 @@ def main():
                 oi_value = float(row.get("open_interest", 0) or 0)
             except (TypeError, ValueError):
                 oi_value = 0.0
+            try:
+                oi_value_usd = float(row.get("open_interest_usd", 0) or 0)
+            except (TypeError, ValueError):
+                oi_value_usd = 0.0
             strike_entry = {
                 "instrument_name": inst.get("instrument_name"),
                 "strike": float(inst.get("strike", 0) or 0),
@@ -383,8 +424,11 @@ def main():
             }
             if inst.get("expiration_timestamp") == nearest_deribit_ts:
                 deribit_strikes.append(strike_entry)
+                nearest_oi_usd += oi_value_usd
             expiry_key = expiry_date.strftime("%Y-%m-%d")
             expiry_strikes_map.setdefault(expiry_key, []).append(strike_entry)
+            oi_total_by_expiry[expiry_key] = oi_total_by_expiry.get(expiry_key, 0.0) + oi_value
+            total_oi_usd += oi_value_usd
 
         expiry_totals = []
         for expiry_key, strike_rows in expiry_strikes_map.items():
@@ -426,6 +470,8 @@ def main():
         }
 
         total_oi, call_oi, put_oi, put_call = aggregate_open_interest(combined_strikes)
+        if total_oi_usd:
+            total_oi = total_oi_usd
 
         if not combined_strikes and nearest_maturity:
             for row in latest_maturity_rows:
@@ -483,6 +529,36 @@ def main():
         if iv_7d and iv_30d:
             iv_term = f"{iv_7d:.1f}% / {iv_30d:.1f}%"
 
+        greeks_dates = load_cdd("/summary/deribit/options/greeks/available/", {
+            "underlying": meta["spot_symbol"],
+            "return": "JSON"
+        })
+        latest_greeks_date = None
+        if isinstance(greeks_dates, dict):
+            asset_key = meta["spot_symbol"]
+            latest_greeks_date = greeks_dates.get(asset_key, {}).get("last_date")
+
+        oi_concentration = None
+        nearest_share = None
+        if oi_total_by_expiry:
+            totals = sorted(oi_total_by_expiry.values(), reverse=True)
+            top5 = sum(totals[:5])
+            total_sum = sum(totals)
+            if total_sum:
+                oi_concentration = top5 / total_sum
+                if nearest_deribit_expiry and nearest_deribit_expiry in oi_total_by_expiry:
+                    nearest_share = oi_total_by_expiry[nearest_deribit_expiry] / total_sum
+
+        rv_iv = None
+        if latest_greeks_date:
+            greeks_maturity = load_deribit_options_greeks_maturity(meta["spot_symbol"], latest_greeks_date, 5000)
+            greeks_maturity = greeks_maturity if isinstance(greeks_maturity, list) else []
+            iv_values = [row.get("avg_iv") for row in greeks_maturity if row.get("avg_iv") is not None]
+            if iv_values:
+                avg_iv = sum(iv_values) / len(iv_values)
+                if iv_7d:
+                    rv_iv = f"{iv_7d:.1f}% / {avg_iv:.1f}%"
+
         snapshot[asset] = {
             "total_oi": total_oi,
             "oi_change_7d": oi_change,
@@ -491,8 +567,8 @@ def main():
             "put_oi": put_oi,
             "atm_iv": iv_7d / 100 if iv_7d else None,
             "iv_term": iv_term,
-            "oi_concentration": None,
-            "nearest_expiry_share": None,
+            "oi_concentration": oi_concentration,
+            "nearest_expiry_share": nearest_share,
             "spot_price": spot_price,
             "spot_source": "CryptoDataDownload"
         }
@@ -500,8 +576,9 @@ def main():
         trader[asset] = {
             "funding_rate": f"{funding_rate * 100:.4f}%" if funding_rate is not None else "—",
             "perp_basis": f"${perp_basis:.2f}" if perp_basis is not None else "—",
-            "rv_iv": "—",
-            "liquidations": "—"
+            "rv_iv": rv_iv or "—",
+            "liquidations": "—",
+            "sources": "Deribit + Binance (CDD)"
         }
 
     with open(os.path.join(output_dir, "oi_history.json"), "w") as f:

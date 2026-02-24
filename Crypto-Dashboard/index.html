@@ -337,7 +337,7 @@
       <div class="chart-header">
         <div>
           <div class="chart-title">7-Day Open Interest Momentum</div>
-          <div class="chart-subtitle" id="oiSubtitle">Nearest expiry options open interest</div>
+      <div class="chart-subtitle" id="oiSubtitle">Options open interest (Deribit + Binance)</div>
         </div>
         <span class="pill" id="oiRange">Last 7 days</span>
       </div>
@@ -418,7 +418,7 @@
     function updateKPIs(assetData) {
       document.getElementById('maxPainValue').textContent = fmtCurrency(assetData.maxPain?.max_pain);
       document.getElementById('maxPainExpiry').textContent = `Expiry: ${assetData.maxPain?.expiry || '—'}`;
-      document.getElementById('totalOi').textContent = fmtNumber(assetData.snapshot?.total_oi);
+      document.getElementById('totalOi').textContent = fmtCurrency(assetData.snapshot?.total_oi);
       document.getElementById('oiChange').textContent = `7d change: ${fmtPercent(assetData.snapshot?.oi_change_7d)}`;
       document.getElementById('putCall').textContent = assetData.snapshot?.put_call_ratio ? assetData.snapshot.put_call_ratio.toFixed(2) : '—';
       document.getElementById('callPutMix').textContent = `Calls ${fmtNumber(assetData.snapshot?.call_oi)} · Puts ${fmtNumber(assetData.snapshot?.put_oi)}`;
@@ -461,7 +461,8 @@
         { label: 'Funding Rate (Current)', value: assetData.trader?.funding_rate || '—' },
         { label: 'Perp Basis (Annualized)', value: assetData.trader?.perp_basis || '—' },
         { label: 'Realized vs Implied Vol', value: assetData.trader?.rv_iv || '—' },
-        { label: '24h Liquidations', value: assetData.trader?.liquidations || '—' }
+        { label: '24h Liquidations', value: assetData.trader?.liquidations || '—' },
+        { label: 'Data Sources', value: assetData.trader?.sources || '—' }
       ];
       rows.forEach(row => {
         const div = document.createElement('div');
