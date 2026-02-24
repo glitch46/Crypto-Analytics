@@ -486,7 +486,8 @@
         const li = document.createElement('li');
         li.className = 'list-item';
         const label = `${item.date} · ${item.asset} ${fmtCurrency(item.notional)} expiring`;
-        const detail = `${fmtPercent(item.delta_vs_avg)} vs daily avg`;
+        const maxPain = item.max_pain ? `Max pain ${fmtCurrency(item.max_pain)}` : 'Max pain —';
+        const detail = `${maxPain} · ${fmtPercent(item.delta_vs_avg)} vs daily avg`;
         li.innerHTML = `<span>${label}</span><span>${detail}</span>`;
         list.appendChild(li);
       });

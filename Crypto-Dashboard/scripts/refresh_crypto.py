@@ -275,10 +275,36 @@ def main():
                     "date": item["date"],
                     "asset": meta["spot_symbol"],
                     "notional": item["total"],
-                    "delta_vs_avg": (item["total"] - avg_total) / avg_total
+                    "delta_vs_avg": (item["total"] - avg_total) / avg_total,
+                    "max_pain": None
                 })
             expiry_rows.sort(key=lambda x: x["notional"], reverse=True)
             expiry_rows = expiry_rows[:5]
+
+            for row in expiry_rows:
+                options_rows = load_binance_options_ohlc(underlying, row["date"])
+                options_rows = options_rows if isinstance(options_rows, list) else []
+                latest_by_symbol = extract_latest_by_symbol(options_rows)
+                expiry_strikes = []
+                for symbol, opt_row in latest_by_symbol.items():
+                    strike = parse_symbol_strike(symbol)
+                    opt_type = parse_symbol_type(symbol, opt_row.get("Type") or opt_row.get("type"))
+                    oi = opt_row.get("Open Interest Contracts") or opt_row.get("open_interest_contracts")
+                    try:
+                        oi_value = float(oi) if oi is not None else 0.0
+                    except (TypeError, ValueError):
+                        oi_value = 0.0
+                    if strike and opt_type:
+                        expiry_strikes.append({
+                            "instrument_name": symbol,
+                            "strike": strike,
+                            "option_type": opt_type,
+                            "open_interest": oi_value
+                        })
+                expiry_points = sorted({s["strike"] for s in expiry_strikes})
+                best_expiry, _ = compute_max_pain(expiry_strikes, expiry_points)
+                row["max_pain"] = best_expiry["strike"] if best_expiry else None
+
         expiry_pressure[asset] = expiry_rows
 
         price_points = sorted({s["strike"] for s in strikes})
