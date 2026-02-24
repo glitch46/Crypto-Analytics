@@ -317,7 +317,7 @@
       <div class="kpi-sub" id="maxPainExpiry">Notional: —</div>
       </div>
       <div class="panel">
-        <div class="kpi-label">Total Options OI</div>
+      <div class="kpi-label">Total Options OI (Notional USD)</div>
         <div class="kpi-value" id="totalOi">—</div>
         <div class="kpi-sub" id="oiChange">7d change: —</div>
       </div>
@@ -418,7 +418,7 @@
     function updateKPIs(assetData) {
       document.getElementById('maxPainValue').textContent = assetData.maxPain?.peak_expiry || '—';
       document.getElementById('maxPainExpiry').textContent = `Notional: ${fmtCurrency(assetData.maxPain?.peak_notional)}`;
-      document.getElementById('totalOi').textContent = fmtCurrency(assetData.snapshot?.total_oi);
+      document.getElementById('totalOi').textContent = fmtNumber(assetData.snapshot?.total_oi, ' USD');
       document.getElementById('oiChange').textContent = `7d change: ${fmtPercent(assetData.snapshot?.oi_change_7d)}`;
       document.getElementById('putCall').textContent = assetData.snapshot?.put_call_ratio ? assetData.snapshot.put_call_ratio.toFixed(2) : '—';
       document.getElementById('callPutMix').textContent = `Calls ${fmtNumber(assetData.snapshot?.call_oi)} · Puts ${fmtNumber(assetData.snapshot?.put_oi)}`;
