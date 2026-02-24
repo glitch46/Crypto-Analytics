@@ -340,6 +340,15 @@ def main():
         futures_series = [{"date": k, "open_interest": v} for k, v in sorted(futures_series_map.items())]
         if futures_series:
             history = futures_series[-7:]
+        if len(history) < 7:
+            today = datetime.date.today()
+            history_map = {item["date"]: item["open_interest"] for item in history}
+            last_value = history[-1]["open_interest"] if history else 0
+            padded = []
+            for offset in range(6, -1, -1):
+                day = (today - datetime.timedelta(days=offset)).strftime("%Y-%m-%d")
+                padded.append({"date": day, "open_interest": history_map.get(day, last_value)})
+            history = padded
         oi_history[asset] = history
 
         maturities = load_binance_oi_maturity(underlying)
