@@ -1,4 +1,76 @@
 {
-  "BTC": [],
-  "ETH": []
+  "BTC": [
+    {
+      "date": "2023-10-27",
+      "asset": "BTC",
+      "notional": 5331.36,
+      "delta_vs_avg": 2.014793033250396,
+      "max_pain": null
+    },
+    {
+      "date": "2023-11-24",
+      "asset": "BTC",
+      "notional": 3000.8999999999996,
+      "delta_vs_avg": 0.6969577018774032,
+      "max_pain": null
+    },
+    {
+      "date": "2023-12-29",
+      "asset": "BTC",
+      "notional": 2672.59,
+      "delta_vs_avg": 0.5113040036190909,
+      "max_pain": null
+    },
+    {
+      "date": "2023-11-03",
+      "asset": "BTC",
+      "notional": 718.3,
+      "delta_vs_avg": -0.5938136168287718,
+      "max_pain": null
+    },
+    {
+      "date": "2024-03-29",
+      "asset": "BTC",
+      "notional": 538.48,
+      "delta_vs_avg": -0.6954987559375706,
+      "max_pain": null
+    }
+  ],
+  "ETH": [
+    {
+      "date": "2023-10-27",
+      "asset": "ETH",
+      "notional": 38187.21,
+      "delta_vs_avg": 1.7146844356267201,
+      "max_pain": null
+    },
+    {
+      "date": "2023-11-24",
+      "asset": "ETH",
+      "notional": 25943.96,
+      "delta_vs_avg": 0.8443260036677778,
+      "max_pain": null
+    },
+    {
+      "date": "2023-12-29",
+      "asset": "ETH",
+      "notional": 22097.5,
+      "delta_vs_avg": 0.5708856267913118,
+      "max_pain": null
+    },
+    {
+      "date": "2024-03-29",
+      "asset": "ETH",
+      "notional": 7008.2,
+      "delta_vs_avg": -0.5017951963037054,
+      "max_pain": null
+    },
+    {
+      "date": "2023-11-03",
+      "asset": "ETH",
+      "notional": 4300.57,
+      "delta_vs_avg": -0.6942774703016219,
+      "max_pain": null
+    }
+  ]
 }

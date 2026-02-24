@@ -1,11 +1,11 @@
 {
   "BTC": {
-    "expiry": "\u2014",
+    "expiry": "2023-10-27",
     "max_pain": null,
     "candidates": []
   },
   "ETH": {
-    "expiry": "\u2014",
+    "expiry": "2023-10-27",
     "max_pain": null,
     "candidates": []
   }
