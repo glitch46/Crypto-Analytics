@@ -7,8 +7,8 @@
     "put_oi": 1952.6999999999998,
     "atm_iv": 0.5573,
     "iv_term": "55.7% / 38.8%",
-    "oi_concentration": 0.977009049513835,
-    "nearest_expiry_share": 0.014151334450097256,
+    "oi_concentration": 0.9770094100398391,
+    "nearest_expiry_share": 0.014150921427549023,
     "spot_price": 64656.02,
     "spot_source": "CryptoDataDownload"
   },
@@ -20,8 +20,8 @@
     "put_oi": 12142.0,
     "atm_iv": 0.7238,
     "iv_term": "72.4% / 54.2%",
-    "oi_concentration": 0.974169011418295,
-    "nearest_expiry_share": 0.017139687626793645,
+    "oi_concentration": 0.974167077038755,
+    "nearest_expiry_share": 0.0171396535930062,
     "spot_price": 1856.3,
     "spot_source": "CryptoDataDownload"
   }
