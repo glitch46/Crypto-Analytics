@@ -373,6 +373,7 @@ def main():
         deribit_strikes = []
         expiry_strikes_map = {}
         total_oi_usd = 0.0
+        total_oi_base = 0.0
         nearest_oi_usd = 0.0
         oi_total_by_expiry = {}
         if nearest_maturity:
@@ -439,6 +440,7 @@ def main():
             expiry_strikes_map.setdefault(expiry_key, []).append(strike_entry)
             oi_total_by_expiry[expiry_key] = oi_total_by_expiry.get(expiry_key, 0.0) + oi_value
             total_oi_usd += oi_value_usd
+            total_oi_base += oi_value
 
         expiry_totals = []
         for expiry_key, strike_rows in expiry_strikes_map.items():
@@ -481,8 +483,6 @@ def main():
         }
 
         total_oi, call_oi, put_oi, put_call = aggregate_open_interest(combined_strikes)
-        if total_oi_usd:
-            total_oi = total_oi_usd
 
         if not combined_strikes and nearest_maturity:
             for row in latest_maturity_rows:
@@ -503,6 +503,10 @@ def main():
             oi_change = (history[-1]["open_interest"] - history[0]["open_interest"]) / history[0]["open_interest"]
 
         spot_price = load_spot_price(underlying)
+        if not total_oi_usd and spot_price:
+            total_oi_usd = total_oi_base * spot_price
+        if total_oi_usd:
+            total_oi = total_oi_usd
 
         basis_rows = load_binance_basis(underlying, 2)
         basis_rows = basis_rows if isinstance(basis_rows, list) else []
