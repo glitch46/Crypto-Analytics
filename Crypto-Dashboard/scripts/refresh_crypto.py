@@ -474,7 +474,8 @@ def main():
         price_points = sorted({s["strike"] for s in combined_strikes})
         best, candidates = compute_max_pain(combined_strikes, price_points)
         max_pain[asset] = {
-            "expiry": nearest_deribit_expiry or nearest_maturity or "—",
+            "peak_expiry": expiry_rows[0]["date"] if expiry_rows else "—",
+            "peak_notional": expiry_rows[0]["notional"] if expiry_rows else None,
             "max_pain": best["strike"] if best else None,
             "candidates": candidates
         }

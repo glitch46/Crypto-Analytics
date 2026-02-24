@@ -312,9 +312,9 @@
 
     <section class="grid kpis">
       <div class="panel glow">
-        <div class="kpi-label">Max Pain (Nearest Expiry)</div>
-        <div class="kpi-value kpi-accent" id="maxPainValue">—</div>
-        <div class="kpi-sub" id="maxPainExpiry">Expiry: —</div>
+      <div class="kpi-label">Peak Expiry (Next 90 Days)</div>
+      <div class="kpi-value kpi-accent" id="maxPainValue">—</div>
+      <div class="kpi-sub" id="maxPainExpiry">Notional: —</div>
       </div>
       <div class="panel">
         <div class="kpi-label">Total Options OI</div>
@@ -416,8 +416,8 @@
     }
 
     function updateKPIs(assetData) {
-      document.getElementById('maxPainValue').textContent = fmtCurrency(assetData.maxPain?.max_pain);
-      document.getElementById('maxPainExpiry').textContent = `Expiry: ${assetData.maxPain?.expiry || '—'}`;
+      document.getElementById('maxPainValue').textContent = assetData.maxPain?.peak_expiry || '—';
+      document.getElementById('maxPainExpiry').textContent = `Notional: ${fmtCurrency(assetData.maxPain?.peak_notional)}`;
       document.getElementById('totalOi').textContent = fmtCurrency(assetData.snapshot?.total_oi);
       document.getElementById('oiChange').textContent = `7d change: ${fmtPercent(assetData.snapshot?.oi_change_7d)}`;
       document.getElementById('putCall').textContent = assetData.snapshot?.put_call_ratio ? assetData.snapshot.put_call_ratio.toFixed(2) : '—';
