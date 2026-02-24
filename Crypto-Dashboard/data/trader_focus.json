@@ -1,14 +1,14 @@
 {
   "BTC": {
-    "funding_rate": "—",
-    "perp_basis": "—",
-    "rv_iv": "—",
-    "liquidations": "—"
+    "funding_rate": "\u2014",
+    "perp_basis": "\u2014",
+    "rv_iv": "\u2014",
+    "liquidations": "\u2014"
   },
   "ETH": {
-    "funding_rate": "—",
-    "perp_basis": "—",
-    "rv_iv": "—",
-    "liquidations": "—"
+    "funding_rate": "\u2014",
+    "perp_basis": "\u2014",
+    "rv_iv": "\u2014",
+    "liquidations": "\u2014"
   }
 }

@@ -1,10 +1,10 @@
 {
   "BTC": {
-    "total_oi": null,
+    "total_oi": 0.0,
     "oi_change_7d": null,
     "put_call_ratio": null,
-    "call_oi": null,
-    "put_oi": null,
+    "call_oi": 0.0,
+    "put_oi": 0.0,
     "atm_iv": null,
     "iv_term": null,
     "oi_concentration": null,
@@ -13,11 +13,11 @@
     "spot_source": "CryptoDataDownload"
   },
   "ETH": {
-    "total_oi": null,
+    "total_oi": 0.0,
     "oi_change_7d": null,
     "put_call_ratio": null,
-    "call_oi": null,
-    "put_oi": null,
+    "call_oi": 0.0,
+    "put_oi": 0.0,
     "atm_iv": null,
     "iv_term": null,
     "oi_concentration": null,
