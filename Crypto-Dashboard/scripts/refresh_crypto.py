@@ -7,6 +7,7 @@ import urllib.request
 
 CRYPTO_API_KEY = os.environ.get("CRYPTODATADOWNLOAD_API_KEY")
 CRYPTO_API_BASE = "https://api.cryptodatadownload.com/v1/data"
+DERIBIT_BASE = "https://www.deribit.com/api/v2/public"
 
 ASSETS = {
     "BTC": {
@@ -41,6 +42,17 @@ def load_cdd(path, params=None):
     if query:
         url = f"{url}?{query}"
     data = fetch_json(url, headers=build_headers())
+    if isinstance(data, dict) and "result" in data:
+        return data["result"]
+    return data
+
+
+def fetch_deribit(path, params=None):
+    query = urllib.parse.urlencode(params or {})
+    url = f"{DERIBIT_BASE}{path}"
+    if query:
+        url = f"{url}?{query}"
+    data = fetch_json(url)
     if isinstance(data, dict) and "result" in data:
         return data["result"]
     return data
@@ -108,6 +120,44 @@ def load_spot_price(symbol):
                 except (TypeError, ValueError):
                     pass
     return None
+
+
+def load_deribit_instruments(currency):
+    return fetch_deribit("/get_instruments", {
+        "currency": currency,
+        "kind": "option"
+    })
+
+
+def load_deribit_book_summary(currency):
+    return fetch_deribit("/get_book_summary_by_currency", {
+        "currency": currency,
+        "kind": "option"
+    })
+
+
+def load_deribit_funding(symbol):
+    return load_cdd("/ohlc/deribit/futures/funding/", {
+        "symbol": symbol,
+        "limit": 3,
+        "return": "JSON"
+    })
+
+
+def load_deribit_volatility(symbol, limit=30):
+    return load_cdd("/ohlc/deribit/volatility/", {
+        "symbol": symbol,
+        "limit": limit,
+        "return": "JSON"
+    })
+
+
+def load_binance_basis(symbol, limit=2):
+    return load_cdd("/summary/binance/basis/", {
+        "symbol": symbol,
+        "limit": limit,
+        "return": "JSON"
+    })
 
 
 def compute_max_pain(strikes, price_points):
@@ -222,6 +272,22 @@ def parse_maturity(value):
         return None
 
 
+def parse_deribit_expiry_date(value):
+    try:
+        return datetime.datetime.strptime(value, "%d%b%y").date()
+    except (ValueError, TypeError):
+        return None
+
+
+def within_forward_window(date_value, days=90, start_offset=1):
+    if not date_value:
+        return False
+    today = datetime.date.today()
+    start = today + datetime.timedelta(days=start_offset)
+    end = today + datetime.timedelta(days=days)
+    return start <= date_value <= end
+
+
 def main():
     output_dir = os.path.join(os.path.dirname(__file__), "..", "data")
     os.makedirs(output_dir, exist_ok=True)
@@ -252,12 +318,13 @@ def main():
         for row in latest_maturity_rows:
             maturity = row.get("maturity")
             parsed = parse_maturity(maturity)
-            if parsed:
+            if parsed and within_forward_window(parsed, 90):
                 maturity_values.append(parsed)
         maturity_values = sorted(set(maturity_values))
         nearest_maturity = maturity_values[0].strftime("%Y-%m-%d") if maturity_values else None
 
         strikes = []
+        deribit_strikes = []
         expiry_totals = []
         if nearest_maturity:
             options_rows = load_binance_options_ohlc(underlying, nearest_maturity)
@@ -280,11 +347,44 @@ def main():
                         "open_interest": oi_value
                     })
 
+        deribit_instruments = load_deribit_instruments(meta["spot_symbol"])
+        deribit_instruments = deribit_instruments if isinstance(deribit_instruments, list) else []
+        deribit_instruments = [i for i in deribit_instruments if within_forward_window(
+            datetime.date.fromtimestamp(i.get("expiration_timestamp", 0) / 1000),
+            90
+        )]
+        expiry_ts_values = sorted({i["expiration_timestamp"] for i in deribit_instruments})
+        nearest_deribit_ts = expiry_ts_values[0] if expiry_ts_values else None
+        nearest_deribit_expiry = None
+        if nearest_deribit_ts:
+            nearest_deribit_expiry = datetime.datetime.utcfromtimestamp(nearest_deribit_ts / 1000).strftime("%Y-%m-%d")
+
+        deribit_summary = load_deribit_book_summary(meta["spot_symbol"])
+        deribit_summary = deribit_summary if isinstance(deribit_summary, list) else []
+        summary_map = {row.get("instrument_name"): row for row in deribit_summary}
+        for inst in deribit_instruments:
+            if inst.get("expiration_timestamp") != nearest_deribit_ts:
+                continue
+            row = summary_map.get(inst.get("instrument_name"))
+            if not row:
+                continue
+            try:
+                oi_value = float(row.get("open_interest", 0) or 0)
+            except (TypeError, ValueError):
+                oi_value = 0.0
+            deribit_strikes.append({
+                "instrument_name": inst.get("instrument_name"),
+                "strike": float(inst.get("strike", 0) or 0),
+                "option_type": inst.get("option_type"),
+                "open_interest": oi_value
+            })
+
         # Aggregate OI per maturity from the latest date's rows
         maturity_oi = {}
         for row in latest_maturity_rows:
             maturity = row.get("maturity")
-            if not maturity:
+            parsed = parse_maturity(maturity)
+            if not maturity or not parsed or not within_forward_window(parsed, 90):
                 continue
             calls = row.get("calls_oi") or row.get("total_calls_oi") or 0
             puts = row.get("puts_oi") or row.get("total_puts_oi") or 0
@@ -339,17 +439,18 @@ def main():
 
         expiry_pressure[asset] = expiry_rows
 
-        price_points = sorted({s["strike"] for s in strikes})
-        best, candidates = compute_max_pain(strikes, price_points)
+        combined_strikes = strikes + deribit_strikes
+        price_points = sorted({s["strike"] for s in combined_strikes})
+        best, candidates = compute_max_pain(combined_strikes, price_points)
         max_pain[asset] = {
-            "expiry": nearest_maturity or "—",
+            "expiry": nearest_deribit_expiry or nearest_maturity or "—",
             "max_pain": best["strike"] if best else None,
             "candidates": candidates
         }
 
-        total_oi, call_oi, put_oi, put_call = aggregate_open_interest(strikes)
+        total_oi, call_oi, put_oi, put_call = aggregate_open_interest(combined_strikes)
 
-        if not strikes and nearest_maturity:
+        if not combined_strikes and nearest_maturity:
             for row in latest_maturity_rows:
                 maturity = row.get("maturity")
                 if maturity == nearest_maturity:
@@ -369,14 +470,50 @@ def main():
 
         spot_price = load_spot_price(underlying)
 
+        basis_rows = load_binance_basis(underlying, 2)
+        basis_rows = basis_rows if isinstance(basis_rows, list) else []
+        perp_basis = None
+        if basis_rows:
+            try:
+                perp_basis = float(basis_rows[0].get("basis", 0))
+            except (TypeError, ValueError):
+                perp_basis = None
+
+        funding_rows = load_deribit_funding(f"{meta['spot_symbol']}-PERPETUAL")
+        funding_rows = funding_rows if isinstance(funding_rows, list) else []
+        funding_rate = None
+        if funding_rows:
+            try:
+                funding_rate = float(funding_rows[0].get("interest_8h"))
+            except (TypeError, ValueError):
+                funding_rate = None
+
+        vol_rows = load_deribit_volatility(meta["spot_symbol"], 30)
+        vol_rows = vol_rows if isinstance(vol_rows, list) else []
+        iv_7d = None
+        iv_30d = None
+        if vol_rows:
+            try:
+                iv_7d = float(vol_rows[0].get("close"))
+            except (TypeError, ValueError):
+                iv_7d = None
+            if len(vol_rows) >= 7:
+                try:
+                    iv_30d = float(vol_rows[min(29, len(vol_rows) - 1)].get("close"))
+                except (TypeError, ValueError):
+                    iv_30d = None
+        iv_term = None
+        if iv_7d and iv_30d:
+            iv_term = f"{iv_7d:.1f}% / {iv_30d:.1f}%"
+
         snapshot[asset] = {
             "total_oi": total_oi,
             "oi_change_7d": oi_change,
             "put_call_ratio": put_call,
             "call_oi": call_oi,
             "put_oi": put_oi,
-            "atm_iv": None,
-            "iv_term": None,
+            "atm_iv": iv_7d / 100 if iv_7d else None,
+            "iv_term": iv_term,
             "oi_concentration": None,
             "nearest_expiry_share": None,
             "spot_price": spot_price,
@@ -384,8 +521,8 @@ def main():
         }
 
         trader[asset] = {
-            "funding_rate": "—",
-            "perp_basis": "—",
+            "funding_rate": f"{funding_rate * 100:.4f}%" if funding_rate is not None else "—",
+            "perp_basis": f"${perp_basis:.2f}" if perp_basis is not None else "—",
             "rv_iv": "—",
             "liquidations": "—"
         }
