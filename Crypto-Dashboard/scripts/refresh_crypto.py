@@ -303,6 +303,8 @@ def main():
 
         oi_summary = load_binance_options_oi_summary(underlying)
         history = build_history(oi_summary if isinstance(oi_summary, list) else [])
+        if len(history) >= 7:
+            history = history[-7:]
         oi_history[asset] = history
 
         maturities = load_binance_oi_maturity(underlying)
@@ -325,7 +327,7 @@ def main():
 
         strikes = []
         deribit_strikes = []
-        expiry_totals = []
+        expiry_strikes_map = {}
         if nearest_maturity:
             options_rows = load_binance_options_ohlc(underlying, nearest_maturity)
             options_rows = options_rows if isinstance(options_rows, list) else []
@@ -363,8 +365,9 @@ def main():
         deribit_summary = deribit_summary if isinstance(deribit_summary, list) else []
         summary_map = {row.get("instrument_name"): row for row in deribit_summary}
         for inst in deribit_instruments:
+            expiry_date = datetime.date.fromtimestamp(inst.get("expiration_timestamp", 0) / 1000)
             if inst.get("expiration_timestamp") != nearest_deribit_ts:
-                continue
+                pass
             row = summary_map.get(inst.get("instrument_name"))
             if not row:
                 continue
@@ -372,29 +375,21 @@ def main():
                 oi_value = float(row.get("open_interest", 0) or 0)
             except (TypeError, ValueError):
                 oi_value = 0.0
-            deribit_strikes.append({
+            strike_entry = {
                 "instrument_name": inst.get("instrument_name"),
                 "strike": float(inst.get("strike", 0) or 0),
                 "option_type": inst.get("option_type"),
                 "open_interest": oi_value
-            })
+            }
+            if inst.get("expiration_timestamp") == nearest_deribit_ts:
+                deribit_strikes.append(strike_entry)
+            expiry_key = expiry_date.strftime("%Y-%m-%d")
+            expiry_strikes_map.setdefault(expiry_key, []).append(strike_entry)
 
-        # Aggregate OI per maturity from the latest date's rows
-        maturity_oi = {}
-        for row in latest_maturity_rows:
-            maturity = row.get("maturity")
-            parsed = parse_maturity(maturity)
-            if not maturity or not parsed or not within_forward_window(parsed, 90):
-                continue
-            calls = row.get("calls_oi") or row.get("total_calls_oi") or 0
-            puts = row.get("puts_oi") or row.get("total_puts_oi") or 0
-            try:
-                total = float(calls) + float(puts)
-            except (TypeError, ValueError):
-                total = 0.0
-            maturity_oi[maturity] = maturity_oi.get(maturity, 0.0) + total
-        for maturity, total in maturity_oi.items():
-            expiry_totals.append({"date": maturity, "total": total})
+        expiry_totals = []
+        for expiry_key, strike_rows in expiry_strikes_map.items():
+            total = sum(row.get("open_interest", 0) or 0 for row in strike_rows)
+            expiry_totals.append({"date": expiry_key, "total": total})
 
         avg_total = None
         if expiry_totals:
@@ -414,25 +409,7 @@ def main():
             expiry_rows = expiry_rows[:5]
 
             for erow in expiry_rows:
-                options_rows = load_binance_options_ohlc(underlying, erow["date"])
-                options_rows = options_rows if isinstance(options_rows, list) else []
-                latest_by_symbol = extract_latest_by_symbol(options_rows)
-                expiry_strikes = []
-                for symbol, opt_row in latest_by_symbol.items():
-                    strike = parse_symbol_strike(symbol)
-                    opt_type = parse_symbol_type(symbol, opt_row.get("type"))
-                    oi = opt_row.get("openinterest_contracts")
-                    try:
-                        oi_value = float(oi) if oi is not None else 0.0
-                    except (TypeError, ValueError):
-                        oi_value = 0.0
-                    if strike and opt_type:
-                        expiry_strikes.append({
-                            "instrument_name": symbol,
-                            "strike": strike,
-                            "option_type": opt_type,
-                            "open_interest": oi_value
-                        })
+                expiry_strikes = expiry_strikes_map.get(erow["date"], [])
                 expiry_points = sorted({s["strike"] for s in expiry_strikes})
                 best_expiry, _ = compute_max_pain(expiry_strikes, expiry_points)
                 erow["max_pain"] = best_expiry["strike"] if best_expiry else None
