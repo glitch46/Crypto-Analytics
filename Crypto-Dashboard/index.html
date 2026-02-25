@@ -40,10 +40,64 @@
       color: var(--white-soft);
     }
 
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
+      border-right: 1px solid var(--gray-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      height: 100vh;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 10px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--black-rich);
+      color: var(--white-soft);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 200ms ease-out;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      border-color: #ff4d7d70;
+      box-shadow: var(--shadow-sm);
+      color: var(--white-pure);
+    }
+
     .page {
       max-width: 1200px;
       margin: 0 auto;
       padding: 64px 24px 80px;
+      flex: 1;
     }
 
     .hero {
@@ -278,6 +332,20 @@
     }
 
     @media (max-width: 1024px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sidebar-nav {
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+      }
       .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .two-col { grid-template-columns: 1fr; }
       .controls { flex-direction: column; align-items: flex-start; }
@@ -295,7 +363,16 @@
   </style>
 </head>
 <body>
-  <div class="page">
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Dashboards</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="../index.html">Home</a>
+        <a class="sidebar-link active" href="index.html">Options Intelligence</a>
+        <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
+      </nav>
+    </aside>
+    <div class="page">
     <header class="hero">
       <h1>Options Intelligence</h1>
       <p>Monitor BTC and ETH options positioning across near-term expiries, max pain zones, and open interest shifts. Built from Binance and Deribit options data (no OKX).</p>
@@ -374,6 +451,7 @@
     <footer class="footer" id="footerNote">
       Data sources: CryptoDataDownload. Max pain computed with nearest expiry only.
     </footer>
+    </div>
   </div>
 
   <script>
