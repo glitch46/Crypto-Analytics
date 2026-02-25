@@ -11,7 +11,7 @@ Static dashboard that visualizes 7-day open interest and max pain for BTC and ET
 - `data/metadata.json`: refresh timestamp + sources
 
 ## Refresh
-Set `CRYPTODATADOWNLOAD_API_KEY` before running. Requests are authenticated via the `Authorization: Bearer <token>` header per CryptoDataDownload API docs:
+Set `CRYPTODATADOWNLOAD_API_KEY` before running. Requests are authenticated via the `Authorization: Token <token>` header per CryptoDataDownload API docs:
 
 ```
 python scripts/refresh_crypto.py

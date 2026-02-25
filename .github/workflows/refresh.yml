@@ -13,6 +13,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Secret scan
+        run: |
+          if rg -n "auth_token=|CRYPTODATADOWNLOAD_API_KEY|sk-[A-Za-z0-9]{20,}" .; then
+            echo "Potential secret detected in repo" >&2
+            exit 1
+          fi
       - name: Set up Python
         uses: actions/setup-python@v5
         with:

@@ -36,7 +36,6 @@ def build_headers():
 
 def load_cdd(path, params=None):
     payload = dict(params or {})
-    payload.setdefault("auth_token", CRYPTO_API_KEY)
     query = urllib.parse.urlencode(payload)
     url = f"{CRYPTO_API_BASE}{path}"
     if query:
