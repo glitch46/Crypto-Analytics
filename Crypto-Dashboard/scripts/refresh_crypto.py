@@ -306,6 +306,15 @@ def within_forward_window(date_value, days=90, start_offset=1):
     return start <= date_value <= end
 
 
+def filter_strikes_by_spot(strikes, spot_price, min_mult=0.5, max_mult=2.0):
+    if not spot_price:
+        return strikes
+    lower = spot_price * min_mult
+    upper = spot_price * max_mult
+    filtered = [s for s in strikes if lower <= s.get("strike", 0) <= upper and (s.get("open_interest", 0) or 0) > 0]
+    return filtered if filtered else strikes
+
+
 def main():
     output_dir = os.path.join(os.path.dirname(__file__), "..", "data")
     os.makedirs(output_dir, exist_ok=True)
@@ -462,6 +471,7 @@ def main():
             expiry_totals.append({"date": expiry_key, "total": total})
 
         combined_strikes = strikes + deribit_strikes
+        combined_strikes = filter_strikes_by_spot(combined_strikes, spot_price, 0.4, 2.5)
 
         expiry_rows = []
         if expiry_totals:
@@ -498,6 +508,7 @@ def main():
 
             for erow in expiry_rows:
                 expiry_strikes = expiry_strikes_map.get(erow["date"], [])
+                expiry_strikes = filter_strikes_by_spot(expiry_strikes, spot_price, 0.4, 2.5)
                 expiry_points = sorted({s["strike"] for s in expiry_strikes})
                 best_expiry, _ = compute_max_pain(expiry_strikes, expiry_points)
                 erow["max_pain"] = best_expiry["strike"] if best_expiry else None
