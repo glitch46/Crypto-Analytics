@@ -375,6 +375,8 @@ def main():
         nearest_oi_usd = 0.0
         oi_total_by_expiry = {}
         oi_usd_by_expiry = {}
+        calls_usd_by_expiry = {}
+        puts_usd_by_expiry = {}
         if nearest_maturity:
             options_rows = load_binance_options_ohlc(underlying, nearest_maturity)
             options_rows = options_rows if isinstance(options_rows, list) else []
@@ -462,6 +464,10 @@ def main():
             expiry_strikes_map.setdefault(expiry_key, []).append(strike_entry)
             oi_total_by_expiry[expiry_key] = oi_total_by_expiry.get(expiry_key, 0.0) + oi_value
             oi_usd_by_expiry[expiry_key] = oi_usd_by_expiry.get(expiry_key, 0.0) + oi_value_usd
+            if inst.get("option_type") == "call":
+                calls_usd_by_expiry[expiry_key] = calls_usd_by_expiry.get(expiry_key, 0.0) + oi_value_usd
+            elif inst.get("option_type") == "put":
+                puts_usd_by_expiry[expiry_key] = puts_usd_by_expiry.get(expiry_key, 0.0) + oi_value_usd
             total_oi_usd += oi_value_usd
             total_oi_base += oi_value
 
@@ -496,12 +502,16 @@ def main():
 
             avg_total = sum(item["total"] for item in filtered_expiry_totals) / len(filtered_expiry_totals)
             for item in filtered_expiry_totals:
+                calls_usd = calls_usd_by_expiry.get(item["date"], 0.0)
+                puts_usd = puts_usd_by_expiry.get(item["date"], 0.0)
                 expiry_rows.append({
                     "date": item["date"],
                     "asset": meta["spot_symbol"],
                     "notional": item["total"],
                     "delta_vs_avg": (item["total"] - avg_total) / avg_total,
-                    "max_pain": None
+                    "max_pain": None,
+                    "calls_usd": calls_usd,
+                    "puts_usd": puts_usd
                 })
             expiry_rows.sort(key=lambda x: x["notional"], reverse=True)
             expiry_rows = expiry_rows[:5]
