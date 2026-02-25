@@ -78,6 +78,38 @@
       margin: 24px 0 32px;
     }
 
+    .nav {
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-dark);
+      background: var(--black-rich);
+      color: var(--gray-light);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 200ms ease-out;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      color: var(--white-pure);
+      border-color: transparent;
+      background: var(--gradient-primary);
+      box-shadow: var(--shadow-glow);
+    }
+
     .toggle-group {
       display: inline-flex;
       gap: 8px;
@@ -302,6 +334,10 @@
     </header>
 
     <section class="controls">
+      <div class="nav">
+        <a class="nav-link active" href="index.html">Options Intelligence</a>
+        <a class="nav-link" href="../index.html">All Dashboards</a>
+      </div>
       <div class="toggle-group" role="tablist" aria-label="Asset selection">
         <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
         <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
@@ -357,6 +393,27 @@
         <div class="chart-subtitle">Key short-term positioning signals</div>
         <div class="info-grid" id="snapshotGrid"></div>
       </div>
+    </section>
+
+    <section class="grid two-col" style="margin-top: 24px;">
+      <div class="panel">
+        <div class="chart-title">Skew vs Outcome Backtest</div>
+        <div class="chart-subtitle">12-month snapshots around expiry settlement</div>
+        <div class="info-grid" id="backtestSummary"></div>
+        <ul class="list" id="putsDominanceList"></ul>
+      </div>
+      <section class="panel chart-panel">
+        <div class="chart-header">
+          <div>
+            <div class="chart-title">Skew vs Price Change</div>
+            <div class="chart-subtitle">Put/call ratio and 30d price change into expiry</div>
+          </div>
+          <span class="pill" id="backtestRange">Last 12 months</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="backtestChart"></canvas>
+        </div>
+      </section>
     </section>
 
     <section class="panel" style="margin-top: 24px;">
@@ -505,9 +562,47 @@
       });
     }
 
+    function updateBacktest(assetData) {
+      const summary = assetData.backtest?.summary;
+      const rows = assetData.backtest?.months || [];
+      const grid = document.getElementById('backtestSummary');
+      const list = document.getElementById('putsDominanceList');
+      grid.innerHTML = '';
+      list.innerHTML = '';
+
+      const summaryRows = [
+        { label: 'Win Rate (Skew Follow)', value: summary?.win_rate !== null && summary?.win_rate !== undefined ? (summary.win_rate * 100).toFixed(1) + '%' : '—' },
+        { label: 'Months Analyzed', value: summary?.months ?? '—' },
+        { label: 'Puts > Calls Months', value: summary?.puts_over_calls ?? '—' },
+        { label: 'Avg Max Pain Deviation', value: summary?.avg_max_pain_dev !== null && summary?.avg_max_pain_dev !== undefined ? (summary.avg_max_pain_dev * 100).toFixed(2) + '%' : '—' }
+      ];
+      summaryRows.forEach(row => {
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.innerHTML = `<span class="info-label">${row.label}</span><span class="info-value">${row.value}</span>`;
+        grid.appendChild(div);
+      });
+
+      const putsMonths = rows.filter(item => item.put_call && item.put_call > 1);
+      if (!putsMonths.length) {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        li.textContent = 'No months with puts outweighing calls.';
+        list.appendChild(li);
+        return;
+      }
+      putsMonths.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        const change = item.price_change_pct !== null && item.price_change_pct !== undefined ? fmtPercent(item.price_change_pct) : '—';
+        li.innerHTML = `<span>${item.month} · Put/Call ${item.put_call.toFixed(2)}</span><span>Price change ${change}</span>`;
+        list.appendChild(li);
+      });
+    }
+
     function updateMetadata(meta) {
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
-      document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Max pain computed with nearest expiry only.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Max pain computed with nearest expiry only.';
+      document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Max pain computed with nearest expiry only. Backtest uses 30d price change into expiry.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Max pain computed with nearest expiry only. Backtest uses 30d price change into expiry.';
     }
 
     function buildChart(history, asset) {
@@ -553,6 +648,72 @@
       });
     }
 
+    function buildBacktestChart(rows) {
+      const ctx = document.getElementById('backtestChart');
+      if (state.backtestChart) state.backtestChart.destroy();
+      const labels = rows.map(item => item.month);
+      const priceMoves = rows.map(item => item.price_change_pct !== null && item.price_change_pct !== undefined ? item.price_change_pct * 100 : null);
+      const putCall = rows.map(item => item.put_call ?? null);
+      state.backtestChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: '30d Price Change %',
+              data: priceMoves,
+              backgroundColor: 'rgba(0, 180, 216, 0.35)',
+              borderColor: '#00b4d8',
+              borderWidth: 1,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Put/Call Ratio',
+              data: putCall,
+              borderColor: '#ff4d7d',
+              backgroundColor: 'rgba(255, 77, 125, 0.2)',
+              type: 'line',
+              tension: 0.3,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#e8e8ed' } }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#9999a5', maxRotation: 0 },
+              grid: { color: '#1a1a1e' }
+            },
+            y: {
+              ticks: {
+                color: '#9999a5',
+                callback: (value) => `${value}%`
+              },
+              grid: { color: '#1a1a1e' },
+              title: {
+                display: true,
+                text: 'Price Change %',
+                color: '#9999a5'
+              }
+            },
+            y1: {
+              position: 'right',
+              ticks: { color: '#9999a5' },
+              grid: { drawOnChartArea: false },
+              title: {
+                display: true,
+                text: 'Put/Call Ratio',
+                color: '#9999a5'
+              }
+            }
+          }
+        }
+      });
+    }
+
     function render(asset) {
       const assetData = state.data[asset];
       if (!assetData) return;
@@ -562,16 +723,19 @@
       updateSnapshot(assetData);
       updateTraderGrid(assetData);
       updateExpiryList(assetData);
+      updateBacktest(assetData);
+      buildBacktestChart(assetData.backtest?.months || []);
       buildChart(assetData.history, asset);
     }
 
     async function init() {
-      const [history, maxPain, snapshot, trader, expiryPressure, meta] = await Promise.all([
+      const [history, maxPain, snapshot, trader, expiryPressure, backtest, meta] = await Promise.all([
         loadJSON('data/oi_history.json'),
         loadJSON('data/max_pain.json'),
         loadJSON('data/options_snapshot.json'),
         loadJSON('data/trader_focus.json'),
         loadJSON('data/expiry_pressure.json'),
+        loadJSON('data/backtest.json'),
         loadJSON('data/metadata.json')
       ]);
       state.data = {
@@ -580,14 +744,16 @@
           maxPain: maxPain.BTC || {},
           snapshot: snapshot.BTC || {},
           trader: trader.BTC || {},
-          expiry: expiryPressure.BTC || []
+          expiry: expiryPressure.BTC || [],
+          backtest: backtest.BTC || {}
         },
         ETH: {
           history: history.ETH || [],
           maxPain: maxPain.ETH || {},
           snapshot: snapshot.ETH || {},
           trader: trader.ETH || {},
-          expiry: expiryPressure.ETH || []
+          expiry: expiryPressure.ETH || [],
+          backtest: backtest.ETH || {}
         }
       };
       updateMetadata(meta);
