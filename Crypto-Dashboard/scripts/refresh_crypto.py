@@ -18,8 +18,6 @@ ASSETS = {
     }
 }
 
-BACKTEST_MONTHS = 12
-
 
 def fetch_json(url, headers=None):
     req = urllib.request.Request(url, headers=headers or {})
@@ -123,31 +121,11 @@ def load_spot_price(symbol):
     return None
 
 
-def load_spot_history(symbol, limit=450):
-    return load_cdd("/ohlc/binance/spot/", {
-        "symbol": symbol,
-        "interval": "1d",
-        "limit": limit,
-        "return": "JSON"
-    })
-
-
 def load_deribit_instruments(currency):
     return fetch_deribit("/get_instruments", {
         "currency": currency,
         "kind": "option"
     })
-
-
-def load_deribit_settlements(currency, settlement_type="delivery", count=1000, continuation=None):
-    params = {
-        "currency": currency,
-        "type": settlement_type,
-        "count": count
-    }
-    if continuation:
-        params["continuation"] = continuation
-    return fetch_deribit("/get_last_settlements_by_currency", params)
 
 
 def load_deribit_book_summary(currency):
@@ -202,8 +180,6 @@ def load_deribit_options_greeks_maturity(underlying, date, limit=5000):
 def compute_max_pain(strikes, price_points):
     best = None
     candidates = []
-    if not strikes or not price_points:
-        return best, candidates
     for strike in price_points:
         pain = 0.0
         for entry in strikes:
@@ -272,29 +248,6 @@ def extract_latest_by_symbol(options_rows):
     return latest
 
 
-def extract_latest_by_symbol_before(options_rows, cutoff_date):
-    latest = {}
-    if isinstance(cutoff_date, str):
-        cutoff_date = parse_maturity(cutoff_date)
-    for row in options_rows:
-        date = row.get("date") or row.get("Date")
-        if not date:
-            continue
-        row_date = parse_maturity(date)
-        if not row_date or (cutoff_date and row_date > cutoff_date):
-            continue
-        symbol = row.get("symbol") or row.get("Symbol")
-        if not symbol:
-            continue
-        hour = row.get("hour") or row.get("Hour") or ""
-        stamp = f"{date} {hour}".strip()
-        existing = latest.get(symbol)
-        if not existing or stamp > existing.get("_stamp", ""):
-            row["_stamp"] = stamp
-            latest[symbol] = row
-    return latest
-
-
 def normalize_option_type(value):
     if not value:
         return None
@@ -343,100 +296,6 @@ def parse_deribit_expiry_date(value):
         return None
 
 
-def parse_deribit_option_expiry(instrument_name):
-    if not instrument_name:
-        return None
-    parts = instrument_name.split("-")
-    if len(parts) < 4:
-        return None
-    return parse_deribit_expiry_date(parts[1])
-
-
-def is_deribit_option(instrument_name):
-    if not instrument_name:
-        return False
-    parts = instrument_name.split("-")
-    if len(parts) < 4:
-        return False
-    return normalize_option_type(parts[-1]) is not None
-
-
-def collect_settlement_prices(currency, cutoff_date):
-    settlements = []
-    continuation = None
-    while True:
-        data = load_deribit_settlements(currency, "delivery", 1000, continuation)
-        if not isinstance(data, dict):
-            break
-        rows = data.get("settlements", [])
-        if not rows:
-            break
-        stop = False
-        for row in rows:
-            ts = row.get("timestamp")
-            if not ts:
-                continue
-            event_date = datetime.datetime.utcfromtimestamp(ts / 1000).date()
-            if cutoff_date and event_date < cutoff_date:
-                stop = True
-                break
-            settlements.append(row)
-        continuation = data.get("continuation")
-        if stop or not continuation:
-            break
-    return settlements
-
-
-def pick_monthly_expiries(expiry_prices, months=12):
-    monthly = {}
-    for expiry_date in sorted(expiry_prices.keys(), reverse=True):
-        month_key = expiry_date.strftime("%Y-%m")
-        if month_key not in monthly:
-            monthly[month_key] = expiry_date
-        if len(monthly) >= months:
-            break
-    return sorted(monthly.values())
-
-
-def get_spot_on_or_before(price_map, target_date, max_lookback=10):
-    for offset in range(max_lookback + 1):
-        candidate = target_date - datetime.timedelta(days=offset)
-        if candidate in price_map:
-            return price_map[candidate]
-    return None
-
-
-def parse_float(value):
-    try:
-        return float(value)
-    except (TypeError, ValueError):
-        return None
-
-
-def build_binance_expiry_snapshot(underlying, maturity, expiry_date):
-    rows = load_binance_options_ohlc(underlying, maturity)
-    rows = rows if isinstance(rows, list) else []
-    latest_by_symbol = extract_latest_by_symbol_before(rows, expiry_date)
-    strikes = []
-    for symbol, row in latest_by_symbol.items():
-        strike = parse_symbol_strike(symbol)
-        opt_type = parse_symbol_type(symbol, row.get("type"))
-        oi = (
-            row.get("openinterest_contracts")
-            or row.get("open_interest_contracts")
-            or row.get("Open Interest Contracts")
-        )
-        oi_value = parse_float(oi) or 0.0
-        if strike and opt_type:
-            strikes.append({
-                "instrument_name": symbol,
-                "strike": strike,
-                "option_type": opt_type,
-                "open_interest": oi_value
-            })
-    return strikes
-
-
 def within_forward_window(date_value, days=90, start_offset=1):
     if not date_value:
         return False
@@ -464,7 +323,6 @@ def main():
     snapshot = {}
     trader = {}
     expiry_pressure = {}
-    backtest = {}
 
     for asset, meta in ASSETS.items():
         underlying = f"{meta['spot_symbol']}USDT"
@@ -486,20 +344,6 @@ def main():
         oi_history[asset] = history
 
         spot_price = load_spot_price(underlying)
-        spot_history = load_spot_history(underlying, 450)
-        spot_history = spot_history if isinstance(spot_history, list) else []
-        spot_map = {}
-        for row in spot_history:
-            date_value = row.get("date") or row.get("Date")
-            close_value = row.get("close") or row.get("Close")
-            if not date_value:
-                continue
-            parsed = parse_maturity(date_value)
-            if parsed is None:
-                continue
-            close_price = parse_float(close_value)
-            if close_price is not None:
-                spot_map[parsed] = close_price
 
         maturities = load_binance_oi_maturity(underlying)
         maturity_rows = maturities if isinstance(maturities, list) else []
@@ -682,16 +526,10 @@ def main():
 
         price_points = sorted({s["strike"] for s in combined_strikes})
         best, candidates = compute_max_pain(combined_strikes, price_points)
-        max_pain_value = best["strike"] if isinstance(best, dict) else None
-        peak_expiry = None
-        peak_notional = None
-        if expiry_rows:
-            peak_expiry = expiry_rows[0].get("date")
-            peak_notional = expiry_rows[0].get("notional")
         max_pain[asset] = {
-            "peak_expiry": peak_expiry or "—",
-            "peak_notional": peak_notional,
-            "max_pain": max_pain_value,
+            "peak_expiry": expiry_rows[0]["date"] if expiry_rows else "—",
+            "peak_notional": expiry_rows[0]["notional"] if expiry_rows else None,
+            "max_pain": best["strike"] if best else None,
             "candidates": candidates
         }
 
@@ -729,9 +567,6 @@ def main():
                 total_oi_usd += binance_oi_usd * spot_price
         if total_oi_usd:
             total_oi = total_oi_usd
-
-        if put_call is None and call_oi and put_oi:
-            put_call = (put_oi / call_oi) if call_oi else None
 
         basis_rows = load_binance_basis(underlying, 2)
         basis_rows = basis_rows if isinstance(basis_rows, list) else []
@@ -821,117 +656,6 @@ def main():
             "sources": "Deribit + Binance (CDD)"
         }
 
-        cutoff_date = datetime.date.today() - datetime.timedelta(days=365)
-        settlements = collect_settlement_prices(meta["spot_symbol"], cutoff_date)
-        expiry_prices = {}
-        for row in settlements:
-            instrument = row.get("instrument_name")
-            if not is_deribit_option(instrument):
-                continue
-            expiry_date = parse_deribit_option_expiry(instrument)
-            if not expiry_date or expiry_date < cutoff_date:
-                continue
-            price = parse_float(row.get("index_price"))
-            if price is None:
-                continue
-            expiry_prices.setdefault(expiry_date, []).append(price)
-        expiry_prices = {
-            date_key: sum(values) / len(values)
-            for date_key, values in expiry_prices.items()
-            if values
-        }
-
-        monthly_expiries = pick_monthly_expiries(expiry_prices, BACKTEST_MONTHS)
-        backtest_rows = []
-        win_total = 0
-        win_hits = 0
-        puts_over_calls = 0
-        max_pain_devs = []
-
-        for expiry_date in monthly_expiries:
-            maturity = expiry_date.strftime("%Y-%m-%d")
-            strikes = build_binance_expiry_snapshot(underlying, maturity, expiry_date)
-            if not strikes:
-                continue
-            total_oi, call_oi, put_oi, put_call = aggregate_open_interest(strikes)
-            price_points = sorted({s["strike"] for s in strikes})
-            best, _ = compute_max_pain(strikes, price_points)
-            max_pain_strike = best["strike"] if isinstance(best, dict) else None
-
-            settlement_price = expiry_prices.get(expiry_date)
-            spot_30d = get_spot_on_or_before(spot_map, expiry_date - datetime.timedelta(days=30))
-            spot_expiry = get_spot_on_or_before(spot_map, expiry_date)
-
-            price_change = None
-            price_change_pct = None
-            outcome_direction = "flat"
-            if settlement_price is not None and spot_30d is not None:
-                price_change = settlement_price - spot_30d
-                if spot_30d:
-                    price_change_pct = price_change / spot_30d
-                if price_change > 0:
-                    outcome_direction = "up"
-                elif price_change < 0:
-                    outcome_direction = "down"
-
-            skew_direction = "flat"
-            if put_call is not None:
-                if put_call > 1:
-                    skew_direction = "down"
-                elif put_call < 1:
-                    skew_direction = "up"
-            skew_followed = False
-            if skew_direction != "flat" and outcome_direction != "flat":
-                win_total += 1
-                skew_followed = skew_direction == outcome_direction
-                if skew_followed:
-                    win_hits += 1
-
-            if put_call is not None and put_call > 1:
-                puts_over_calls += 1
-
-            max_pain_dev = None
-            max_pain_dev_pct = None
-            if settlement_price is not None and max_pain_strike:
-                max_pain_dev = settlement_price - max_pain_strike
-                if settlement_price:
-                    max_pain_dev_pct = abs(max_pain_dev) / settlement_price
-                if max_pain_dev_pct is not None:
-                    max_pain_devs.append(max_pain_dev_pct)
-
-            backtest_rows.append({
-                "month": expiry_date.strftime("%Y-%m"),
-                "expiry": maturity,
-                "settlement_price": settlement_price,
-                "spot_30d": spot_30d,
-                "spot_expiry": spot_expiry,
-                "put_call": put_call,
-                "call_oi": call_oi,
-                "put_oi": put_oi,
-                "max_pain": max_pain_strike,
-                "max_pain_dev": max_pain_dev,
-                "max_pain_dev_pct": max_pain_dev_pct,
-                "price_change": price_change,
-                "price_change_pct": price_change_pct,
-                "skew_direction": skew_direction,
-                "outcome_direction": outcome_direction,
-                "skew_followed": skew_followed
-            })
-
-        backtest_rows.sort(key=lambda x: x["expiry"])
-        win_rate = (win_hits / win_total) if win_total else None
-        avg_max_pain_dev = (sum(max_pain_devs) / len(max_pain_devs)) if max_pain_devs else None
-
-        backtest[asset] = {
-            "summary": {
-                "win_rate": win_rate,
-                "months": len(backtest_rows),
-                "puts_over_calls": puts_over_calls,
-                "avg_max_pain_dev": avg_max_pain_dev
-            },
-            "months": backtest_rows
-        }
-
     with open(os.path.join(output_dir, "oi_history.json"), "w") as f:
         f.write(json.dumps(oi_history, indent=2))
     with open(os.path.join(output_dir, "max_pain.json"), "w") as f:
@@ -942,12 +666,10 @@ def main():
         f.write(json.dumps(trader, indent=2))
     with open(os.path.join(output_dir, "expiry_pressure.json"), "w") as f:
         f.write(json.dumps(expiry_pressure, indent=2))
-    with open(os.path.join(output_dir, "backtest.json"), "w") as f:
-        f.write(json.dumps(backtest, indent=2))
     with open(os.path.join(output_dir, "metadata.json"), "w") as f:
         meta = {
             "last_updated": datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-            "sources": ["CryptoDataDownload", "Deribit"]
+            "sources": ["CryptoDataDownload"]
         }
         f.write(json.dumps(meta, indent=2))
 
