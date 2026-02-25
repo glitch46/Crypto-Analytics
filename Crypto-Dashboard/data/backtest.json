@@ -1,0 +1,20 @@
+{
+  "BTC": {
+    "summary": {
+      "win_rate": null,
+      "months": 0,
+      "puts_over_calls": 0,
+      "avg_max_pain_dev": null
+    },
+    "months": []
+  },
+  "ETH": {
+    "summary": {
+      "win_rate": null,
+      "months": 0,
+      "puts_over_calls": 0,
+      "avg_max_pain_dev": null
+    },
+    "months": []
+  }
+}
