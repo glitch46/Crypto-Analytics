@@ -465,9 +465,31 @@ def main():
         if expiry_totals:
             avg_total = sum(item["total"] for item in expiry_totals) / len(expiry_totals)
 
+        combined_strikes = strikes + deribit_strikes
+
         expiry_rows = []
         if expiry_totals and avg_total:
-            for item in expiry_totals:
+            top_contracts = sorted(
+                combined_strikes,
+                key=lambda x: x.get("open_interest", 0) or 0,
+                reverse=True
+            )[:10]
+            top_expiry_set = set()
+            for item in top_contracts:
+                symbol = item.get("instrument_name") or ""
+                expiry = None
+                if "-" in symbol:
+                    parts = symbol.split("-")
+                    if len(parts) >= 2:
+                        expiry = parse_deribit_expiry_date(parts[1])
+                if expiry and within_forward_window(expiry, 90):
+                    top_expiry_set.add(expiry.strftime("%Y-%m-%d"))
+
+            filtered_expiry_totals = [item for item in expiry_totals if item["date"] in top_expiry_set]
+            if not filtered_expiry_totals:
+                filtered_expiry_totals = expiry_totals
+
+            for item in filtered_expiry_totals:
                 expiry_rows.append({
                     "date": item["date"],
                     "asset": meta["spot_symbol"],
@@ -486,7 +508,6 @@ def main():
 
         expiry_pressure[asset] = expiry_rows
 
-        combined_strikes = strikes + deribit_strikes
         price_points = sorted({s["strike"] for s in combined_strikes})
         best, candidates = compute_max_pain(combined_strikes, price_points)
         max_pain[asset] = {
