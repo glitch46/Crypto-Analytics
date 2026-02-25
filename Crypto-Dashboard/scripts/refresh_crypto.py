@@ -413,26 +413,23 @@ def parse_float(value):
         return None
 
 
-def build_binance_expiry_snapshot(underlying, maturity, expiry_date):
-    rows = load_binance_options_ohlc(underlying, maturity)
-    rows = rows if isinstance(rows, list) else []
-    latest_by_symbol = extract_latest_by_symbol_before(rows, expiry_date)
+def build_strikes_from_settlements(settlement_rows, expiry_date):
     strikes = []
-    for symbol, row in latest_by_symbol.items():
-        strike = parse_symbol_strike(symbol)
-        opt_type = parse_symbol_type(symbol, row.get("type"))
-        oi = (
-            row.get("openinterest_contracts")
-            or row.get("open_interest_contracts")
-            or row.get("Open Interest Contracts")
-        )
-        oi_value = parse_float(oi) or 0.0
-        if strike and opt_type:
+    for row in settlement_rows:
+        instrument = row.get("instrument_name", "")
+        exp = parse_deribit_option_expiry(instrument)
+        if exp != expiry_date:
+            continue
+        strike = parse_symbol_strike(instrument)
+        parts = instrument.split("-")
+        opt_type = normalize_option_type(parts[-1]) if len(parts) >= 4 else None
+        oi = abs(parse_float(row.get("position")) or 0.0)
+        if strike and opt_type and oi > 0:
             strikes.append({
-                "instrument_name": symbol,
+                "instrument_name": instrument,
                 "strike": strike,
                 "option_type": opt_type,
-                "open_interest": oi_value
+                "open_interest": oi
             })
     return strikes
 
@@ -840,8 +837,7 @@ def main():
         max_pain_devs = []
 
         for expiry_date in monthly_expiries:
-            maturity = expiry_date.strftime("%Y-%m-%d")
-            bt_strikes = build_binance_expiry_snapshot(underlying, maturity, expiry_date)
+            bt_strikes = build_strikes_from_settlements(settlements, expiry_date)
             if not bt_strikes:
                 continue
             _, bt_call_oi, bt_put_oi, bt_put_call = aggregate_open_interest(bt_strikes)
@@ -892,7 +888,7 @@ def main():
 
             backtest_rows.append({
                 "month": expiry_date.strftime("%Y-%m"),
-                "expiry": maturity,
+                "expiry": expiry_date.strftime("%Y-%m-%d"),
                 "settlement_price": settlement_price,
                 "spot_30d": spot_30d,
                 "spot_expiry": spot_expiry,
