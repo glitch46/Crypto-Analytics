@@ -452,10 +452,24 @@ def filter_strikes_by_spot(strikes, spot_price, min_mult=0.5, max_mult=2.0):
     return filtered if filtered else strikes
 
 
+def load_existing_oi_history(output_dir):
+    path = os.path.join(output_dir, "oi_history.json")
+    if os.path.exists(path):
+        try:
+            with open(path) as f:
+                data = json.loads(f.read())
+            if isinstance(data, dict):
+                return data
+        except Exception:
+            pass
+    return {}
+
+
 def main():
     output_dir = os.path.join(os.path.dirname(__file__), "..", "data")
     os.makedirs(output_dir, exist_ok=True)
 
+    existing_oi = load_existing_oi_history(output_dir)
     oi_history = {}
     max_pain = {}
     snapshot = {}
@@ -466,21 +480,13 @@ def main():
     for asset, meta in ASSETS.items():
         underlying = f"{meta['spot_symbol']}USDT"
 
-        oi_summary = load_binance_options_oi_summary(underlying)
-        history = build_history(oi_summary if isinstance(oi_summary, list) else [])
-        if len(history) >= 7:
-            history = history[-7:]
+        # Load previous OI history for this asset (accumulate across runs)
+        prev_history = existing_oi.get(asset, [])
+        prev_map = {item["date"]: item["open_interest"] for item in prev_history if item.get("date")}
 
-        if len(history) < 7:
-            today = datetime.date.today()
-            history_map = {item["date"]: item["open_interest"] for item in history}
-            last_value = history[-1]["open_interest"] if history else 0
-            padded = []
-            for offset in range(6, -1, -1):
-                day = (today - datetime.timedelta(days=offset)).strftime("%Y-%m-%d")
-                padded.append({"date": day, "open_interest": history_map.get(day, last_value)})
-            history = padded
-        oi_history[asset] = history
+        # We'll compute today's Deribit total OI after fetching book summary below
+        # For now, store prev_map and fill history after we have deribit_summary
+        oi_history[asset] = prev_map  # temporary, replaced below
 
         spot_price = load_spot_price(underlying)
         spot_history = load_spot_history(underlying, 450)
@@ -550,22 +556,7 @@ def main():
                         "open_interest": oi_value
                     })
 
-        binance_oi_summary = oi_summary if isinstance(oi_summary, list) else []
-        if binance_oi_summary:
-            latest_oi_row = binance_oi_summary[0]
-            try:
-                binance_calls = float(latest_oi_row.get("total_calls_oi", 0) or 0)
-                binance_puts = float(latest_oi_row.get("total_puts_oi", 0) or 0)
-                binance_oi_contracts = binance_calls + binance_puts
-            except (TypeError, ValueError):
-                binance_calls = 0.0
-                binance_puts = 0.0
-                binance_oi_contracts = 0.0
-            if binance_oi_contracts:
-                binance_oi_usd = binance_oi_contracts
-                if spot_price:
-                    call_oi_usd += binance_calls * spot_price
-                    put_oi_usd += binance_puts * spot_price
+        # Binance OI summary removed (CDD data stale since 2023)
 
         deribit_instruments = load_deribit_instruments(meta["spot_symbol"])
         deribit_instruments = deribit_instruments if isinstance(deribit_instruments, list) else []
@@ -707,19 +698,27 @@ def main():
             put_oi = put_oi_usd
             put_call = (put_oi_usd / call_oi_usd) if call_oi_usd else None
 
+        if not total_oi_usd and spot_price:
+            total_oi_usd = total_oi_base * spot_price
+        if total_oi_usd:
+            total_oi = total_oi_usd
+
+        # Build rolling OI history from Deribit total OI
+        prev_map = oi_history.get(asset, {})
+        if isinstance(prev_map, list):
+            prev_map = {item["date"]: item["open_interest"] for item in prev_map if item.get("date")}
+        today_str = datetime.date.today().strftime("%Y-%m-%d")
+        prev_map[today_str] = total_oi_usd or total_oi or 0
+        # Remove entries older than 14 days to keep file small
+        cutoff_oi = (datetime.date.today() - datetime.timedelta(days=14)).strftime("%Y-%m-%d")
+        prev_map = {k: v for k, v in prev_map.items() if k >= cutoff_oi}
+        history = sorted([{"date": k, "open_interest": v} for k, v in prev_map.items()], key=lambda x: x["date"])
+        history = history[-7:]
+        oi_history[asset] = history
+
         oi_change = None
         if len(history) >= 2 and history[0]["open_interest"]:
             oi_change = (history[-1]["open_interest"] - history[0]["open_interest"]) / history[0]["open_interest"]
-
-        if spot_price and total_oi_usd:
-            if binance_oi_usd:
-                total_oi_usd += binance_oi_usd * spot_price
-        elif spot_price:
-            total_oi_usd = total_oi_base * spot_price
-            if binance_oi_usd:
-                total_oi_usd += binance_oi_usd * spot_price
-        if total_oi_usd:
-            total_oi = total_oi_usd
 
         basis_rows = load_binance_basis(underlying, 2)
         basis_rows = basis_rows if isinstance(basis_rows, list) else []
@@ -805,7 +804,6 @@ def main():
             "funding_rate": f"{funding_rate * 100:.4f}%" if funding_rate is not None else "—",
             "perp_basis": f"${perp_basis:.2f}" if perp_basis is not None else "—",
             "rv_iv": rv_iv or "—",
-            "liquidations": "—",
             "sources": "Deribit + Binance (CDD)"
         }
 
