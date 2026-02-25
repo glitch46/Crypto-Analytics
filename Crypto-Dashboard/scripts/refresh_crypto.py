@@ -361,6 +361,8 @@ def main():
         total_oi_usd = 0.0
         total_oi_base = 0.0
         binance_oi_usd = 0.0
+        call_oi_usd = 0.0
+        put_oi_usd = 0.0
         nearest_oi_usd = 0.0
         oi_total_by_expiry = {}
         oi_usd_by_expiry = {}
@@ -387,15 +389,20 @@ def main():
 
         binance_oi_summary = oi_summary if isinstance(oi_summary, list) else []
         if binance_oi_summary:
+            latest_oi_row = binance_oi_summary[0]
             try:
-                latest_oi_row = binance_oi_summary[0]
-                binance_oi_contracts = float(latest_oi_row.get("total_calls_oi", 0) or 0) + float(
-                    latest_oi_row.get("total_puts_oi", 0) or 0
-                )
+                binance_calls = float(latest_oi_row.get("total_calls_oi", 0) or 0)
+                binance_puts = float(latest_oi_row.get("total_puts_oi", 0) or 0)
+                binance_oi_contracts = binance_calls + binance_puts
             except (TypeError, ValueError):
+                binance_calls = 0.0
+                binance_puts = 0.0
                 binance_oi_contracts = 0.0
             if binance_oi_contracts:
                 binance_oi_usd = binance_oi_contracts
+                if spot_price:
+                    call_oi_usd += binance_calls * spot_price
+                    put_oi_usd += binance_puts * spot_price
 
         deribit_instruments = load_deribit_instruments(meta["spot_symbol"])
         deribit_instruments = deribit_instruments if isinstance(deribit_instruments, list) else []
@@ -438,6 +445,10 @@ def main():
             if inst.get("expiration_timestamp") == nearest_deribit_ts:
                 deribit_strikes.append(strike_entry)
                 nearest_oi_usd += oi_value_usd
+            if inst.get("option_type") == "call":
+                call_oi_usd += oi_value_usd
+            elif inst.get("option_type") == "put":
+                put_oi_usd += oi_value_usd
             expiry_key = expiry_date.strftime("%Y-%m-%d")
             expiry_strikes_map.setdefault(expiry_key, []).append(strike_entry)
             oi_total_by_expiry[expiry_key] = oi_total_by_expiry.get(expiry_key, 0.0) + oi_value
@@ -500,6 +511,11 @@ def main():
                         pass
             total_oi = call_oi + put_oi
             put_call = (put_oi / call_oi) if call_oi else None
+
+        if call_oi_usd or put_oi_usd:
+            call_oi = call_oi_usd
+            put_oi = put_oi_usd
+            put_call = (put_oi_usd / call_oi_usd) if call_oi_usd else None
 
         oi_change = None
         if len(history) >= 2 and history[0]["open_interest"]:
