@@ -471,7 +471,7 @@ def main():
             expiry_totals.append({"date": expiry_key, "total": total})
 
         combined_strikes = strikes + deribit_strikes
-        combined_strikes = filter_strikes_by_spot(combined_strikes, spot_price, 0.4, 2.5)
+        combined_strikes = filter_strikes_by_spot(combined_strikes, spot_price, 0.7, 1.3)
 
         expiry_rows = []
         if expiry_totals:
@@ -508,7 +508,7 @@ def main():
 
             for erow in expiry_rows:
                 expiry_strikes = expiry_strikes_map.get(erow["date"], [])
-                expiry_strikes = filter_strikes_by_spot(expiry_strikes, spot_price, 0.4, 2.5)
+                expiry_strikes = filter_strikes_by_spot(expiry_strikes, spot_price, 0.7, 1.3)
                 expiry_points = sorted({s["strike"] for s in expiry_strikes})
                 best_expiry, _ = compute_max_pain(expiry_strikes, expiry_points)
                 erow["max_pain"] = best_expiry["strike"] if best_expiry else None
