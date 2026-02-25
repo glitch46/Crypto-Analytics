@@ -396,6 +396,15 @@
       return Number(value).toFixed(2) + suffix;
     }
 
+    function fmtShort(value, suffix = '') {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const abs = Math.abs(value);
+      if (abs >= 1e9) return (value / 1e9).toFixed(1) + 'B' + suffix;
+      if (abs >= 1e6) return (value / 1e6).toFixed(1) + 'M' + suffix;
+      if (abs >= 1e3) return (value / 1e3).toFixed(1) + 'K' + suffix;
+      return Number(value).toFixed(1) + suffix;
+    }
+
     function fmtPercent(value) {
       if (value === null || value === undefined || Number.isNaN(value)) return '—';
       const sign = value >= 0 ? '+' : '';
@@ -417,7 +426,7 @@
 
     function updateKPIs(assetData) {
       document.getElementById('maxPainValue').textContent = assetData.maxPain?.peak_expiry || '—';
-      document.getElementById('maxPainExpiry').textContent = `Notional: ${fmtCurrency(assetData.maxPain?.peak_notional)}`;
+      document.getElementById('maxPainExpiry').textContent = `Notional: ${fmtShort(assetData.maxPain?.peak_notional, ' USD')}`;
       document.getElementById('totalOi').textContent = fmtNumber(assetData.snapshot?.total_oi, ' USD');
       document.getElementById('oiChange').textContent = `7d change: ${fmtPercent(assetData.snapshot?.oi_change_7d)}`;
       document.getElementById('putCall').textContent = assetData.snapshot?.put_call_ratio ? assetData.snapshot.put_call_ratio.toFixed(2) : '—';
