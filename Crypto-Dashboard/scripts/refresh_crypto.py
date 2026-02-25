@@ -335,6 +335,8 @@ def main():
             history = padded
         oi_history[asset] = history
 
+        spot_price = load_spot_price(underlying)
+
         maturities = load_binance_oi_maturity(underlying)
         maturity_rows = maturities if isinstance(maturities, list) else []
         # Get the latest date's rows only (API returns newest first)
@@ -361,6 +363,7 @@ def main():
         binance_oi_usd = 0.0
         nearest_oi_usd = 0.0
         oi_total_by_expiry = {}
+        oi_usd_by_expiry = {}
         if nearest_maturity:
             options_rows = load_binance_options_ohlc(underlying, nearest_maturity)
             options_rows = options_rows if isinstance(options_rows, list) else []
@@ -424,6 +427,8 @@ def main():
                 oi_value_usd = float(row.get("open_interest_usd", 0) or 0)
             except (TypeError, ValueError):
                 oi_value_usd = 0.0
+            if oi_value_usd == 0.0 and spot_price:
+                oi_value_usd = oi_value * spot_price
             strike_entry = {
                 "instrument_name": inst.get("instrument_name"),
                 "strike": float(inst.get("strike", 0) or 0),
@@ -436,12 +441,13 @@ def main():
             expiry_key = expiry_date.strftime("%Y-%m-%d")
             expiry_strikes_map.setdefault(expiry_key, []).append(strike_entry)
             oi_total_by_expiry[expiry_key] = oi_total_by_expiry.get(expiry_key, 0.0) + oi_value
+            oi_usd_by_expiry[expiry_key] = oi_usd_by_expiry.get(expiry_key, 0.0) + oi_value_usd
             total_oi_usd += oi_value_usd
             total_oi_base += oi_value
 
         expiry_totals = []
-        for expiry_key, strike_rows in expiry_strikes_map.items():
-            total = sum(row.get("open_interest", 0) or 0 for row in strike_rows)
+        for expiry_key in expiry_strikes_map.keys():
+            total = oi_usd_by_expiry.get(expiry_key, 0.0)
             expiry_totals.append({"date": expiry_key, "total": total})
 
         avg_total = None
@@ -499,10 +505,11 @@ def main():
         if len(history) >= 2 and history[0]["open_interest"]:
             oi_change = (history[-1]["open_interest"] - history[0]["open_interest"]) / history[0]["open_interest"]
 
-        spot_price = load_spot_price(underlying)
-        if spot_price:
-            if total_oi_base:
-                total_oi_usd = total_oi_base * spot_price
+        if spot_price and total_oi_usd:
+            if binance_oi_usd:
+                total_oi_usd += binance_oi_usd * spot_price
+        elif spot_price:
+            total_oi_usd = total_oi_base * spot_price
             if binance_oi_usd:
                 total_oi_usd += binance_oi_usd * spot_price
         if total_oi_usd:
