@@ -160,9 +160,9 @@ def load_binance_basis(symbol, limit=2):
     })
 
 
-def load_binance_futures_metrics(symbol, limit=2):
-    return load_cdd("/summary/binance/futures/metrics/", {
-        "symbol": symbol,
+def load_binance_options_ohlc_by_underlying(underlying, limit=5000):
+    return load_cdd("/ohlc/binance/options/", {
+        "underlying": underlying,
         "limit": limit,
         "return": "JSON"
     })
@@ -324,22 +324,6 @@ def main():
         if len(history) >= 7:
             history = history[-7:]
 
-        futures_metrics = load_binance_futures_metrics(underlying, 200)
-        futures_metrics = futures_metrics if isinstance(futures_metrics, list) else []
-        futures_series_map = {}
-        for row in futures_metrics:
-            date = row.get("date")
-            if not date:
-                continue
-            day = date.split(" ")[0]
-            try:
-                oi_value = float(row.get("sum_open_interest_value", 0))
-            except (TypeError, ValueError):
-                oi_value = 0.0
-            futures_series_map[day] = oi_value
-        futures_series = [{"date": k, "open_interest": v} for k, v in sorted(futures_series_map.items())]
-        if futures_series:
-            history = futures_series[-7:]
         if len(history) < 7:
             today = datetime.date.today()
             history_map = {item["date"]: item["open_interest"] for item in history}
@@ -374,6 +358,7 @@ def main():
         expiry_strikes_map = {}
         total_oi_usd = 0.0
         total_oi_base = 0.0
+        binance_oi_usd = 0.0
         nearest_oi_usd = 0.0
         oi_total_by_expiry = {}
         if nearest_maturity:
@@ -396,6 +381,18 @@ def main():
                         "option_type": opt_type,
                         "open_interest": oi_value
                     })
+
+        binance_oi_summary = oi_summary if isinstance(oi_summary, list) else []
+        if binance_oi_summary:
+            try:
+                latest_oi_row = binance_oi_summary[0]
+                binance_oi_contracts = float(latest_oi_row.get("total_calls_oi", 0) or 0) + float(
+                    latest_oi_row.get("total_puts_oi", 0) or 0
+                )
+            except (TypeError, ValueError):
+                binance_oi_contracts = 0.0
+            if binance_oi_contracts:
+                binance_oi_usd = binance_oi_contracts
 
         deribit_instruments = load_deribit_instruments(meta["spot_symbol"])
         deribit_instruments = deribit_instruments if isinstance(deribit_instruments, list) else []
@@ -503,8 +500,11 @@ def main():
             oi_change = (history[-1]["open_interest"] - history[0]["open_interest"]) / history[0]["open_interest"]
 
         spot_price = load_spot_price(underlying)
-        if not total_oi_usd and spot_price:
-            total_oi_usd = total_oi_base * spot_price
+        if spot_price:
+            if total_oi_base:
+                total_oi_usd = total_oi_base * spot_price
+            if binance_oi_usd:
+                total_oi_usd += binance_oi_usd * spot_price
         if total_oi_usd:
             total_oi = total_oi_usd
 
