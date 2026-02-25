@@ -461,34 +461,30 @@ def main():
             total = oi_usd_by_expiry.get(expiry_key, 0.0)
             expiry_totals.append({"date": expiry_key, "total": total})
 
-        avg_total = None
-        if expiry_totals:
-            avg_total = sum(item["total"] for item in expiry_totals) / len(expiry_totals)
-
         combined_strikes = strikes + deribit_strikes
 
         expiry_rows = []
-        if expiry_totals and avg_total:
+        if expiry_totals:
             top_contracts = sorted(
-                combined_strikes,
-                key=lambda x: x.get("open_interest", 0) or 0,
+                [
+                    {
+                        "expiry": key,
+                        "open_interest_usd": oi_usd_by_expiry.get(key, 0.0),
+                        "strike_rows": expiry_strikes_map.get(key, [])
+                    }
+                    for key in expiry_strikes_map.keys()
+                ],
+                key=lambda x: x["open_interest_usd"],
                 reverse=True
-            )[:10]
-            top_expiry_set = set()
-            for item in top_contracts:
-                symbol = item.get("instrument_name") or ""
-                expiry = None
-                if "-" in symbol:
-                    parts = symbol.split("-")
-                    if len(parts) >= 2:
-                        expiry = parse_deribit_expiry_date(parts[1])
-                if expiry and within_forward_window(expiry, 90):
-                    top_expiry_set.add(expiry.strftime("%Y-%m-%d"))
+            )
+            top_contracts = top_contracts[:10]
 
-            filtered_expiry_totals = [item for item in expiry_totals if item["date"] in top_expiry_set]
-            if not filtered_expiry_totals:
-                filtered_expiry_totals = expiry_totals
+            filtered_expiry_totals = [
+                {"date": item["expiry"], "total": item["open_interest_usd"]}
+                for item in top_contracts
+            ]
 
+            avg_total = sum(item["total"] for item in filtered_expiry_totals) / len(filtered_expiry_totals)
             for item in filtered_expiry_totals:
                 expiry_rows.append({
                     "date": item["date"],
