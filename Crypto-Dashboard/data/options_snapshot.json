@@ -1,14 +1,14 @@
 {
   "BTC": {
-    "total_oi": 21402202978.72799,
+    "total_oi": 21402506862.021988,
     "oi_change_7d": 0.04798243824304548,
-    "put_call_ratio": 0.76164336684991,
+    "put_call_ratio": 0.7616683798819656,
     "call_oi": 12148998702.841002,
-    "put_oi": 9253204275.887009,
+    "put_oi": 9253508159.181007,
     "atm_iv": 0.5765,
     "iv_term": "57.6% / 38.2%",
-    "oi_concentration": 0.9898087984594409,
-    "nearest_expiry_share": 0.006980971486102078,
+    "oi_concentration": 0.9898089487804976,
+    "nearest_expiry_share": 0.006980868516201394,
     "spot_price": 64656.02,
     "spot_source": "CryptoDataDownload"
   },
