@@ -589,7 +589,9 @@
           <tbody></tbody>
         </table>
       </div>
-      <div class="strategy-table-wrap" style="margin-top: 24px;">
+      <div class="chart-title" style="margin-top: 28px;">Strategy Events</div>
+      <div class="chart-subtitle">Each buy/sell occurrence in chronological order</div>
+      <div class="strategy-table-wrap" style="margin-top: 16px;">
         <table class="strategy-table" id="strategyEvents">
           <thead>
             <tr>
@@ -908,7 +910,7 @@
     function renderEventTable(events) {
       const tbody = document.querySelector('#strategyEvents tbody');
       tbody.innerHTML = '';
-      const sorted = [...events].sort((a, b) => b.date.localeCompare(a.date));
+      const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
       sorted.forEach(event => {
         const tr = document.createElement('tr');
         const cashPct = formatPercent(event.cashPct);
