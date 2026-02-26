@@ -5018,299 +5018,373 @@
   "lunar_events": [
     {
       "date": "2023-03-06",
-      "type": "full"
+      "type": "full",
+      "close": 22410.0
     },
     {
       "date": "2023-03-21",
-      "type": "new"
+      "type": "new",
+      "close": 28105.47
     },
     {
       "date": "2023-04-05",
-      "type": "full"
+      "type": "full",
+      "close": 28170.01
     },
     {
       "date": "2023-04-20",
-      "type": "new"
+      "type": "new",
+      "close": 28243.65
     },
     {
       "date": "2023-05-04",
-      "type": "full"
+      "type": "full",
+      "close": 28838.16
     },
     {
       "date": "2023-05-19",
-      "type": "new"
+      "type": "new",
+      "close": 26880.26
     },
     {
       "date": "2023-06-03",
-      "type": "full"
+      "type": "full",
+      "close": 27069.22
     },
     {
       "date": "2023-06-18",
-      "type": "new"
+      "type": "new",
+      "close": 26339.97
     },
     {
       "date": "2023-07-02",
-      "type": "full"
+      "type": "full",
+      "close": 30617.03
     },
     {
       "date": "2023-07-17",
-      "type": "new"
+      "type": "new",
+      "close": 30138.0
     },
     {
       "date": "2023-08-01",
-      "type": "full"
+      "type": "full",
+      "close": 29705.99
     },
     {
       "date": "2023-08-16",
-      "type": "new"
+      "type": "new",
+      "close": 28730.51
     },
     {
       "date": "2023-08-30",
-      "type": "full"
+      "type": "full",
+      "close": 27299.99
     },
     {
       "date": "2023-09-14",
-      "type": "new"
+      "type": "new",
+      "close": 26522.73
     },
     {
       "date": "2023-09-29",
-      "type": "full"
+      "type": "full",
+      "close": 26906.96
     },
     {
       "date": "2023-10-14",
-      "type": "new"
+      "type": "new",
+      "close": 26852.48
     },
     {
       "date": "2023-10-28",
-      "type": "full"
+      "type": "full",
+      "close": 34081.0
     },
     {
       "date": "2023-11-12",
-      "type": "new"
+      "type": "new",
+      "close": 37064.13
     },
     {
       "date": "2023-11-27",
-      "type": "full"
+      "type": "full",
+      "close": 37242.7
     },
     {
       "date": "2023-12-12",
-      "type": "new"
+      "type": "new",
+      "close": 41492.39
     },
     {
       "date": "2023-12-27",
-      "type": "full"
+      "type": "full",
+      "close": 43428.85
     },
     {
       "date": "2024-01-10",
-      "type": "new"
+      "type": "new",
+      "close": 46653.99
     },
     {
       "date": "2024-01-25",
-      "type": "full"
+      "type": "full",
+      "close": 39961.09
     },
     {
       "date": "2024-02-09",
-      "type": "new"
+      "type": "new",
+      "close": 47132.77
     },
     {
       "date": "2024-02-24",
-      "type": "full"
+      "type": "full",
+      "close": 51568.22
     },
     {
       "date": "2024-03-09",
-      "type": "new"
+      "type": "new",
+      "close": 68313.27
     },
     {
       "date": "2024-03-24",
-      "type": "full"
+      "type": "full",
+      "close": 67209.99
     },
     {
       "date": "2024-04-08",
-      "type": "new"
+      "type": "new",
+      "close": 71620.0
     },
     {
       "date": "2024-04-23",
-      "type": "full"
+      "type": "full",
+      "close": 66414.0
     },
     {
       "date": "2024-05-07",
-      "type": "new"
+      "type": "new",
+      "close": 62312.08
     },
     {
       "date": "2024-05-22",
-      "type": "full"
+      "type": "full",
+      "close": 69166.62
     },
     {
       "date": "2024-06-06",
-      "type": "new"
+      "type": "new",
+      "close": 70799.06
     },
     {
       "date": "2024-06-21",
-      "type": "full"
+      "type": "full",
+      "close": 64143.56
     },
     {
       "date": "2024-07-05",
-      "type": "new"
+      "type": "new",
+      "close": 56628.79
     },
     {
       "date": "2024-07-20",
-      "type": "full"
+      "type": "full",
+      "close": 67139.96
     },
     {
       "date": "2024-08-04",
-      "type": "new"
+      "type": "new",
+      "close": 58161.0
     },
     {
       "date": "2024-08-19",
-      "type": "full"
+      "type": "full",
+      "close": 59438.5
     },
     {
       "date": "2024-09-03",
-      "type": "new"
+      "type": "new",
+      "close": 57487.73
     },
     {
       "date": "2024-09-17",
-      "type": "full"
+      "type": "full",
+      "close": 60313.99
     },
     {
       "date": "2024-10-02",
-      "type": "new"
+      "type": "new",
+      "close": 60649.28
     },
     {
       "date": "2024-10-17",
-      "type": "full"
+      "type": "full",
+      "close": 67421.78
     },
     {
       "date": "2024-11-01",
-      "type": "new"
+      "type": "new",
+      "close": 69496.01
     },
     {
       "date": "2024-11-15",
-      "type": "full"
+      "type": "full",
+      "close": 91032.07
     },
     {
       "date": "2024-11-30",
-      "type": "new"
+      "type": "new",
+      "close": 96407.99
     },
     {
       "date": "2024-12-15",
-      "type": "full"
+      "type": "full",
+      "close": 104463.99
     },
     {
       "date": "2024-12-30",
-      "type": "new"
+      "type": "new",
+      "close": 92792.05
     },
     {
       "date": "2025-01-13",
-      "type": "full"
+      "type": "full",
+      "close": 94536.1
     },
     {
       "date": "2025-01-28",
-      "type": "new"
+      "type": "new",
+      "close": 101335.52
     },
     {
       "date": "2025-02-12",
-      "type": "full"
+      "type": "full",
+      "close": 97869.99
     },
     {
       "date": "2025-02-27",
-      "type": "new"
+      "type": "new",
+      "close": 84708.58
     },
     {
       "date": "2025-03-13",
-      "type": "full"
+      "type": "full",
+      "close": 81115.78
     },
     {
       "date": "2025-03-28",
-      "type": "new"
+      "type": "new",
+      "close": 84424.38
     },
     {
       "date": "2025-04-12",
-      "type": "full"
+      "type": "full",
+      "close": 85276.9
     },
     {
       "date": "2025-04-27",
-      "type": "new"
+      "type": "new",
+      "close": 93749.3
     },
     {
       "date": "2025-05-12",
-      "type": "full"
+      "type": "full",
+      "close": 102791.32
     },
     {
       "date": "2025-05-26",
-      "type": "new"
+      "type": "new",
+      "close": 109434.79
     },
     {
       "date": "2025-06-10",
-      "type": "full"
+      "type": "full",
+      "close": 110274.39
     },
     {
       "date": "2025-06-25",
-      "type": "new"
+      "type": "new",
+      "close": 107340.58
     },
     {
       "date": "2025-07-10",
-      "type": "full"
+      "type": "full",
+      "close": 116010.0
     },
     {
       "date": "2025-07-24",
-      "type": "new"
+      "type": "new",
+      "close": 118340.99
     },
     {
       "date": "2025-08-08",
-      "type": "full"
+      "type": "full",
+      "close": 116674.74
     },
     {
       "date": "2025-08-23",
-      "type": "new"
+      "type": "new",
+      "close": 115438.05
     },
     {
       "date": "2025-09-07",
-      "type": "full"
+      "type": "full",
+      "close": 111137.34
     },
     {
       "date": "2025-09-21",
-      "type": "new"
+      "type": "new",
+      "close": 115232.29
     },
     {
       "date": "2025-10-06",
-      "type": "full"
+      "type": "full",
+      "close": 124658.54
     },
     {
       "date": "2025-10-21",
-      "type": "new"
+      "type": "new",
+      "close": 108297.67
     },
     {
       "date": "2025-11-05",
-      "type": "full"
+      "type": "full",
+      "close": 103885.16
     },
     {
       "date": "2025-11-19",
-      "type": "new"
+      "type": "new",
+      "close": 91554.96
     },
     {
       "date": "2025-12-04",
-      "type": "full"
+      "type": "full",
+      "close": 92078.06
     },
     {
       "date": "2025-12-19",
-      "type": "new"
+      "type": "new",
+      "close": 88136.94
     },
     {
       "date": "2026-01-03",
-      "type": "full"
+      "type": "full",
+      "close": 90628.01
     },
     {
       "date": "2026-01-18",
-      "type": "new"
+      "type": "new",
+      "close": 93673.14
     },
     {
       "date": "2026-02-01",
-      "type": "full"
+      "type": "full",
+      "close": 76968.21
     },
     {
       "date": "2026-02-16",
-      "type": "new"
+      "type": "new",
+      "close": 68892.43
     }
   ]
 }
