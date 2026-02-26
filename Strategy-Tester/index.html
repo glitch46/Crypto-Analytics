@@ -1,0 +1,984 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Strategy Tester</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
+      --gradient-hover: linear-gradient(135deg, #ff5252 0%, #e91e7b 100%);
+      --accent-solid: #ff4d7d;
+      --black-deep: #000000;
+      --black-rich: #0a0a0b;
+      --black-elevated: #121214;
+      --gray-dark: #1a1a1e;
+      --gray-mid: #2a2a30;
+      --gray-muted: #6b6b76;
+      --gray-light: #9999a5;
+      --white-soft: #e8e8ed;
+      --white-pure: #ffffff;
+      --success: #00d26a;
+      --warning: #ffb800;
+      --info: #00b4d8;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 30px #ff4d7d30;
+      --glow-ring: 0 0 0 4px #ff4d7d20;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
+      color: var(--white-soft);
+    }
+
+    .layout {
+      display: flex;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
+      border-right: 1px solid var(--gray-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      height: 100vh;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+    }
+
+    .sidebar-nav {
+      display: grid;
+      gap: 10px;
+    }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--black-rich);
+      color: var(--white-soft);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 200ms ease-out;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      border-color: #ff4d7d70;
+      box-shadow: var(--shadow-sm);
+      color: var(--white-pure);
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+      flex: 1;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white-pure);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 700px;
+      color: var(--gray-light);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 24px 0 32px;
+    }
+
+    .nav {
+      display: inline-flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-dark);
+      background: var(--black-rich);
+      color: var(--gray-light);
+      text-decoration: none;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: all 200ms ease-out;
+    }
+
+    .nav-link.active,
+    .nav-link:hover {
+      color: var(--white-pure);
+      border-color: transparent;
+      background: var(--gradient-primary);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      gap: 8px;
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      color: var(--gray-light);
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 200ms ease-out;
+      letter-spacing: 0.02em;
+    }
+
+    .toggle-btn.active {
+      background: var(--gradient-primary);
+      color: var(--white-pure);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .toggle-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--glow-ring);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      border-radius: 999px;
+      border: 1px solid #ff4d7d40;
+      background: linear-gradient(135deg, #ff6b6b20 0%, #ff2d9220 100%);
+      color: var(--accent-solid);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .kpis {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .panel {
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .panel.glow {
+      border: 1px solid transparent;
+      background: linear-gradient(var(--black-rich), var(--black-rich)) padding-box,
+        var(--gradient-primary) border-box;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      margin-top: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .kpi-accent {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .chart-panel {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .chart-header {
+      padding: 24px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .chart-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white-pure);
+    }
+
+    .chart-subtitle {
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .chart-wrap {
+      padding: 16px 24px 24px;
+    }
+
+    canvas { max-height: 320px; }
+
+    .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .list {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0 0;
+      display: grid;
+      gap: 12px;
+    }
+
+    .list-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 16px;
+      border-radius: 12px;
+      background: var(--black-elevated);
+      border: 1px solid var(--gray-dark);
+    }
+
+    .list-item span {
+      font-variant-numeric: tabular-nums;
+    }
+
+    .pill {
+      padding: 6px 12px;
+      border-radius: 999px;
+      background: #1a1a1e;
+      color: var(--gray-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 16px;
+      background: var(--black-elevated);
+      border-radius: 12px;
+      border: 1px solid var(--gray-dark);
+    }
+
+    .info-label {
+      color: var(--gray-light);
+      font-size: 13px;
+    }
+
+    .info-value {
+      font-weight: 700;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .footer {
+      margin-top: 32px;
+      color: var(--gray-muted);
+      font-size: 12px;
+    }
+
+    .strategy-controls {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .strategy-field {
+      display: grid;
+      gap: 8px;
+    }
+
+    .strategy-field label {
+      font-size: 12px;
+      color: var(--gray-light);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .strategy-field input,
+    .strategy-field select {
+      border-radius: 12px;
+      border: 1px solid var(--gray-dark);
+      background: var(--black-rich);
+      color: var(--white-soft);
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
+    .strategy-note {
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .strategy-btn {
+      border: none;
+      background: var(--gradient-primary);
+      color: var(--white-pure);
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: var(--shadow-glow);
+    }
+
+    .strategy-summary {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--gray-dark);
+      background: var(--black-elevated);
+    }
+
+    .strategy-summary span {
+      color: var(--gray-light);
+    }
+
+    .strategy-table-wrap {
+      margin-top: 20px;
+      overflow-x: auto;
+    }
+
+    .strategy-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .strategy-table th,
+    .strategy-table td {
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray-dark);
+    }
+
+    .strategy-table th {
+      color: var(--gray-light);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      font-size: 11px;
+    }
+
+    @media (max-width: 1024px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sidebar-nav {
+        grid-auto-flow: column;
+        grid-auto-columns: max-content;
+      }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+      .controls { flex-direction: column; align-items: flex-start; }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 40px 18px 64px; }
+      .hero h1 { font-size: 30px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      * { transition: none !important; animation: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Dashboards</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="../index.html">Home</a>
+        <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
+        <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
+        <a class="sidebar-link active" href="index.html">Strategy Tester</a>
+      </nav>
+    </aside>
+    <div class="page">
+    <header class="hero">
+      <h1>Strategy Tester</h1>
+      <p>Simulate quirky, momentum, and seasonal strategies over the last 3 years with dynamic position sizing and single-position rules.</p>
+    </header>
+
+    <section class="controls">
+      <div class="toggle-group" role="tablist" aria-label="Asset selection">
+        <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
+        <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
+      </div>
+      <span class="pill" id="dataStamp">Updated —</span>
+      <span class="pill" style="border-color: #2a2a30; color: #6b6b76;">Refreshes every 6 hours</span>
+    </section>
+
+    <section class="grid kpis">
+      <div class="panel glow">
+        <div class="kpi-label">Skew Follow Win Rate</div>
+        <div class="kpi-value kpi-accent" id="skewWinRate">—</div>
+        <div class="kpi-sub" id="skewWinNote">Directional hit rate</div>
+      </div>
+      <div class="panel">
+        <div class="kpi-label">Months Analyzed</div>
+        <div class="kpi-value" id="monthsAnalyzed">—</div>
+        <div class="kpi-sub" id="monthsNote">Last 12 expiries</div>
+      </div>
+      <div class="panel">
+        <div class="kpi-label">Puts > Calls Months</div>
+        <div class="kpi-value" id="putsDominance">—</div>
+        <div class="kpi-sub" id="putsNote">Put/call ratio above 1</div>
+      </div>
+      <div class="panel">
+        <div class="kpi-label">Avg Max Pain Deviation</div>
+        <div class="kpi-value" id="avgMaxPain">—</div>
+        <div class="kpi-sub" id="maxPainNote">Abs deviation vs settlement</div>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top: 24px;">
+      <div class="chart-title">Strategy Tester</div>
+      <div class="chart-subtitle">Run custom strategy backtests over the last 3 years</div>
+      <div class="strategy-controls">
+        <div class="strategy-field">
+          <label for="capitalInput">Initial Capital (USD)</label>
+          <input id="capitalInput" type="number" min="100" step="100" value="10000" />
+        </div>
+        <div class="strategy-field">
+          <label for="strategySelect">Strategy</label>
+          <select id="strategySelect"></select>
+        </div>
+        <div class="strategy-field">
+          <label for="buySize">On each occurrence: Buy</label>
+          <select id="buySize">
+            <option value="0.25">25%</option>
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1" selected>100%</option>
+          </select>
+        </div>
+        <div class="strategy-field">
+          <label for="sellSize">Sell</label>
+          <select id="sellSize">
+            <option value="0.25">25%</option>
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1" selected>100%</option>
+          </select>
+        </div>
+        <div class="strategy-field">
+          <label>Defaults</label>
+          <div class="strategy-note">Sizing: % of available cash/BTC. Position: single only.</div>
+        </div>
+        <div class="strategy-field">
+          <label>&nbsp;</label>
+          <button class="strategy-btn" id="runStrategy">Run backtest</button>
+        </div>
+      </div>
+      <div class="strategy-summary" id="strategySummary"></div>
+      <div class="strategy-table-wrap">
+        <table class="strategy-table" id="strategyTable">
+          <thead>
+            <tr>
+              <th>Quarter</th>
+              <th>Start Capital</th>
+              <th>End Capital</th>
+              <th>USD Gain</th>
+              <th>% Return</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="panel" style="margin-top: 24px;">
+      <div class="chart-title">Strategy Tester</div>
+      <div class="chart-subtitle">Run custom strategy backtests over the last 3 years</div>
+      <div class="strategy-controls">
+        <div class="strategy-field">
+          <label for="capitalInput">Initial Capital (USD)</label>
+          <input id="capitalInput" type="number" min="100" step="100" value="10000" />
+        </div>
+        <div class="strategy-field">
+          <label for="strategySelect">Strategy</label>
+          <select id="strategySelect"></select>
+        </div>
+        <div class="strategy-field">
+          <label for="buySize">On each occurrence: Buy</label>
+          <select id="buySize">
+            <option value="0.25">25%</option>
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1" selected>100%</option>
+          </select>
+        </div>
+        <div class="strategy-field">
+          <label for="sellSize">Sell</label>
+          <select id="sellSize">
+            <option value="0.25">25%</option>
+            <option value="0.5">50%</option>
+            <option value="0.75">75%</option>
+            <option value="1" selected>100%</option>
+          </select>
+        </div>
+        <div class="strategy-field">
+          <label>Defaults</label>
+          <div class="strategy-note">Sizing: % of available cash/BTC. Position: single only.</div>
+        </div>
+        <div class="strategy-field">
+          <label>&nbsp;</label>
+          <button class="strategy-btn" id="runStrategy">Run backtest</button>
+        </div>
+      </div>
+      <div class="strategy-summary" id="strategySummary"></div>
+      <div class="strategy-table-wrap">
+        <table class="strategy-table" id="strategyTable">
+          <thead>
+            <tr>
+              <th>Quarter</th>
+              <th>Start Capital</th>
+              <th>End Capital</th>
+              <th>USD Gain</th>
+              <th>% Return</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="footer" id="footerNote">
+      Data sources: CryptoDataDownload, Deribit. Strategy tester uses 3-year BTC history.
+    </footer>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      asset: 'BTC',
+      data: {},
+      strategy: {
+        prices: [],
+        weeklyRsi: [],
+        lunarEvents: []
+      }
+    };
+
+    async function loadJSON(path) {
+      const res = await fetch(path, { cache: 'no-cache' });
+      return res.json();
+    }
+
+    function fmtNumber(value, suffix = '') {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const abs = Math.abs(value);
+      if (abs >= 1e9) return (value / 1e9).toFixed(2) + 'B' + suffix;
+      if (abs >= 1e6) return (value / 1e6).toFixed(2) + 'M' + suffix;
+      if (abs >= 1e3) return (value / 1e3).toFixed(2) + 'K' + suffix;
+      return Number(value).toFixed(2) + suffix;
+    }
+
+    function fmtShort(value, suffix = '') {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const abs = Math.abs(value);
+      if (abs >= 1e9) return (value / 1e9).toFixed(1) + 'B' + suffix;
+      if (abs >= 1e6) return (value / 1e6).toFixed(1) + 'M' + suffix;
+      if (abs >= 1e3) return (value / 1e3).toFixed(1) + 'K' + suffix;
+      return Number(value).toFixed(1) + suffix;
+    }
+
+    function fmtPercent(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const sign = value >= 0 ? '+' : '';
+      return sign + (value * 100).toFixed(1) + '%';
+    }
+
+    function fmtCurrency(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+
+    function updateToggle(asset) {
+      document.querySelectorAll('.toggle-btn').forEach(btn => {
+        const active = btn.dataset.asset === asset;
+        btn.classList.toggle('active', active);
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+      });
+    }
+
+    function updateKPIs(assetData) {
+      const summary = assetData.backtest?.summary;
+      const winRate = summary?.win_rate !== null && summary?.win_rate !== undefined ? (summary.win_rate * 100).toFixed(1) + '%' : '—';
+      const avgPain = summary?.avg_max_pain_dev !== null && summary?.avg_max_pain_dev !== undefined ? (summary.avg_max_pain_dev * 100).toFixed(2) + '%' : '—';
+      document.getElementById('skewWinRate').textContent = winRate;
+      document.getElementById('monthsAnalyzed').textContent = summary?.months ?? '—';
+      document.getElementById('putsDominance').textContent = summary?.puts_over_calls ?? '—';
+      document.getElementById('avgMaxPain').textContent = avgPain;
+    }
+
+
+    function formatUSD(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+
+    function formatPercent(value) {
+      if (value === null || value === undefined || Number.isNaN(value)) return '—';
+      const sign = value >= 0 ? '+' : '';
+      return sign + (value * 100).toFixed(2) + '%';
+    }
+
+    function buildSignals(prices, weeklyRsi, lunarEvents) {
+      const signalMap = {};
+      prices.forEach((row, idx) => {
+        signalMap[row.date] = {
+          date: row.date,
+          close: row.close,
+          index: idx
+        };
+      });
+      weeklyRsi.forEach(entry => {
+        if (signalMap[entry.date]) {
+          signalMap[entry.date].weeklyRsi = entry.rsi;
+        }
+      });
+      lunarEvents.forEach(event => {
+        if (signalMap[event.date]) {
+          signalMap[event.date].lunar = event.type;
+        }
+      });
+      return prices.map(row => signalMap[row.date]);
+    }
+
+    function createStrategies() {
+      return [
+        {
+          id: 'moon',
+          label: 'Buy BTC on full moon, sell on new moon',
+          buy: (row) => row.lunar === 'full',
+          sell: (row) => row.lunar === 'new'
+        },
+        {
+          id: 'weekly_rsi',
+          label: 'Weekly RSI < 30 buy, > 70 sell',
+          buy: (row) => row.weeklyRsi !== null && row.weeklyRsi !== undefined && row.weeklyRsi < 30,
+          sell: (row) => row.weeklyRsi !== null && row.weeklyRsi !== undefined && row.weeklyRsi > 70
+        },
+        {
+          id: 'friday_monday',
+          label: 'Friday close buy, Monday close sell',
+          buy: (row) => new Date(row.date + 'T00:00:00Z').getUTCDay() === 5,
+          sell: (row) => new Date(row.date + 'T00:00:00Z').getUTCDay() === 1
+        },
+        {
+          id: 'two_day_dip',
+          label: 'Two-day dip buy, sell after 3 green days',
+          buy: (row, prevRows) => {
+            if (prevRows.length < 2) return false;
+            return prevRows[prevRows.length - 1].close < prevRows[prevRows.length - 2].close
+              && row.close < prevRows[prevRows.length - 1].close;
+          },
+          sell: (row, prevRows) => {
+            if (prevRows.length < 3) return false;
+            const a = prevRows[prevRows.length - 2].close;
+            const b = prevRows[prevRows.length - 1].close;
+            return a > prevRows[prevRows.length - 3].close && b > a && row.close > b;
+          }
+        },
+        {
+          id: 'q4_only',
+          label: 'Long Q4 only, flat otherwise',
+          buy: (row) => {
+            const month = new Date(row.date + 'T00:00:00Z').getUTCMonth();
+            return month >= 9 && month <= 11;
+          },
+          sell: (row) => {
+            const month = new Date(row.date + 'T00:00:00Z').getUTCMonth();
+            return month <= 8;
+          }
+        },
+        {
+          id: 'fear_spike',
+          label: 'Fear spike: buy after -7% day, sell after +5% rebound',
+          buy: (row, prevRows) => {
+            if (!prevRows.length) return false;
+            const prev = prevRows[prevRows.length - 1];
+            const change = (row.close - prev.close) / prev.close;
+            return change <= -0.07;
+          },
+          sell: (row, prevRows) => {
+            if (!prevRows.length) return false;
+            const prev = prevRows[prevRows.length - 1];
+            const change = (row.close - prev.close) / prev.close;
+            return change >= 0.05;
+          }
+        },
+        {
+          id: 'mean_revert',
+          label: 'Mean reversion: buy below 20d avg, sell above 20d avg',
+          buy: (row, prevRows) => {
+            if (prevRows.length < 20) return false;
+            const slice = prevRows.slice(prevRows.length - 20);
+            const avg = slice.reduce((sum, r) => sum + r.close, 0) / slice.length;
+            return row.close < avg * 0.97;
+          },
+          sell: (row, prevRows) => {
+            if (prevRows.length < 20) return false;
+            const slice = prevRows.slice(prevRows.length - 20);
+            const avg = slice.reduce((sum, r) => sum + r.close, 0) / slice.length;
+            return row.close > avg * 1.03;
+          }
+        }
+      ];
+    }
+
+    function runStrategy(prices, strategy, buySize, sellSize, initialCapital) {
+      let cash = initialCapital;
+      let btc = 0;
+      let peak = initialCapital;
+      let maxDrawdown = 0;
+      const records = [];
+
+      for (let i = 0; i < prices.length - 1; i += 1) {
+        const row = prices[i];
+        const next = prices[i + 1];
+        const prevRows = prices.slice(0, i + 1);
+
+        const hasPosition = btc > 0;
+        const buySignal = strategy.buy(row, prevRows);
+        const sellSignal = strategy.sell(row, prevRows);
+
+        if (!hasPosition && buySignal) {
+          const allocation = cash * buySize;
+          const units = allocation / next.close;
+          btc += units;
+          cash -= allocation;
+        } else if (hasPosition && sellSignal) {
+          const sellUnits = btc * sellSize;
+          const proceeds = sellUnits * next.close;
+          btc -= sellUnits;
+          cash += proceeds;
+        }
+
+        const totalValue = cash + btc * next.close;
+        if (totalValue > peak) peak = totalValue;
+        const drawdown = (peak - totalValue) / peak;
+        if (drawdown > maxDrawdown) maxDrawdown = drawdown;
+        records.push({ date: next.date, value: totalValue });
+      }
+
+      const finalValue = cash + btc * (prices.length ? prices[prices.length - 1].close : 0);
+      const totalReturn = (finalValue - initialCapital) / initialCapital;
+      const years = prices.length / 365;
+      const cagr = years ? Math.pow(finalValue / initialCapital, 1 / years) - 1 : null;
+
+      return { finalValue, totalReturn, cagr, maxDrawdown, records };
+    }
+
+    function buildQuarterTable(records) {
+      const quarterMap = {};
+      records.forEach((item) => {
+        const date = new Date(item.date + 'T00:00:00Z');
+        const quarter = Math.floor(date.getUTCMonth() / 3) + 1;
+        const key = `${date.getUTCFullYear()}-Q${quarter}`;
+        if (!quarterMap[key]) {
+          quarterMap[key] = { start: item.value, end: item.value };
+        }
+        quarterMap[key].end = item.value;
+      });
+      const rows = Object.keys(quarterMap).sort().map(key => {
+        const entry = quarterMap[key];
+        const gain = entry.end - entry.start;
+        const pct = entry.start ? gain / entry.start : null;
+        return { quarter: key, start: entry.start, end: entry.end, gain, pct };
+      });
+      return rows;
+    }
+
+    function renderStrategySummary(result) {
+      const summary = document.getElementById('strategySummary');
+      summary.innerHTML = `
+        <div><span>Final Value:</span> ${formatUSD(result.finalValue)}</div>
+        <div><span>Total Return:</span> ${formatPercent(result.totalReturn)}</div>
+        <div><span>CAGR:</span> ${formatPercent(result.cagr)}</div>
+        <div><span>Max Drawdown:</span> ${formatPercent(result.maxDrawdown)}</div>
+      `;
+    }
+
+    function renderQuarterTable(rows) {
+      const tbody = document.querySelector('#strategyTable tbody');
+      tbody.innerHTML = '';
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${row.quarter}</td>
+          <td>${formatUSD(row.start)}</td>
+          <td>${formatUSD(row.end)}</td>
+          <td>${formatUSD(row.gain)}</td>
+          <td>${formatPercent(row.pct)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateMetadata(meta) {
+      document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
+      document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Strategy tester uses 3-year BTC history.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Strategy tester uses 3-year BTC history.';
+    }
+
+
+    function render(asset) {
+      const assetData = state.data[asset];
+      if (!assetData) return;
+      updateToggle(asset);
+      updateKPIs(assetData);
+    }
+
+    async function init() {
+      const [backtest, meta, strategySignals] = await Promise.all([
+        loadJSON('../Crypto-Dashboard/data/backtest.json'),
+        loadJSON('../Crypto-Dashboard/data/metadata.json'),
+        loadJSON('../Crypto-Dashboard/data/strategy_signals.json')
+      ]);
+      state.data = {
+        BTC: {
+          backtest: backtest.BTC || {}
+        },
+        ETH: {
+          backtest: backtest.ETH || {}
+        }
+      };
+      state.strategy.prices = strategySignals?.prices || [];
+      state.strategy.weeklyRsi = strategySignals?.weekly_rsi || [];
+      state.strategy.lunarEvents = strategySignals?.lunar_events || [];
+      const strategies = createStrategies();
+      const select = document.getElementById('strategySelect');
+      strategies.forEach(strategy => {
+        const opt = document.createElement('option');
+        opt.value = strategy.id;
+        opt.textContent = strategy.label;
+        select.appendChild(opt);
+      });
+      updateMetadata(meta);
+      render(state.asset);
+      const runBtn = document.getElementById('runStrategy');
+      runBtn.addEventListener('click', () => {
+        const capital = parseFloat(document.getElementById('capitalInput').value || '0');
+        const buySize = parseFloat(document.getElementById('buySize').value || '1');
+        const sellSize = parseFloat(document.getElementById('sellSize').value || '1');
+        const selected = document.getElementById('strategySelect').value;
+        const strategy = strategies.find(item => item.id === selected) || strategies[0];
+        if (!state.strategy.prices.length || !capital) {
+          return;
+        }
+        const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.lunarEvents);
+        const result = runStrategy(series, strategy, buySize, sellSize, capital);
+        renderStrategySummary(result);
+        renderQuarterTable(buildQuarterTable(result.records));
+      });
+    }
+
+    document.querySelectorAll('.toggle-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        state.asset = btn.dataset.asset;
+        render(state.asset);
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>
