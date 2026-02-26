@@ -579,6 +579,20 @@
           <tbody></tbody>
         </table>
       </div>
+      <div class="strategy-table-wrap" style="margin-top: 24px;">
+        <table class="strategy-table" id="strategyEvents">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>BTC Price</th>
+              <th>Event</th>
+              <th>Investment Total</th>
+              <th>Cash / BTC %</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
     </section>
 
     <footer class="footer" id="footerNote">
@@ -754,6 +768,7 @@
       let peak = initialCapital;
       let maxDrawdown = 0;
       const records = [];
+      const events = [];
       let tradeWins = 0;
       let tradeCount = 0;
       let entryValue = null;
@@ -773,6 +788,17 @@
           btc += units;
           cash -= allocation;
           entryValue = allocation;
+          const totalValue = cash + btc * next.close;
+          const cashPct = totalValue ? (cash / totalValue) : 0;
+          const btcPct = totalValue ? (btc * next.close / totalValue) : 0;
+          events.push({
+            date: next.date,
+            price: next.close,
+            side: 'Buy',
+            totalValue,
+            cashPct,
+            btcPct
+          });
         } else if (hasPosition && sellSignal) {
           const sellUnits = btc * sellSize;
           const proceeds = sellUnits * next.close;
@@ -785,6 +811,17 @@
             }
             entryValue = null;
           }
+          const totalValue = cash + btc * next.close;
+          const cashPct = totalValue ? (cash / totalValue) : 0;
+          const btcPct = totalValue ? (btc * next.close / totalValue) : 0;
+          events.push({
+            date: next.date,
+            price: next.close,
+            side: 'Sell',
+            totalValue,
+            cashPct,
+            btcPct
+          });
         }
 
         const totalValue = cash + btc * next.close;
@@ -800,7 +837,7 @@
       const cagr = years ? Math.pow(finalValue / initialCapital, 1 / years) - 1 : null;
 
       const winRate = tradeCount ? tradeWins / tradeCount : null;
-      return { finalValue, totalReturn, cagr, maxDrawdown, records, winRate, cash, btc };
+      return { finalValue, totalReturn, cagr, maxDrawdown, records, winRate, cash, btc, events };
     }
 
     function buildQuarterTable(records) {
@@ -858,6 +895,25 @@
       });
     }
 
+    function renderEventTable(events) {
+      const tbody = document.querySelector('#strategyEvents tbody');
+      tbody.innerHTML = '';
+      const sorted = [...events].sort((a, b) => b.date.localeCompare(a.date));
+      sorted.forEach(event => {
+        const tr = document.createElement('tr');
+        const cashPct = formatPercent(event.cashPct);
+        const btcPct = formatPercent(event.btcPct);
+        tr.innerHTML = `
+          <td>${event.date}</td>
+          <td>${formatUSD(event.price)}</td>
+          <td>${event.side}</td>
+          <td>${formatUSD(event.totalValue)}</td>
+          <td>${cashPct} / ${btcPct}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
     function updateMetadata(meta) {
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
       document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Strategy tester uses 3-year BTC history.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Strategy tester uses 3-year BTC history.';
@@ -894,6 +950,7 @@
           const hold = computeHoldBenchmark(series, capital);
           renderStrategySummary(result);
           renderQuarterTable(buildQuarterTable(result.records));
+          renderEventTable(result.events || []);
           document.getElementById('strategyFinal').textContent = formatUSD(result.finalValue);
           document.getElementById('strategyReturn').textContent = formatPercent(result.totalReturn);
           document.getElementById('strategyCagr').textContent = formatPercent(result.cagr);
@@ -920,6 +977,7 @@
         const hold = computeHoldBenchmark(series, capital);
         renderStrategySummary(result);
         renderQuarterTable(buildQuarterTable(result.records));
+        renderEventTable(result.events || []);
         document.getElementById('strategyFinal').textContent = formatUSD(result.finalValue);
         document.getElementById('strategyReturn').textContent = formatPercent(result.totalReturn);
         document.getElementById('strategyCagr').textContent = formatPercent(result.cagr);
