@@ -515,7 +515,7 @@
       <div class="panel">
         <div class="kpi-label">Strategy vs Hold %</div>
         <div class="kpi-value" id="strategyVsHold">—</div>
-        <div class="kpi-sub">Outperformance</div>
+        <div class="kpi-sub" id="strategyVsHoldLabel">—</div>
       </div>
       <div class="panel">
         <div class="kpi-label">Current Holdings</div>
@@ -978,6 +978,12 @@
           document.getElementById('holdValue').textContent = formatUSD(hold.value);
           const vsHold = hold.value ? (result.finalValue / hold.value) - 1 : null;
           document.getElementById('strategyVsHold').textContent = formatPercent(vsHold);
+          const vsHoldLabel = document.getElementById('strategyVsHoldLabel');
+          if (vsHold !== null && vsHold !== undefined) {
+            vsHoldLabel.innerHTML = vsHold >= 0 ? '<strong>Outperformance</strong>' : '<strong>Underperformance</strong>';
+          } else {
+            vsHoldLabel.textContent = '—';
+          }
           document.getElementById('currentHoldings').textContent = `${result.btc.toFixed(4)} BTC + ${formatUSD(result.cash)}`;
           document.getElementById('signalWinRate').textContent = formatPercent(result.winRate);
         }
@@ -1005,6 +1011,12 @@
         document.getElementById('holdValue').textContent = formatUSD(hold.value);
         const vsHold = hold.value ? (result.finalValue / hold.value) - 1 : null;
         document.getElementById('strategyVsHold').textContent = formatPercent(vsHold);
+        const vsHoldLabel = document.getElementById('strategyVsHoldLabel');
+        if (vsHold !== null && vsHold !== undefined) {
+          vsHoldLabel.innerHTML = vsHold >= 0 ? '<strong>Outperformance</strong>' : '<strong>Underperformance</strong>';
+        } else {
+          vsHoldLabel.textContent = '—';
+        }
         document.getElementById('currentHoldings').textContent = `${result.btc.toFixed(4)} BTC + ${formatUSD(result.cash)}`;
         document.getElementById('signalWinRate').textContent = formatPercent(result.winRate);
       });
