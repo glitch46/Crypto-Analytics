@@ -591,8 +591,7 @@
 function buildChart(history, asset) {
       const ctx = document.getElementById('oiChart');
       const labels = history.map(item => item.date);
-      const binanceValues = history.map(item => item.open_interest);
-      const deribitValues = history.map(item => item.deribit_oi || 0);
+      const totalValues = history.map(item => (item.open_interest || 0) + (item.deribit_oi || 0));
       if (state.chart) state.chart.destroy();
       state.chart = new Chart(ctx, {
         type: 'line',
@@ -600,8 +599,8 @@ function buildChart(history, asset) {
           labels,
           datasets: [
             {
-              label: `${asset} Binance OI`,
-              data: binanceValues,
+              label: `${asset} Total Open Interest`,
+              data: totalValues,
               borderColor: '#ff4d7d',
               backgroundColor: 'rgba(255, 77, 125, 0.15)',
               fill: true,
@@ -609,17 +608,6 @@ function buildChart(history, asset) {
               borderWidth: 2,
               pointRadius: 3,
               pointBackgroundColor: '#ff6b6b'
-            },
-            {
-              label: `${asset} Deribit OI`,
-              data: deribitValues,
-              borderColor: '#00b4d8',
-              backgroundColor: 'rgba(0, 180, 216, 0.15)',
-              fill: true,
-              tension: 0.35,
-              borderWidth: 2,
-              pointRadius: 3,
-              pointBackgroundColor: '#00b4d8'
             }
           ]
         },
