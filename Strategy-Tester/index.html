@@ -707,7 +707,8 @@
         },
         {
           id: 'daily_rsi',
-          label: 'Daily RSI < 30 buy, > 70 sell',
+          label: 'Daily RSI < 30 buy, > 70 sell (25% tranches)',
+          tranche: 0.25,
           buy: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi < 30,
           sell: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi > 70
         },
@@ -800,11 +801,13 @@
         const hasPosition = btc > 0;
         const buySignal = strategy.buy(row, prevRows);
         const sellSignal = strategy.sell(row, prevRows);
-        const allowRebuy = buySize < 1;
-        const allowResell = sellSize < 1;
+        const tranche = strategy.tranche || buySize;
+        const trancheSell = strategy.tranche || sellSize;
+        const allowRebuy = tranche < 1;
+        const allowResell = trancheSell < 1;
 
         if ((!hasPosition || allowRebuy) && buySignal && cash > 0) {
-          const allocation = cash * buySize;
+          const allocation = cash * tranche;
           const units = allocation / next.close;
           btc += units;
           cash -= allocation;
@@ -821,7 +824,7 @@
             btcPct
           });
         } else if ((hasPosition || allowResell) && sellSignal && btc > 0) {
-          const sellUnits = btc * sellSize;
+          const sellUnits = btc * trancheSell;
           const proceeds = sellUnits * next.close;
           btc -= sellUnits;
           cash += proceeds;
