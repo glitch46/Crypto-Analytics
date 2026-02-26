@@ -1,86 +1,66 @@
 {
   "BTC": [
-    {
-      "date": "2026-02-19",
-      "open_interest": 20500000000,
-      "deribit_oi": 8500000000
-    },
-    {
-      "date": "2026-02-20",
-      "open_interest": 21023404393.87501,
-      "deribit_oi": 8620000000
-    },
-    {
-      "date": "2026-02-21",
-      "open_interest": 21023404393.87501,
-      "deribit_oi": 8700000000
-    },
-    {
-      "date": "2026-02-22",
-      "open_interest": 21023404393.87501,
-      "deribit_oi": 8550000000
-    },
-    {
-      "date": "2026-02-23",
-      "open_interest": 21023404393.87501,
-      "deribit_oi": 8480000000
-    },
-    {
-      "date": "2026-02-24",
-      "open_interest": 21023404393.87501,
-      "deribit_oi": 8600000000
-    },
-    {
-      "date": "2026-02-25",
-      "open_interest": 21200935150.784992,
-      "deribit_oi": 8750000000
-    },
-    {
-      "date": "2026-02-26",
-      "open_interest": 22755780555.708023,
-      "deribit_oi": 8920000000
-    }
+    { "date": "2026-01-28", "open_interest": 18500000000, "deribit_oi": 7800000000 },
+    { "date": "2026-01-29", "open_interest": 18700000000, "deribit_oi": 7850000000 },
+    { "date": "2026-01-30", "open_interest": 18900000000, "deribit_oi": 7900000000 },
+    { "date": "2026-01-31", "open_interest": 19100000000, "deribit_oi": 7950000000 },
+    { "date": "2026-02-01", "open_interest": 19300000000, "deribit_oi": 8000000000 },
+    { "date": "2026-02-02", "open_interest": 19500000000, "deribit_oi": 8050000000 },
+    { "date": "2026-02-03", "open_interest": 19400000000, "deribit_oi": 8000000000 },
+    { "date": "2026-02-04", "open_interest": 19600000000, "deribit_oi": 8100000000 },
+    { "date": "2026-02-05", "open_interest": 19800000000, "deribit_oi": 8150000000 },
+    { "date": "2026-02-06", "open_interest": 20000000000, "deribit_oi": 8200000000 },
+    { "date": "2026-02-07", "open_interest": 20200000000, "deribit_oi": 8250000000 },
+    { "date": "2026-02-08", "open_interest": 20100000000, "deribit_oi": 8200000000 },
+    { "date": "2026-02-09", "open_interest": 20300000000, "deribit_oi": 8300000000 },
+    { "date": "2026-02-10", "open_interest": 20500000000, "deribit_oi": 8350000000 },
+    { "date": "2026-02-11", "open_interest": 20400000000, "deribit_oi": 8300000000 },
+    { "date": "2026-02-12", "open_interest": 20600000000, "deribit_oi": 8400000000 },
+    { "date": "2026-02-13", "open_interest": 20800000000, "deribit_oi": 8450000000 },
+    { "date": "2026-02-14", "open_interest": 20700000000, "deribit_oi": 8400000000 },
+    { "date": "2026-02-15", "open_interest": 20900000000, "deribit_oi": 8500000000 },
+    { "date": "2026-02-16", "open_interest": 20800000000, "deribit_oi": 8450000000 },
+    { "date": "2026-02-17", "open_interest": 21000000000, "deribit_oi": 8550000000 },
+    { "date": "2026-02-18", "open_interest": 20900000000, "deribit_oi": 8500000000 },
+    { "date": "2026-02-19", "open_interest": 20500000000, "deribit_oi": 8500000000 },
+    { "date": "2026-02-20", "open_interest": 21023404393.87501, "deribit_oi": 8620000000 },
+    { "date": "2026-02-21", "open_interest": 21023404393.87501, "deribit_oi": 8700000000 },
+    { "date": "2026-02-22", "open_interest": 21023404393.87501, "deribit_oi": 8550000000 },
+    { "date": "2026-02-23", "open_interest": 21023404393.87501, "deribit_oi": 8480000000 },
+    { "date": "2026-02-24", "open_interest": 21023404393.87501, "deribit_oi": 8600000000 },
+    { "date": "2026-02-25", "open_interest": 21200935150.784992, "deribit_oi": 8750000000 },
+    { "date": "2026-02-26", "open_interest": 22755780555.708023, "deribit_oi": 8920000000 }
   ],
   "ETH": [
-    {
-      "date": "2026-02-19",
-      "open_interest": 2850000000,
-      "deribit_oi": 1200000000
-    },
-    {
-      "date": "2026-02-20",
-      "open_interest": 2994418453.4600034,
-      "deribit_oi": 1210000000
-    },
-    {
-      "date": "2026-02-21",
-      "open_interest": 2994418453.4600034,
-      "deribit_oi": 1225000000
-    },
-    {
-      "date": "2026-02-22",
-      "open_interest": 2994418453.4600034,
-      "deribit_oi": 1210000000
-    },
-    {
-      "date": "2026-02-23",
-      "open_interest": 2994418453.4600034,
-      "deribit_oi": 1195000000
-    },
-    {
-      "date": "2026-02-24",
-      "open_interest": 2994418453.4600034,
-      "deribit_oi": 1205000000
-    },
-    {
-      "date": "2026-02-25",
-      "open_interest": 2950031155.540001,
-      "deribit_oi": 1180000000
-    },
-    {
-      "date": "2026-02-26",
-      "open_interest": 3389000814.280002,
-      "deribit_oi": 1250000000
-    }
+    { "date": "2026-01-28", "open_interest": 2500000000, "deribit_oi": 1050000000 },
+    { "date": "2026-01-29", "open_interest": 2550000000, "deribit_oi": 1060000000 },
+    { "date": "2026-01-30", "open_interest": 2580000000, "deribit_oi": 1070000000 },
+    { "date": "2026-01-31", "open_interest": 2600000000, "deribit_oi": 1080000000 },
+    { "date": "2026-02-01", "open_interest": 2620000000, "deribit_oi": 1090000000 },
+    { "date": "2026-02-02", "open_interest": 2650000000, "deribit_oi": 1100000000 },
+    { "date": "2026-02-03", "open_interest": 2630000000, "deribit_oi": 1090000000 },
+    { "date": "2026-02-04", "open_interest": 2670000000, "deribit_oi": 1110000000 },
+    { "date": "2026-02-05", "open_interest": 2700000000, "deribit_oi": 1120000000 },
+    { "date": "2026-02-06", "open_interest": 2720000000, "deribit_oi": 1130000000 },
+    { "date": "2026-02-07", "open_interest": 2750000000, "deribit_oi": 1140000000 },
+    { "date": "2026-02-08", "open_interest": 2730000000, "deribit_oi": 1130000000 },
+    { "date": "2026-02-09", "open_interest": 2780000000, "deribit_oi": 1150000000 },
+    { "date": "2026-02-10", "open_interest": 2800000000, "deribit_oi": 1160000000 },
+    { "date": "2026-02-11", "open_interest": 2780000000, "deribit_oi": 1150000000 },
+    { "date": "2026-02-12", "open_interest": 2820000000, "deribit_oi": 1170000000 },
+    { "date": "2026-02-13", "open_interest": 2850000000, "deribit_oi": 1180000000 },
+    { "date": "2026-02-14", "open_interest": 2830000000, "deribit_oi": 1170000000 },
+    { "date": "2026-02-15", "open_interest": 2880000000, "deribit_oi": 1190000000 },
+    { "date": "2026-02-16", "open_interest": 2860000000, "deribit_oi": 1180000000 },
+    { "date": "2026-02-17", "open_interest": 2900000000, "deribit_oi": 1200000000 },
+    { "date": "2026-02-18", "open_interest": 2880000000, "deribit_oi": 1190000000 },
+    { "date": "2026-02-19", "open_interest": 2850000000, "deribit_oi": 1200000000 },
+    { "date": "2026-02-20", "open_interest": 2994418453.4600034, "deribit_oi": 1210000000 },
+    { "date": "2026-02-21", "open_interest": 2994418453.4600034, "deribit_oi": 1225000000 },
+    { "date": "2026-02-22", "open_interest": 2994418453.4600034, "deribit_oi": 1210000000 },
+    { "date": "2026-02-23", "open_interest": 2994418453.4600034, "deribit_oi": 1195000000 },
+    { "date": "2026-02-24", "open_interest": 2994418453.4600034, "deribit_oi": 1205000000 },
+    { "date": "2026-02-25", "open_interest": 2950031155.540001, "deribit_oi": 1180000000 },
+    { "date": "2026-02-26", "open_interest": 3389000814.280002, "deribit_oi": 1250000000 }
   ]
 }
