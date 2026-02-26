@@ -713,7 +713,17 @@ def main():
         cutoff_oi = (datetime.date.today() - datetime.timedelta(days=14)).strftime("%Y-%m-%d")
         prev_map = {k: v for k, v in prev_map.items() if k >= cutoff_oi}
         history = sorted([{"date": k, "open_interest": v} for k, v in prev_map.items()], key=lambda x: x["date"])
-        history = history[-7:]
+        if len(history) < 7:
+            last_value = history[-1]["open_interest"] if history else total_oi_usd or total_oi or 0
+            today = datetime.date.today()
+            history_map = {item["date"]: item["open_interest"] for item in history}
+            padded = []
+            for offset in range(6, -1, -1):
+                day = (today - datetime.timedelta(days=offset)).strftime("%Y-%m-%d")
+                padded.append({"date": day, "open_interest": history_map.get(day, last_value)})
+            history = padded
+        else:
+            history = history[-7:]
         oi_history[asset] = history
 
         oi_change = None
