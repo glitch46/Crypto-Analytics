@@ -335,6 +335,7 @@
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 16px;
+      align-items: end;
       margin-top: 16px;
     }
 
@@ -524,13 +525,12 @@
           </select>
         </div>
         <div class="strategy-field">
-          <label>Defaults</label>
-          <div class="strategy-note">Sizing: % of available cash/BTC. Position: single only.</div>
-        </div>
-        <div class="strategy-field">
           <label>&nbsp;</label>
           <button class="strategy-btn" id="runStrategy">Run backtest</button>
         </div>
+      </div>
+      <div class="strategy-note" style="margin-top: 12px;">
+        Defaults: Sizing is % of available cash/BTC. Position is single only.
       </div>
       <div class="strategy-summary" id="strategySummary"></div>
       <div class="strategy-table-wrap">
