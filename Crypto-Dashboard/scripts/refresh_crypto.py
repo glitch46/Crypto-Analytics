@@ -413,6 +413,94 @@ def parse_float(value):
         return None
 
 
+def build_daily_prices(rows, max_days=1095):
+    prices = []
+    for row in rows:
+        date_value = row.get("date") or row.get("Date")
+        close_value = row.get("close") or row.get("Close")
+        if not date_value:
+            continue
+        parsed = parse_maturity(date_value)
+        if parsed is None:
+            continue
+        close_price = parse_float(close_value)
+        if close_price is None:
+            continue
+        prices.append({"date": parsed.strftime("%Y-%m-%d"), "close": close_price})
+    prices.sort(key=lambda x: x["date"])
+    if max_days and len(prices) > max_days:
+        prices = prices[-max_days:]
+    return prices
+
+
+def compute_rsi(values, period=14):
+    if len(values) <= period:
+        return []
+    gains = []
+    losses = []
+    for i in range(1, period + 1):
+        delta = values[i] - values[i - 1]
+        gains.append(max(delta, 0))
+        losses.append(max(-delta, 0))
+    avg_gain = sum(gains) / period
+    avg_loss = sum(losses) / period
+    rsi_values = []
+    for _ in range(period):
+        rsi_values.append(None)
+    for i in range(period, len(values)):
+        if i > period:
+            delta = values[i] - values[i - 1]
+            gain = max(delta, 0)
+            loss = max(-delta, 0)
+            avg_gain = (avg_gain * (period - 1) + gain) / period
+            avg_loss = (avg_loss * (period - 1) + loss) / period
+        rs = avg_gain / avg_loss if avg_loss else None
+        rsi = 100 - (100 / (1 + rs)) if rs is not None else 100
+        rsi_values.append(rsi)
+    return rsi_values
+
+
+def compute_weekly_rsi(daily_prices, period=14):
+    weekly = []
+    week_map = {}
+    for entry in daily_prices:
+        parsed = parse_maturity(entry["date"])
+        if not parsed:
+            continue
+        week_key = f"{parsed.isocalendar().year}-{parsed.isocalendar().week:02d}"
+        week_map[week_key] = entry
+    for key in sorted(week_map.keys()):
+        weekly.append(week_map[key])
+    closes = [row["close"] for row in weekly]
+    rsi_series = compute_rsi(closes, period)
+    result = []
+    for idx, row in enumerate(weekly):
+        rsi = rsi_series[idx] if idx < len(rsi_series) else None
+        result.append({"date": row["date"], "rsi": rsi})
+    return result
+
+
+def compute_lunar_events(start_date, end_date):
+    events = []
+    synodic = 29.53058867
+    ref = datetime.date(2000, 1, 6)
+    last_event = None
+    current = start_date
+    while current <= end_date:
+        days = (current - ref).days
+        age = (days % synodic + synodic) % synodic
+        event = None
+        if age < 0.8 or age > synodic - 0.8:
+            event = "new"
+        elif abs(age - 14.765) < 0.8:
+            event = "full"
+        if event and event != last_event:
+            events.append({"date": current.strftime("%Y-%m-%d"), "type": event})
+            last_event = event
+        current += datetime.timedelta(days=1)
+    return events
+
+
 def build_strikes_from_settlements(settlement_rows, expiry_date):
     strikes = []
     for row in settlement_rows:
@@ -476,6 +564,7 @@ def main():
     trader = {}
     expiry_pressure = {}
     backtest = {}
+    strategy_data = {}
 
     for asset, meta in ASSETS.items():
         underlying = f"{meta['spot_symbol']}USDT"
@@ -489,7 +578,7 @@ def main():
         oi_history[asset] = prev_map  # temporary, replaced below
 
         spot_price = load_spot_price(underlying)
-        spot_history = load_spot_history(underlying, 450)
+        spot_history = load_spot_history(underlying, 1300)
         spot_history = spot_history if isinstance(spot_history, list) else []
         spot_map = {}
         for row in spot_history:
@@ -503,6 +592,22 @@ def main():
             close_price = parse_float(close_value)
             if close_price is not None:
                 spot_map[parsed] = close_price
+
+        if asset == "BTC":
+            daily_prices = build_daily_prices(spot_history, 1095)
+            if daily_prices:
+                start_date = parse_maturity(daily_prices[0]["date"])
+                end_date = parse_maturity(daily_prices[-1]["date"])
+            else:
+                start_date = None
+                end_date = None
+            weekly_rsi = compute_weekly_rsi(daily_prices, 14)
+            lunar_events = compute_lunar_events(start_date, end_date) if start_date and end_date else []
+            strategy_data = {
+                "prices": daily_prices,
+                "weekly_rsi": weekly_rsi,
+                "lunar_events": lunar_events
+            }
 
         maturities = load_binance_oi_maturity(underlying)
         maturity_rows = maturities if isinstance(maturities, list) else []
@@ -939,6 +1044,9 @@ def main():
         f.write(json.dumps(expiry_pressure, indent=2))
     with open(os.path.join(output_dir, "backtest.json"), "w") as f:
         f.write(json.dumps(backtest, indent=2))
+    if strategy_data:
+        with open(os.path.join(output_dir, "strategy_signals.json"), "w") as f:
+            f.write(json.dumps(strategy_data, indent=2))
     with open(os.path.join(output_dir, "metadata.json"), "w") as f:
         meta = {
             "last_updated": datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
