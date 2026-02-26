@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import datetime
 import json
+import math
 import os
 import urllib.parse
 import urllib.request
@@ -490,24 +491,95 @@ def compute_daily_rsi(daily_prices, period=14):
     return result
 
 
+def _meeus_new_moon_jde(k):
+    T = k / 1236.85
+    T2 = T * T
+    T3 = T2 * T
+    T4 = T3 * T
+    JDE = (2451550.09766 + 29.530588861 * k
+           + 0.00015437 * T2 - 0.000000150 * T3 + 0.00000000073 * T4)
+    E = 1 - 0.002516 * T - 0.0000074 * T2
+    M = math.radians(2.5534 + 29.10535670 * k - 0.0000014 * T2 - 0.00000011 * T3)
+    Mp = math.radians(201.5643 + 385.81693528 * k + 0.0107582 * T2 + 0.00001238 * T3 - 0.000000058 * T4)
+    F = math.radians(160.7108 + 390.67050284 * k - 0.0016118 * T2 - 0.00000227 * T3 + 0.000000011 * T4)
+    O = math.radians(124.7746 - 1.56375588 * k + 0.0020672 * T2 + 0.00000215 * T3)
+    corr = (
+        -0.40720 * math.sin(Mp) + 0.17241 * E * math.sin(M) + 0.01608 * math.sin(2 * Mp)
+        + 0.01039 * math.sin(2 * F) + 0.00739 * E * math.sin(Mp - M) - 0.00514 * E * math.sin(Mp + M)
+        + 0.00208 * E * E * math.sin(2 * M) - 0.00111 * math.sin(Mp - 2 * F) - 0.00057 * math.sin(Mp + 2 * F)
+        + 0.00056 * E * math.sin(2 * Mp + M) - 0.00042 * math.sin(3 * Mp) + 0.00042 * E * math.sin(M + 2 * F)
+        + 0.00038 * E * math.sin(M - 2 * F) - 0.00024 * E * math.sin(2 * Mp - M) - 0.00017 * math.sin(O)
+        - 0.00007 * math.sin(Mp + 2 * M) + 0.00004 * math.sin(2 * Mp - 2 * F) + 0.00004 * math.sin(3 * M)
+        + 0.00003 * math.sin(Mp + M - 2 * F) + 0.00003 * math.sin(2 * Mp + 2 * F)
+        - 0.00003 * math.sin(Mp + M + 2 * F) + 0.00003 * math.sin(Mp - M + 2 * F)
+        - 0.00002 * math.sin(Mp - M - 2 * F) - 0.00002 * math.sin(3 * Mp + M) + 0.00002 * math.sin(4 * Mp)
+    )
+    return JDE + corr
+
+
+def _meeus_full_moon_jde(k):
+    k = k + 0.5
+    T = k / 1236.85
+    T2 = T * T
+    T3 = T2 * T
+    T4 = T3 * T
+    JDE = (2451550.09766 + 29.530588861 * k
+           + 0.00015437 * T2 - 0.000000150 * T3 + 0.00000000073 * T4)
+    E = 1 - 0.002516 * T - 0.0000074 * T2
+    M = math.radians(2.5534 + 29.10535670 * k - 0.0000014 * T2 - 0.00000011 * T3)
+    Mp = math.radians(201.5643 + 385.81693528 * k + 0.0107582 * T2 + 0.00001238 * T3 - 0.000000058 * T4)
+    F = math.radians(160.7108 + 390.67050284 * k - 0.0016118 * T2 - 0.00000227 * T3 + 0.000000011 * T4)
+    O = math.radians(124.7746 - 1.56375588 * k + 0.0020672 * T2 + 0.00000215 * T3)
+    corr = (
+        -0.40614 * math.sin(Mp) + 0.17302 * E * math.sin(M) + 0.01614 * math.sin(2 * Mp)
+        + 0.01043 * math.sin(2 * F) + 0.00734 * E * math.sin(Mp - M) - 0.00515 * E * math.sin(Mp + M)
+        + 0.00209 * E * E * math.sin(2 * M) - 0.00111 * math.sin(Mp - 2 * F) - 0.00057 * math.sin(Mp + 2 * F)
+        + 0.00056 * E * math.sin(2 * Mp + M) - 0.00042 * math.sin(3 * Mp) + 0.00042 * E * math.sin(M + 2 * F)
+        + 0.00038 * E * math.sin(M - 2 * F) - 0.00024 * E * math.sin(2 * Mp - M) - 0.00017 * math.sin(O)
+        - 0.00007 * math.sin(Mp + 2 * M) + 0.00004 * math.sin(2 * Mp - 2 * F) + 0.00004 * math.sin(3 * M)
+        + 0.00003 * math.sin(Mp + M - 2 * F) + 0.00003 * math.sin(2 * Mp + 2 * F)
+        - 0.00003 * math.sin(Mp + M + 2 * F) + 0.00003 * math.sin(Mp - M + 2 * F)
+        - 0.00002 * math.sin(Mp - M - 2 * F) - 0.00002 * math.sin(3 * Mp + M) + 0.00002 * math.sin(4 * Mp)
+    )
+    return JDE + corr
+
+
+def _jde_to_date(jde):
+    jde += 0.5
+    Z = int(jde)
+    F = jde - Z
+    if Z < 2299161:
+        A = Z
+    else:
+        alpha = int((Z - 1867216.25) / 36524.25)
+        A = Z + 1 + alpha - int(alpha / 4)
+    B = A + 1524
+    C = int((B - 122.1) / 365.25)
+    D = int(365.25 * C)
+    E = int((B - D) / 30.6001)
+    day = B - D - int(30.6001 * E)
+    month = E - 1 if E < 14 else E - 13
+    year = C - 4716 if month > 2 else C - 4715
+    return datetime.date(year, month, day)
+
+
 def compute_lunar_events(start_date, end_date):
     events = []
-    synodic = 29.53058867
-    ref = datetime.date(2000, 1, 6)
-    last_event = None
-    current = start_date
-    while current <= end_date:
-        days = (current - ref).days
-        age = (days % synodic + synodic) % synodic
-        event = None
-        if age < 0.8 or age > synodic - 0.8:
-            event = "new"
-        elif abs(age - 14.765) < 0.8:
-            event = "full"
-        if event and event != last_event:
-            events.append({"date": current.strftime("%Y-%m-%d"), "type": event})
-            last_event = event
-        current += datetime.timedelta(days=1)
+    k_approx = (start_date.year + start_date.month / 12.0 - 2000) * 12.3685
+    k_start = int(k_approx) - 2
+    for i in range(200):
+        k = k_start + i
+        jde_new = _meeus_new_moon_jde(k)
+        d_new = _jde_to_date(jde_new)
+        if start_date <= d_new <= end_date:
+            events.append({"date": d_new.strftime("%Y-%m-%d"), "type": "new"})
+        jde_full = _meeus_full_moon_jde(k)
+        d_full = _jde_to_date(jde_full)
+        if start_date <= d_full <= end_date:
+            events.append({"date": d_full.strftime("%Y-%m-%d"), "type": "full"})
+        if d_new > end_date and d_full > end_date:
+            break
+    events.sort(key=lambda x: x["date"])
     return events
 
 
