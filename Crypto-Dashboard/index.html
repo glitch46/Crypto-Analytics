@@ -415,9 +415,9 @@
       <div class="chart-header">
         <div>
           <div class="chart-title">7-Day Open Interest Momentum</div>
-      <div class="chart-subtitle" id="oiSubtitle">Options open interest (Binance summary)</div>
+      <div class="chart-subtitle" id="oiSubtitle">Options open interest (Binance + Deribit)</div>
         </div>
-        <span class="pill" id="oiRange">Last 7 days</span>
+        <span class="pill" id="oiRange">Last 8 days</span>
       </div>
       <div class="chart-wrap">
         <canvas id="oiChart"></canvas>
@@ -588,10 +588,11 @@
       document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Max pain computed with nearest expiry only.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Max pain computed with nearest expiry only.';
     }
 
-    function buildChart(history, asset) {
+function buildChart(history, asset) {
       const ctx = document.getElementById('oiChart');
       const labels = history.map(item => item.date);
-      const values = history.map(item => item.open_interest);
+      const binanceValues = history.map(item => item.open_interest);
+      const deribitValues = history.map(item => item.deribit_oi || 0);
       if (state.chart) state.chart.destroy();
       state.chart = new Chart(ctx, {
         type: 'line',
@@ -599,8 +600,8 @@
           labels,
           datasets: [
             {
-              label: `${asset} Open Interest`,
-              data: values,
+              label: `${asset} Binance OI`,
+              data: binanceValues,
               borderColor: '#ff4d7d',
               backgroundColor: 'rgba(255, 77, 125, 0.15)',
               fill: true,
@@ -608,6 +609,17 @@
               borderWidth: 2,
               pointRadius: 3,
               pointBackgroundColor: '#ff6b6b'
+            },
+            {
+              label: `${asset} Deribit OI`,
+              data: deribitValues,
+              borderColor: '#00b4d8',
+              backgroundColor: 'rgba(0, 180, 216, 0.15)',
+              fill: true,
+              tension: 0.35,
+              borderWidth: 2,
+              pointRadius: 3,
+              pointBackgroundColor: '#00b4d8'
             }
           ]
         },

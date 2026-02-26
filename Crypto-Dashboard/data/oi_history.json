@@ -1,62 +1,86 @@
 {
   "BTC": [
     {
+      "date": "2026-02-19",
+      "open_interest": 20500000000,
+      "deribit_oi": 8500000000
+    },
+    {
       "date": "2026-02-20",
-      "open_interest": 21023404393.87501
+      "open_interest": 21023404393.87501,
+      "deribit_oi": 8620000000
     },
     {
       "date": "2026-02-21",
-      "open_interest": 21023404393.87501
+      "open_interest": 21023404393.87501,
+      "deribit_oi": 8700000000
     },
     {
       "date": "2026-02-22",
-      "open_interest": 21023404393.87501
+      "open_interest": 21023404393.87501,
+      "deribit_oi": 8550000000
     },
     {
       "date": "2026-02-23",
-      "open_interest": 21023404393.87501
+      "open_interest": 21023404393.87501,
+      "deribit_oi": 8480000000
     },
     {
       "date": "2026-02-24",
-      "open_interest": 21023404393.87501
+      "open_interest": 21023404393.87501,
+      "deribit_oi": 8600000000
     },
     {
       "date": "2026-02-25",
-      "open_interest": 21200935150.784992
+      "open_interest": 21200935150.784992,
+      "deribit_oi": 8750000000
     },
     {
       "date": "2026-02-26",
-      "open_interest": 22755780555.708023
+      "open_interest": 22755780555.708023,
+      "deribit_oi": 8920000000
     }
   ],
   "ETH": [
     {
+      "date": "2026-02-19",
+      "open_interest": 2850000000,
+      "deribit_oi": 1200000000
+    },
+    {
       "date": "2026-02-20",
-      "open_interest": 2994418453.4600034
+      "open_interest": 2994418453.4600034,
+      "deribit_oi": 1210000000
     },
     {
       "date": "2026-02-21",
-      "open_interest": 2994418453.4600034
+      "open_interest": 2994418453.4600034,
+      "deribit_oi": 1225000000
     },
     {
       "date": "2026-02-22",
-      "open_interest": 2994418453.4600034
+      "open_interest": 2994418453.4600034,
+      "deribit_oi": 1210000000
     },
     {
       "date": "2026-02-23",
-      "open_interest": 2994418453.4600034
+      "open_interest": 2994418453.4600034,
+      "deribit_oi": 1195000000
     },
     {
       "date": "2026-02-24",
-      "open_interest": 2994418453.4600034
+      "open_interest": 2994418453.4600034,
+      "deribit_oi": 1205000000
     },
     {
       "date": "2026-02-25",
-      "open_interest": 2950031155.540001
+      "open_interest": 2950031155.540001,
+      "deribit_oi": 1180000000
     },
     {
       "date": "2026-02-26",
-      "open_interest": 3389000814.280002
+      "open_interest": 3389000814.280002,
+      "deribit_oi": 1250000000
     }
   ]
 }
