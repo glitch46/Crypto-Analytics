@@ -164,38 +164,6 @@
       box-shadow: var(--shadow-glow);
     }
 
-    .toggle-group {
-      display: inline-flex;
-      gap: 8px;
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 999px;
-      padding: 6px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .toggle-btn {
-      border: none;
-      background: transparent;
-      color: var(--gray-light);
-      font-weight: 700;
-      padding: 10px 18px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: all 200ms ease-out;
-      letter-spacing: 0.02em;
-    }
-
-    .toggle-btn.active {
-      background: var(--gradient-primary);
-      color: var(--white-pure);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .toggle-btn:focus-visible {
-      outline: none;
-      box-shadow: var(--glow-ring);
-    }
 
     .badge {
       display: inline-flex;
@@ -497,92 +465,33 @@
     </header>
 
     <section class="controls">
-      <div class="toggle-group" role="tablist" aria-label="Asset selection">
-        <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
-        <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
-      </div>
       <span class="pill" id="dataStamp">Updated —</span>
       <span class="pill" style="border-color: #2a2a30; color: #6b6b76;">Refreshes every 6 hours</span>
     </section>
 
     <section class="grid kpis">
       <div class="panel glow">
-        <div class="kpi-label">Skew Follow Win Rate</div>
-        <div class="kpi-value kpi-accent" id="skewWinRate">—</div>
-        <div class="kpi-sub" id="skewWinNote">Directional hit rate</div>
+        <div class="kpi-label">Final Value</div>
+        <div class="kpi-value kpi-accent" id="strategyFinal">—</div>
+        <div class="kpi-sub">After 3 years</div>
       </div>
       <div class="panel">
-        <div class="kpi-label">Months Analyzed</div>
-        <div class="kpi-value" id="monthsAnalyzed">—</div>
-        <div class="kpi-sub" id="monthsNote">Last 12 expiries</div>
+        <div class="kpi-label">Total Return</div>
+        <div class="kpi-value" id="strategyReturn">—</div>
+        <div class="kpi-sub">Net percentage</div>
       </div>
       <div class="panel">
-        <div class="kpi-label">Puts > Calls Months</div>
-        <div class="kpi-value" id="putsDominance">—</div>
-        <div class="kpi-sub" id="putsNote">Put/call ratio above 1</div>
+        <div class="kpi-label">CAGR</div>
+        <div class="kpi-value" id="strategyCagr">—</div>
+        <div class="kpi-sub">Compounded annual</div>
       </div>
       <div class="panel">
-        <div class="kpi-label">Avg Max Pain Deviation</div>
-        <div class="kpi-value" id="avgMaxPain">—</div>
-        <div class="kpi-sub" id="maxPainNote">Abs deviation vs settlement</div>
+        <div class="kpi-label">Max Drawdown</div>
+        <div class="kpi-value" id="strategyDrawdown">—</div>
+        <div class="kpi-sub">Peak-to-trough</div>
       </div>
     </section>
 
-    <section class="panel" style="margin-top: 24px;">
-      <div class="chart-title">Strategy Tester</div>
-      <div class="chart-subtitle">Run custom strategy backtests over the last 3 years</div>
-      <div class="strategy-controls">
-        <div class="strategy-field">
-          <label for="capitalInput">Initial Capital (USD)</label>
-          <input id="capitalInput" type="number" min="100" step="100" value="10000" />
-        </div>
-        <div class="strategy-field">
-          <label for="strategySelect">Strategy</label>
-          <select id="strategySelect"></select>
-        </div>
-        <div class="strategy-field">
-          <label for="buySize">On each occurrence: Buy</label>
-          <select id="buySize">
-            <option value="0.25">25%</option>
-            <option value="0.5">50%</option>
-            <option value="0.75">75%</option>
-            <option value="1" selected>100%</option>
-          </select>
-        </div>
-        <div class="strategy-field">
-          <label for="sellSize">Sell</label>
-          <select id="sellSize">
-            <option value="0.25">25%</option>
-            <option value="0.5">50%</option>
-            <option value="0.75">75%</option>
-            <option value="1" selected>100%</option>
-          </select>
-        </div>
-        <div class="strategy-field">
-          <label>Defaults</label>
-          <div class="strategy-note">Sizing: % of available cash/BTC. Position: single only.</div>
-        </div>
-        <div class="strategy-field">
-          <label>&nbsp;</label>
-          <button class="strategy-btn" id="runStrategy">Run backtest</button>
-        </div>
-      </div>
-      <div class="strategy-summary" id="strategySummary"></div>
-      <div class="strategy-table-wrap">
-        <table class="strategy-table" id="strategyTable">
-          <thead>
-            <tr>
-              <th>Quarter</th>
-              <th>Start Capital</th>
-              <th>End Capital</th>
-              <th>USD Gain</th>
-              <th>% Return</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </section>
 
     <section class="panel" style="margin-top: 24px;">
       <div class="chart-title">Strategy Tester</div>
@@ -648,7 +557,6 @@
 
   <script>
     const state = {
-      asset: 'BTC',
       data: {},
       strategy: {
         prices: [],
@@ -691,23 +599,6 @@
       return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
     }
 
-    function updateToggle(asset) {
-      document.querySelectorAll('.toggle-btn').forEach(btn => {
-        const active = btn.dataset.asset === asset;
-        btn.classList.toggle('active', active);
-        btn.setAttribute('aria-selected', active ? 'true' : 'false');
-      });
-    }
-
-    function updateKPIs(assetData) {
-      const summary = assetData.backtest?.summary;
-      const winRate = summary?.win_rate !== null && summary?.win_rate !== undefined ? (summary.win_rate * 100).toFixed(1) + '%' : '—';
-      const avgPain = summary?.avg_max_pain_dev !== null && summary?.avg_max_pain_dev !== undefined ? (summary.avg_max_pain_dev * 100).toFixed(2) + '%' : '—';
-      document.getElementById('skewWinRate').textContent = winRate;
-      document.getElementById('monthsAnalyzed').textContent = summary?.months ?? '—';
-      document.getElementById('putsDominance').textContent = summary?.puts_over_calls ?? '—';
-      document.getElementById('avgMaxPain').textContent = avgPain;
-    }
 
 
     function formatUSD(value) {
@@ -920,27 +811,13 @@
     }
 
 
-    function render(asset) {
-      const assetData = state.data[asset];
-      if (!assetData) return;
-      updateToggle(asset);
-      updateKPIs(assetData);
-    }
 
     async function init() {
-      const [backtest, meta, strategySignals] = await Promise.all([
-        loadJSON('../Crypto-Dashboard/data/backtest.json'),
+      const [meta, strategySignals] = await Promise.all([
         loadJSON('../Crypto-Dashboard/data/metadata.json'),
         loadJSON('../Crypto-Dashboard/data/strategy_signals.json')
       ]);
-      state.data = {
-        BTC: {
-          backtest: backtest.BTC || {}
-        },
-        ETH: {
-          backtest: backtest.ETH || {}
-        }
-      };
+      state.data = {};
       state.strategy.prices = strategySignals?.prices || [];
       state.strategy.weeklyRsi = strategySignals?.weekly_rsi || [];
       state.strategy.lunarEvents = strategySignals?.lunar_events || [];
@@ -953,7 +830,22 @@
         select.appendChild(opt);
       });
       updateMetadata(meta);
-      render(state.asset);
+      const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.lunarEvents);
+      if (series.length) {
+        const capital = parseFloat(document.getElementById('capitalInput').value || '0');
+        const buySize = parseFloat(document.getElementById('buySize').value || '1');
+        const sellSize = parseFloat(document.getElementById('sellSize').value || '1');
+        const strategy = strategies[0];
+        if (capital) {
+          const result = runStrategy(series, strategy, buySize, sellSize, capital);
+          renderStrategySummary(result);
+          renderQuarterTable(buildQuarterTable(result.records));
+          document.getElementById('strategyFinal').textContent = formatUSD(result.finalValue);
+          document.getElementById('strategyReturn').textContent = formatPercent(result.totalReturn);
+          document.getElementById('strategyCagr').textContent = formatPercent(result.cagr);
+          document.getElementById('strategyDrawdown').textContent = formatPercent(result.maxDrawdown);
+        }
+      }
       const runBtn = document.getElementById('runStrategy');
       runBtn.addEventListener('click', () => {
         const capital = parseFloat(document.getElementById('capitalInput').value || '0');
@@ -968,15 +860,12 @@
         const result = runStrategy(series, strategy, buySize, sellSize, capital);
         renderStrategySummary(result);
         renderQuarterTable(buildQuarterTable(result.records));
+        document.getElementById('strategyFinal').textContent = formatUSD(result.finalValue);
+        document.getElementById('strategyReturn').textContent = formatPercent(result.totalReturn);
+        document.getElementById('strategyCagr').textContent = formatPercent(result.cagr);
+        document.getElementById('strategyDrawdown').textContent = formatPercent(result.maxDrawdown);
       });
     }
-
-    document.querySelectorAll('.toggle-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.asset = btn.dataset.asset;
-        render(state.asset);
-      });
-    });
 
     init();
   </script>

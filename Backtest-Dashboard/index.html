@@ -363,7 +363,6 @@
       font-size: 12px;
     }
 
-
     @media (max-width: 1024px) {
       .layout { flex-direction: column; }
       .sidebar {
@@ -444,6 +443,19 @@
       </div>
     </section>
 
+    <section class="panel chart-panel" style="margin-top: 24px;">
+      <div class="chart-header">
+        <div>
+          <div class="chart-title">Skew vs Price Change</div>
+          <div class="chart-subtitle">Put/call ratio and 30d price change into expiry</div>
+        </div>
+        <span class="pill" id="backtestRange">Last 12 months</span>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="backtestChart"></canvas>
+      </div>
+    </section>
+
     <section class="grid two-col" style="margin-top: 24px;">
       <div class="panel">
         <div class="chart-title">Put/Call Skew Months</div>
@@ -457,7 +469,6 @@
       </div>
     </section>
 
-
     <footer class="footer" id="footerNote">
       Data sources: CryptoDataDownload, Deribit. Backtest uses 30d price change into expiry.
     </footer>
@@ -467,12 +478,7 @@
   <script>
     const state = {
       asset: 'BTC',
-      data: {},
-      strategy: {
-        prices: [],
-        weeklyRsi: [],
-        lunarEvents: []
-      }
+      data: {}
     };
 
     async function loadJSON(path) {
@@ -527,17 +533,126 @@
       document.getElementById('avgMaxPain').textContent = avgPain;
     }
 
+    function updateBacktestLists(assetData) {
+      const rows = assetData.backtest?.months || [];
+      const putsList = document.getElementById('putsDominanceList');
+      const painList = document.getElementById('maxPainDeviationList');
+      putsList.innerHTML = '';
+      painList.innerHTML = '';
+
+      const putsMonths = rows.filter(item => item.put_call && item.put_call > 1);
+      if (!putsMonths.length) {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        li.textContent = 'No months with puts outweighing calls.';
+        putsList.appendChild(li);
+      } else {
+        putsMonths.forEach(item => {
+          const li = document.createElement('li');
+          li.className = 'list-item';
+          const change = item.price_change_pct !== null && item.price_change_pct !== undefined ? fmtPercent(item.price_change_pct) : '—';
+          li.innerHTML = `<span>${item.month} · Put/Call ${item.put_call.toFixed(2)}</span><span>Price change ${change}</span>`;
+          putsList.appendChild(li);
+        });
+      }
+
+      if (!rows.length) {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        li.textContent = 'No max pain deviation data yet.';
+        painList.appendChild(li);
+        return;
+      }
+      rows.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'list-item';
+        const deviation = item.max_pain_dev_pct !== null && item.max_pain_dev_pct !== undefined
+          ? (item.max_pain_dev_pct * 100).toFixed(2) + '%'
+          : '—';
+        const maxPain = item.max_pain ? fmtCurrency(item.max_pain) : '—';
+        li.innerHTML = `<span>${item.month} · Max pain ${maxPain}</span><span>Deviation ${deviation}</span>`;
+        painList.appendChild(li);
+      });
+    }
+
     function updateMetadata(meta) {
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
       document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Backtest uses 30d price change into expiry.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Backtest uses 30d price change into expiry.';
     }
 
+    function buildBacktestChart(rows) {
+      const ctx = document.getElementById('backtestChart');
+      if (state.chart) state.chart.destroy();
+      const labels = rows.map(item => item.month);
+      const priceMoves = rows.map(item => item.price_change_pct !== null && item.price_change_pct !== undefined ? item.price_change_pct * 100 : null);
+      const putCall = rows.map(item => item.put_call ?? null);
+      state.chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: '30d Price Change %',
+              data: priceMoves,
+              backgroundColor: 'rgba(0, 180, 216, 0.35)',
+              borderColor: '#00b4d8',
+              borderWidth: 1,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Put/Call Ratio',
+              data: putCall,
+              borderColor: '#ff4d7d',
+              backgroundColor: 'rgba(255, 77, 125, 0.2)',
+              type: 'line',
+              tension: 0.3,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          plugins: {
+            legend: { labels: { color: '#e8e8ed' } }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#9999a5', maxRotation: 0 },
+              grid: { color: '#1a1a1e' }
+            },
+            y: {
+              ticks: {
+                color: '#9999a5',
+                callback: (value) => `${value}%`
+              },
+              grid: { color: '#1a1a1e' },
+              title: {
+                display: true,
+                text: 'Price Change %',
+                color: '#9999a5'
+              }
+            },
+            y1: {
+              position: 'right',
+              ticks: { color: '#9999a5' },
+              grid: { drawOnChartArea: false },
+              title: {
+                display: true,
+                text: 'Put/Call Ratio',
+                color: '#9999a5'
+              }
+            }
+          }
+        }
+      });
+    }
 
     function render(asset) {
       const assetData = state.data[asset];
       if (!assetData) return;
       updateToggle(asset);
       updateKPIs(assetData);
+      updateBacktestLists(assetData);
+      buildBacktestChart(assetData.backtest?.months || []);
     }
 
     async function init() {
