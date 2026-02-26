@@ -721,15 +721,17 @@
           id: 'two_day_dip',
           label: 'Two-day dip buy, sell after 3 green days',
           buy: (row, prevRows) => {
-            if (prevRows.length < 2) return false;
-            return prevRows[prevRows.length - 1].close < prevRows[prevRows.length - 2].close
-              && row.close < prevRows[prevRows.length - 1].close;
+            if (prevRows.length < 3) return false;
+            const prev1 = prevRows[prevRows.length - 2];
+            const prev2 = prevRows[prevRows.length - 3];
+            return prev1.close < prev2.close && row.close < prev1.close;
           },
           sell: (row, prevRows) => {
-            if (prevRows.length < 3) return false;
-            const a = prevRows[prevRows.length - 2].close;
-            const b = prevRows[prevRows.length - 1].close;
-            return a > prevRows[prevRows.length - 3].close && b > a && row.close > b;
+            if (prevRows.length < 4) return false;
+            const prev1 = prevRows[prevRows.length - 2].close;
+            const prev2 = prevRows[prevRows.length - 3].close;
+            const prev3 = prevRows[prevRows.length - 4].close;
+            return prev2 > prev3 && prev1 > prev2 && row.close > prev1;
           }
         },
         {
