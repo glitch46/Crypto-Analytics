@@ -670,7 +670,7 @@
       return sign + (value * 100).toFixed(2) + '%';
     }
 
-    function buildSignals(prices, weeklyRsi, lunarEvents) {
+    function buildSignals(prices, weeklyRsi, dailyRsi, lunarEvents) {
       const signalMap = {};
       prices.forEach((row, idx) => {
         signalMap[row.date] = {
@@ -682,6 +682,11 @@
       weeklyRsi.forEach(entry => {
         if (signalMap[entry.date]) {
           signalMap[entry.date].weeklyRsi = entry.rsi;
+        }
+      });
+      dailyRsi.forEach(entry => {
+        if (signalMap[entry.date]) {
+          signalMap[entry.date].dailyRsi = entry.rsi;
         }
       });
       lunarEvents.forEach(event => {
@@ -701,10 +706,10 @@
           sell: (row) => row.lunar === 'full'
         },
         {
-          id: 'weekly_rsi',
-          label: 'Weekly RSI < 30 buy, > 70 sell',
-          buy: (row) => row.weeklyRsi !== null && row.weeklyRsi !== undefined && row.weeklyRsi < 30,
-          sell: (row) => row.weeklyRsi !== null && row.weeklyRsi !== undefined && row.weeklyRsi > 70
+          id: 'daily_rsi',
+          label: 'Daily RSI < 30 buy, > 70 sell',
+          buy: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi < 30,
+          sell: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi > 70
         },
         {
           id: 'friday_monday',
@@ -793,8 +798,10 @@
         const hasPosition = btc > 0;
         const buySignal = strategy.buy(row, prevRows);
         const sellSignal = strategy.sell(row, prevRows);
+        const allowRebuy = buySize < 1;
+        const allowResell = sellSize < 1;
 
-        if (!hasPosition && buySignal) {
+        if ((!hasPosition || allowRebuy) && buySignal && cash > 0) {
           const allocation = cash * buySize;
           const units = allocation / next.close;
           btc += units;
@@ -811,7 +818,7 @@
             cashPct,
             btcPct
           });
-        } else if (hasPosition && sellSignal) {
+        } else if ((hasPosition || allowResell) && sellSignal && btc > 0) {
           const sellUnits = btc * sellSize;
           const proceeds = sellUnits * next.close;
           btc -= sellUnits;
@@ -941,6 +948,7 @@
       state.data = {};
       state.strategy.prices = strategySignals?.prices || [];
       state.strategy.weeklyRsi = strategySignals?.weekly_rsi || [];
+      state.strategy.dailyRsi = strategySignals?.daily_rsi || [];
       state.strategy.lunarEvents = strategySignals?.lunar_events || [];
       const strategies = createStrategies();
       const select = document.getElementById('strategySelect');
@@ -951,7 +959,7 @@
         select.appendChild(opt);
       });
       updateMetadata(meta);
-      const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.lunarEvents);
+      const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.dailyRsi, state.strategy.lunarEvents);
       if (series.length) {
         const capital = parseFloat(document.getElementById('capitalInput').value || '0');
         const buySize = parseFloat(document.getElementById('buySize').value || '1');
@@ -984,7 +992,7 @@
         if (!state.strategy.prices.length || !capital) {
           return;
         }
-        const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.lunarEvents);
+        const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.dailyRsi, state.strategy.lunarEvents);
         const result = runStrategy(series, strategy, buySize, sellSize, capital);
         const hold = computeHoldBenchmark(series, capital);
         renderStrategySummary(result);

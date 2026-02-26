@@ -480,6 +480,16 @@ def compute_weekly_rsi(daily_prices, period=14):
     return result
 
 
+def compute_daily_rsi(daily_prices, period=14):
+    closes = [row["close"] for row in daily_prices]
+    rsi_series = compute_rsi(closes, period)
+    result = []
+    for idx, row in enumerate(daily_prices):
+        rsi = rsi_series[idx] if idx < len(rsi_series) else None
+        result.append({"date": row["date"], "rsi": rsi})
+    return result
+
+
 def compute_lunar_events(start_date, end_date):
     events = []
     synodic = 29.53058867
@@ -602,6 +612,7 @@ def main():
                 start_date = None
                 end_date = None
             weekly_rsi = compute_weekly_rsi(daily_prices, 14)
+            daily_rsi = compute_daily_rsi(daily_prices, 14)
             lunar_events = compute_lunar_events(start_date, end_date) if start_date and end_date else []
             price_lookup = {row["date"]: row["close"] for row in daily_prices}
             for event in lunar_events:
@@ -609,6 +620,7 @@ def main():
             strategy_data = {
                 "prices": daily_prices,
                 "weekly_rsi": weekly_rsi,
+                "daily_rsi": daily_rsi,
                 "lunar_events": lunar_events
             }
 
