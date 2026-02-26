@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Strategy Tester</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -544,19 +547,10 @@
             <select id="strategySelect"></select>
           </div>
         </div>
-        <div class="strategy-row two-col">
+        <div class="strategy-row single">
           <div class="strategy-field">
-            <label for="buySize">On each occurrence: Buy</label>
-            <select id="buySize">
-              <option value="0.25">25%</option>
-              <option value="0.5">50%</option>
-              <option value="0.75">75%</option>
-              <option value="1" selected>100%</option>
-            </select>
-          </div>
-          <div class="strategy-field">
-            <label for="sellSize">Sell</label>
-            <select id="sellSize">
+            <label for="trancheSize">On each occurrence, buy or sell</label>
+            <select id="trancheSize">
               <option value="0.25">25%</option>
               <option value="0.5">50%</option>
               <option value="0.75">75%</option>
@@ -572,7 +566,7 @@
         </div>
       </div>
       <div class="strategy-note" style="margin-top: 12px;">
-        Defaults: Sizing is % of available cash/BTC. Position is single only.
+        Sizing is % of total portfolio value per occurrence. Skips if insufficient cash or no BTC to sell.
       </div>
       <div class="strategy-summary" id="strategySummary"></div>
       <div class="strategy-table-wrap">
@@ -707,9 +701,7 @@
         },
         {
           id: 'daily_rsi',
-          label: 'Daily RSI < 30 buy, > 70 sell (25% tranches)',
-          tranche: 0.25,
-          trancheMode: 'portfolio',
+          label: 'Daily RSI < 30 buy, > 70 sell',
           buy: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi < 30,
           sell: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi > 70
         },
@@ -783,96 +775,118 @@
       ];
     }
 
-    function runStrategy(prices, strategy, buySize, sellSize, initialCapital) {
-      let cash = initialCapital;
-      let btc = 0;
-      let peak = initialCapital;
-      let maxDrawdown = 0;
-      const records = [];
-      const events = [];
-      let tradeWins = 0;
-      let tradeCount = 0;
-      let entryValue = null;
+    function runStrategy(prices, strategy, trancheSize, initialCapital) {
+      var cash = initialCapital;
+      var btc  = 0;
+      var peak = initialCapital;
+      var maxDrawdown = 0;
+      var records = [];
+      var events  = [];
+      var tradeWins  = 0;
+      var tradeCount = 0;
+      var entryValue = null;
 
-      for (let i = 0; i < prices.length - 1; i += 1) {
-        const row = prices[i];
-        const next = prices[i + 1];
-        const prevRows = prices.slice(0, i + 1);
+      /* ── Tranche sizing (single dropdown) ──
+         trancheSize = fraction of total portfolio per occurrence (0.25–1.0).
+         maxSlots = 1 / trancheSize  (e.g. 4 at 25%, 2 at 50%, 1 at 100%).
+         buySlots = how many buy-tranches are currently invested in BTC.
 
-        const hasPosition = btc > 0;
-        const buySignal = strategy.buy(row, prevRows);
-        const sellSignal = strategy.sell(row, prevRows);
-        const tranche = strategy.tranche || buySize;
-        const trancheSell = strategy.tranche || sellSize;
-        const allowRebuy = tranche < 1;
-        const allowResell = trancheSell < 1;
-        const totalValueBefore = cash + btc * next.close;
-        const trancheValue = strategy.trancheMode === 'portfolio' ? totalValueBefore * tranche : null;
-        const trancheSellValue = strategy.trancheMode === 'portfolio' ? totalValueBefore * trancheSell : null;
+         BUY:  allocate  trancheSize * portfolioValue  from cash → BTC, +1 slot.
+               Skip if all slots full OR not enough cash.
+         SELL: unwind one slot → sell  btc / buySlots  BTC units.
+               This guarantees a buy + sell pair fully closes one tranche.
+               Skip if buySlots === 0 (no BTC to sell).
 
-        if ((!hasPosition || allowRebuy) && buySignal && cash > 0) {
-          const allocation = strategy.trancheMode === 'portfolio' ? trancheValue : cash * tranche;
-          if (strategy.trancheMode === 'portfolio' && (!allocation || cash < allocation)) {
-            continue;
-          }
-          const units = allocation / next.close;
-          btc += units;
-          cash -= allocation;
-          entryValue = allocation;
-          const totalValue = cash + btc * next.close;
-          const cashPct = totalValue ? (cash / totalValue) : 0;
-          const btcPct = totalValue ? (btc * next.close / totalValue) : 0;
-          events.push({
-            date: next.date,
-            price: next.close,
-            side: 'Buy',
-            totalValue,
-            cashPct,
-            btcPct
-          });
-        } else if ((hasPosition || allowResell) && sellSignal && btc > 0) {
-          const sellValue = strategy.trancheMode === 'portfolio' ? trancheSellValue : btc * trancheSell * next.close;
-          if (strategy.trancheMode === 'portfolio' && (!sellValue || btc * next.close < sellValue)) {
-            continue;
-          }
-          const sellUnits = strategy.trancheMode === 'portfolio' ? (sellValue / next.close) : btc * trancheSell;
-          const proceeds = sellUnits * next.close;
-          btc -= sellUnits;
-          cash += proceeds;
-          if (entryValue !== null) {
-            tradeCount += 1;
-            if (proceeds > entryValue) {
-              tradeWins += 1;
+         Examples with 25%, $10K start:
+           Buy  → cash 75%, BTC 25%  (1 slot)
+           Sell → cash 100%, BTC 0%  (0 slots, all BTC sold)
+           Buy  → cash 75%, BTC 25%  (1 slot)
+           Buy  → cash 50%, BTC 50%  (2 slots)
+           Sell → cash 75%, BTC 25%  (1 slot, sold half the BTC)
+      */
+      var pct      = trancheSize;
+      var maxSlots = Math.round(1 / pct);
+      var buySlots = 0;
+
+      for (var i = 0; i < prices.length - 1; i++) {
+        var row  = prices[i];
+        var next = prices[i + 1];
+        var prevRows = prices.slice(0, i + 1);
+
+        var buySignal  = strategy.buy(row, prevRows);
+        var sellSignal = strategy.sell(row, prevRows);
+        var pv = cash + btc * next.close;
+
+        if (buySignal) {
+          if (buySlots >= maxSlots) {
+            /* All slots full → SKIP */
+            events.push({ date: next.date, price: next.close, side: 'Skip (Buy)',
+              totalValue: pv, cashPct: pv ? cash / pv : 0,
+              btcPct: pv ? (btc * next.close) / pv : 0 });
+          } else {
+            var allocation = pv * pct;
+            if (cash < allocation * 0.99) {
+              /* Not enough cash → SKIP */
+              events.push({ date: next.date, price: next.close, side: 'Skip (Buy)',
+                totalValue: pv, cashPct: pv ? cash / pv : 0,
+                btcPct: pv ? (btc * next.close) / pv : 0 });
+            } else {
+              if (allocation > cash) allocation = cash;
+              var units = allocation / next.close;
+              btc  += units;
+              cash -= allocation;
+              buySlots += 1;
+              entryValue = allocation;
+              var tv = cash + btc * next.close;
+              events.push({ date: next.date, price: next.close, side: 'Buy',
+                totalValue: tv, cashPct: tv ? cash / tv : 0,
+                btcPct: tv ? (btc * next.close) / tv : 0 });
             }
-            entryValue = null;
           }
-          const totalValue = cash + btc * next.close;
-          const cashPct = totalValue ? (cash / totalValue) : 0;
-          const btcPct = totalValue ? (btc * next.close / totalValue) : 0;
-          events.push({
-            date: next.date,
-            price: next.close,
-            side: 'Sell',
-            totalValue,
-            cashPct,
-            btcPct
-          });
+        } else if (sellSignal) {
+          if (buySlots <= 0 || btc <= 1e-12) {
+            /* No BTC to sell → SKIP */
+            events.push({ date: next.date, price: next.close, side: 'Skip (Sell)',
+              totalValue: pv, cashPct: pv ? cash / pv : 0,
+              btcPct: pv ? (btc * next.close) / pv : 0 });
+          } else {
+            /* Sell exactly one slot's worth of BTC units */
+            var sellUnits = btc / buySlots;
+            if (sellUnits > btc) sellUnits = btc;
+            var proceeds = sellUnits * next.close;
+            btc  -= sellUnits;
+            cash += proceeds;
+            buySlots -= 1;
+            if (buySlots < 0) buySlots = 0;
+            if (entryValue !== null) {
+              tradeCount += 1;
+              if (proceeds > entryValue) tradeWins += 1;
+              entryValue = null;
+            }
+            var tv2 = cash + btc * next.close;
+            events.push({ date: next.date, price: next.close, side: 'Sell',
+              totalValue: tv2, cashPct: tv2 ? cash / tv2 : 0,
+              btcPct: tv2 ? (btc * next.close) / tv2 : 0 });
+          }
         }
 
-        const totalValue = cash + btc * next.close;
-        if (totalValue > peak) peak = totalValue;
-        const drawdown = (peak - totalValue) / peak;
-        if (drawdown > maxDrawdown) maxDrawdown = drawdown;
-        records.push({ date: next.date, value: totalValue });
+        pv = cash + btc * next.close;
+        if (pv > peak) peak = pv;
+        var dd = (peak - pv) / peak;
+        if (dd > maxDrawdown) maxDrawdown = dd;
+        records.push({ date: next.date, value: pv });
       }
 
-      const finalValue = cash + btc * (prices.length ? prices[prices.length - 1].close : 0);
-      const totalReturn = (finalValue - initialCapital) / initialCapital;
-      const years = prices.length / 365;
-      const cagr = years ? Math.pow(finalValue / initialCapital, 1 / years) - 1 : null;
+      if (Math.abs(btc)  < 1e-10) btc  = 0;
+      if (Math.abs(cash) < 0.01)  cash = 0;
 
-      const winRate = tradeCount ? tradeWins / tradeCount : null;
-      return { finalValue, totalReturn, cagr, maxDrawdown, records, winRate, cash, btc, events };
+      var finalValue  = cash + btc * (prices.length ? prices[prices.length - 1].close : 0);
+      var totalReturn = (finalValue - initialCapital) / initialCapital;
+      var years = prices.length / 365;
+      var cagr  = years ? Math.pow(finalValue / initialCapital, 1 / years) - 1 : null;
+      var winRate = tradeCount ? tradeWins / tradeCount : null;
+
+      return { finalValue: finalValue, totalReturn: totalReturn, cagr: cagr, maxDrawdown: maxDrawdown, records: records, winRate: winRate, cash: cash, btc: btc, events: events };
     }
 
     function buildQuarterTable(records) {
@@ -936,12 +950,14 @@
       const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
       sorted.forEach(event => {
         const tr = document.createElement('tr');
+        const isSkip = event.side.startsWith('Skip');
+        if (isSkip) tr.style.opacity = '0.45';
         const cashPct = formatPercent(event.cashPct);
         const btcPct = formatPercent(event.btcPct);
         tr.innerHTML = `
           <td>${event.date}</td>
           <td>${formatUSD(event.price)}</td>
-          <td>${event.side}</td>
+          <td>${isSkip ? '<span style="color:var(--gray-muted)">' + event.side + '</span>' : event.side}</td>
           <td>${formatUSD(event.totalValue)}</td>
           <td>${cashPct} / ${btcPct}</td>
         `;
@@ -978,11 +994,10 @@
       const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.dailyRsi, state.strategy.lunarEvents);
       if (series.length) {
         const capital = parseFloat(document.getElementById('capitalInput').value || '0');
-        const buySize = parseFloat(document.getElementById('buySize').value || '1');
-        const sellSize = parseFloat(document.getElementById('sellSize').value || '1');
+        const trancheSize = parseFloat(document.getElementById('trancheSize').value || '1');
         const strategy = strategies[0];
         if (capital) {
-          const result = runStrategy(series, strategy, buySize, sellSize, capital);
+          const result = runStrategy(series, strategy, trancheSize, capital);
           const hold = computeHoldBenchmark(series, capital);
           renderStrategySummary(result);
           renderQuarterTable(buildQuarterTable(result.records));
@@ -1007,15 +1022,14 @@
       const runBtn = document.getElementById('runStrategy');
       runBtn.addEventListener('click', () => {
         const capital = parseFloat(document.getElementById('capitalInput').value || '0');
-        const buySize = parseFloat(document.getElementById('buySize').value || '1');
-        const sellSize = parseFloat(document.getElementById('sellSize').value || '1');
+        const trancheSize = parseFloat(document.getElementById('trancheSize').value || '1');
         const selected = document.getElementById('strategySelect').value;
         const strategy = strategies.find(item => item.id === selected) || strategies[0];
         if (!state.strategy.prices.length || !capital) {
           return;
         }
         const series = buildSignals(state.strategy.prices, state.strategy.weeklyRsi, state.strategy.dailyRsi, state.strategy.lunarEvents);
-        const result = runStrategy(series, strategy, buySize, sellSize, capital);
+        const result = runStrategy(series, strategy, trancheSize, capital);
         const hold = computeHoldBenchmark(series, capital);
         renderStrategySummary(result);
         renderQuarterTable(buildQuarterTable(result.records));
