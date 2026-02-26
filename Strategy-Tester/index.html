@@ -709,6 +709,7 @@
           id: 'daily_rsi',
           label: 'Daily RSI < 30 buy, > 70 sell (25% tranches)',
           tranche: 0.25,
+          trancheMode: 'portfolio',
           buy: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi < 30,
           sell: (row) => row.dailyRsi !== null && row.dailyRsi !== undefined && row.dailyRsi > 70
         },
@@ -805,9 +806,15 @@
         const trancheSell = strategy.tranche || sellSize;
         const allowRebuy = tranche < 1;
         const allowResell = trancheSell < 1;
+        const totalValueBefore = cash + btc * next.close;
+        const trancheValue = strategy.trancheMode === 'portfolio' ? totalValueBefore * tranche : null;
+        const trancheSellValue = strategy.trancheMode === 'portfolio' ? totalValueBefore * trancheSell : null;
 
         if ((!hasPosition || allowRebuy) && buySignal && cash > 0) {
-          const allocation = cash * tranche;
+          const allocation = strategy.trancheMode === 'portfolio' ? trancheValue : cash * tranche;
+          if (strategy.trancheMode === 'portfolio' && (!allocation || cash < allocation)) {
+            continue;
+          }
           const units = allocation / next.close;
           btc += units;
           cash -= allocation;
@@ -824,7 +831,11 @@
             btcPct
           });
         } else if ((hasPosition || allowResell) && sellSignal && btc > 0) {
-          const sellUnits = btc * trancheSell;
+          const sellValue = strategy.trancheMode === 'portfolio' ? trancheSellValue : btc * trancheSell * next.close;
+          if (strategy.trancheMode === 'portfolio' && (!sellValue || btc * next.close < sellValue)) {
+            continue;
+          }
+          const sellUnits = strategy.trancheMode === 'portfolio' ? (sellValue / next.close) : btc * trancheSell;
           const proceeds = sellUnits * next.close;
           btc -= sellUnits;
           cash += proceeds;
