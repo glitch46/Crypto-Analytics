@@ -603,6 +603,9 @@ def main():
                 end_date = None
             weekly_rsi = compute_weekly_rsi(daily_prices, 14)
             lunar_events = compute_lunar_events(start_date, end_date) if start_date and end_date else []
+            price_lookup = {row["date"]: row["close"] for row in daily_prices}
+            for event in lunar_events:
+                event["close"] = price_lookup.get(event["date"])
             strategy_data = {
                 "prices": daily_prices,
                 "weekly_rsi": weekly_rsi,

@@ -638,9 +638,9 @@
       return [
         {
           id: 'moon',
-          label: 'Buy BTC on full moon, sell on new moon',
-          buy: (row) => row.lunar === 'full',
-          sell: (row) => row.lunar === 'new'
+          label: 'Buy BTC on new moon, sell on full moon',
+          buy: (row) => row.lunar === 'new',
+          sell: (row) => row.lunar === 'full'
         },
         {
           id: 'weekly_rsi',
