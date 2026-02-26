@@ -737,23 +737,7 @@
           },
           sell: (row) => {
             const month = new Date(row.date + 'T00:00:00Z').getUTCMonth();
-            return month <= 8;
-          }
-        },
-        {
-          id: 'fear_spike',
-          label: 'Fear spike: buy after -7% day, sell after +5% rebound',
-          buy: (row, prevRows) => {
-            if (!prevRows.length) return false;
-            const prev = prevRows[prevRows.length - 1];
-            const change = (row.close - prev.close) / prev.close;
-            return change <= -0.07;
-          },
-          sell: (row, prevRows) => {
-            if (!prevRows.length) return false;
-            const prev = prevRows[prevRows.length - 1];
-            const change = (row.close - prev.close) / prev.close;
-            return change >= 0.05;
+return month <= 8;
           }
         },
         {
