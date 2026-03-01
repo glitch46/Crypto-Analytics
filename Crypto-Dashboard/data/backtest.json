@@ -1,30 +1,12 @@
 {
   "BTC": {
     "summary": {
-      "win_rate": 0.5,
+      "win_rate": 0.4166666666666667,
       "months": 12,
-      "puts_over_calls": 4,
-      "avg_max_pain_dev": 0.2150521852415822
+      "puts_over_calls": 3,
+      "avg_max_pain_dev": 0.21089835984190594
     },
     "months": [
-      {
-        "month": "2025-03",
-        "expiry": "2025-03-31",
-        "settlement_price": 81856.85000000005,
-        "spot_30d": 86064.53,
-        "spot_expiry": 82550.01,
-        "put_call": 1.2443669701078182,
-        "call_oi": 1548.9000000000003,
-        "put_oi": 1927.4,
-        "max_pain": 98000.0,
-        "max_pain_dev": -16143.14999999995,
-        "max_pain_dev_pct": 0.19721196210213246,
-        "price_change": -4207.679999999949,
-        "price_change_pct": -0.04888982720291332,
-        "skew_direction": "down",
-        "outcome_direction": "down",
-        "skew_followed": true
-      },
       {
         "month": "2025-04",
         "expiry": "2025-04-30",
@@ -210,7 +192,7 @@
         "expiry": "2026-02-28",
         "settlement_price": 63920.990000000085,
         "spot_30d": 84650.16,
-        "spot_expiry": 65872.1,
+        "spot_expiry": 66973.26,
         "put_call": 2.355758554557384,
         "call_oi": 1981.4000000000003,
         "put_oi": 4667.700000000001,
@@ -222,35 +204,35 @@
         "skew_direction": "down",
         "outcome_direction": "down",
         "skew_followed": true
+      },
+      {
+        "month": "2026-03",
+        "expiry": "2026-03-01",
+        "settlement_price": 67110.23,
+        "spot_30d": 84260.49,
+        "spot_expiry": 66973.26,
+        "put_call": 0.8052614012197712,
+        "call_oi": 3295.7000000000003,
+        "put_oi": 2653.9,
+        "max_pain": 77000.0,
+        "max_pain_dev": -9889.770000000004,
+        "max_pain_dev_pct": 0.14736605730601735,
+        "price_change": -17150.26000000001,
+        "price_change_pct": -0.20353857424755076,
+        "skew_direction": "up",
+        "outcome_direction": "down",
+        "skew_followed": false
       }
     ]
   },
   "ETH": {
     "summary": {
-      "win_rate": 0.4166666666666667,
+      "win_rate": 0.3333333333333333,
       "months": 12,
-      "puts_over_calls": 5,
-      "avg_max_pain_dev": 0.4266657460289848
+      "puts_over_calls": 4,
+      "avg_max_pain_dev": 0.4195861200306536
     },
     "months": [
-      {
-        "month": "2025-03",
-        "expiry": "2025-03-31",
-        "settlement_price": 1794.0400000000004,
-        "spot_30d": 2217.39,
-        "spot_expiry": 1822.43,
-        "put_call": 1.3681391059980679,
-        "call_oi": 11387.0,
-        "put_oi": 15579.0,
-        "max_pain": 2300.0,
-        "max_pain_dev": -505.9599999999996,
-        "max_pain_dev_pct": 0.28202269737575497,
-        "price_change": -423.34999999999945,
-        "price_change_pct": -0.19092266132705546,
-        "skew_direction": "down",
-        "outcome_direction": "down",
-        "skew_followed": true
-      },
       {
         "month": "2025-04",
         "expiry": "2025-04-30",
@@ -436,7 +418,7 @@
         "expiry": "2026-02-28",
         "settlement_price": 1869.029999999999,
         "spot_30d": 2822.59,
-        "spot_expiry": 1929.84,
+        "spot_expiry": 1964.51,
         "put_call": 0.5694376590985061,
         "call_oi": 38891.0,
         "put_oi": 22146.0,
@@ -445,6 +427,24 @@
         "max_pain_dev_pct": 0.2840885379046892,
         "price_change": -953.5600000000011,
         "price_change_pct": -0.3378315660439529,
+        "skew_direction": "up",
+        "outcome_direction": "down",
+        "skew_followed": false
+      },
+      {
+        "month": "2026-03",
+        "expiry": "2026-03-01",
+        "settlement_price": 2004.8999999999999,
+        "spot_30d": 2707.38,
+        "spot_expiry": 1964.51,
+        "put_call": 0.6619673563400977,
+        "call_oi": 25181.0,
+        "put_oi": 16669.0,
+        "max_pain": 2400.0,
+        "max_pain_dev": -395.10000000000014,
+        "max_pain_dev_pct": 0.19706718539578041,
+        "price_change": -702.4800000000002,
+        "price_change_pct": -0.2594685637036545,
         "skew_direction": "up",
         "outcome_direction": "down",
         "skew_followed": false
