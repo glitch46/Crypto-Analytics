@@ -1,10 +1,10 @@
 {
   "BTC": {
     "summary": {
-      "win_rate": 0.5,
+      "win_rate": 0.4166666666666667,
       "months": 12,
       "puts_over_calls": 4,
-      "avg_max_pain_dev": 0.21016406077931035
+      "avg_max_pain_dev": 0.21145758405744644
     },
     "months": [
       {
@@ -207,30 +207,30 @@
       },
       {
         "month": "2026-03",
-        "expiry": "2026-03-11",
-        "settlement_price": 69650.37000000007,
-        "spot_30d": 70138.0,
-        "spot_expiry": 69948.63,
-        "put_call": 1.214966391559602,
-        "call_oi": 2350.6000000000004,
-        "put_oi": 2855.900000000001,
-        "max_pain": 60000.0,
-        "max_pain_dev": 9650.370000000068,
-        "max_pain_dev_pct": 0.13855446855486997,
-        "price_change": -487.6299999999319,
-        "price_change_pct": -0.0069524366249384345,
+        "expiry": "2026-03-12",
+        "settlement_price": 69746.27999999996,
+        "spot_30d": 68841.29,
+        "spot_expiry": 70191.86,
+        "put_call": 1.1659814222628293,
+        "call_oi": 1970.1,
+        "put_oi": 2297.1,
+        "max_pain": 59000.0,
+        "max_pain_dev": 10746.279999999955,
+        "max_pain_dev_pct": 0.15407674789250356,
+        "price_change": 904.9899999999616,
+        "price_change_pct": 0.013146034886911063,
         "skew_direction": "down",
-        "outcome_direction": "down",
-        "skew_followed": true
+        "outcome_direction": "up",
+        "skew_followed": false
       }
     ]
   },
   "ETH": {
     "summary": {
-      "win_rate": 0.4166666666666667,
+      "win_rate": 0.3333333333333333,
       "months": 12,
       "puts_over_calls": 5,
-      "avg_max_pain_dev": 0.4161517005359742
+      "avg_max_pain_dev": 0.4169924378779508
     },
     "months": [
       {
@@ -433,21 +433,21 @@
       },
       {
         "month": "2026-03",
-        "expiry": "2026-03-11",
-        "settlement_price": 2013.8700000000003,
-        "spot_30d": 2105.02,
-        "spot_expiry": 2036.51,
-        "put_call": 1.4740361236540465,
-        "call_oi": 11516.0,
-        "put_oi": 16975.0,
+        "expiry": "2026-03-12",
+        "settlement_price": 2038.2300000000014,
+        "spot_30d": 2022.67,
+        "spot_expiry": 2051.97,
+        "put_call": 1.1382906370437542,
+        "call_oi": 17644.0,
+        "put_oi": 20084.0,
         "max_pain": 1700.0,
-        "max_pain_dev": 313.87000000000035,
-        "max_pain_dev_pct": 0.15585415145962764,
-        "price_change": -91.14999999999964,
-        "price_change_pct": -0.04330125129452435,
+        "max_pain_dev": 338.2300000000014,
+        "max_pain_dev_pct": 0.16594299956334718,
+        "price_change": 15.56000000000131,
+        "price_change_pct": 0.0076928020883294404,
         "skew_direction": "down",
-        "outcome_direction": "down",
-        "skew_followed": true
+        "outcome_direction": "up",
+        "skew_followed": false
       }
     ]
   }
