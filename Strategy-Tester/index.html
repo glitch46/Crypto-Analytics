@@ -1015,7 +1015,7 @@ return month <= 8;
     function renderEventTable(events) {
       const tbody = document.querySelector('#strategyEvents tbody');
       tbody.innerHTML = '';
-      const sorted = [...events].sort((a, b) => a.date.localeCompare(b.date));
+      const sorted = [...events].sort((a, b) => b.date.localeCompare(a.date));
       sorted.forEach(event => {
         const tr = document.createElement('tr');
         const isSkip = event.side.startsWith('Skip');
@@ -1060,17 +1060,34 @@ return month <= 8;
       const candles = buildCandleWindow(prices, 90);
       const labels = candles.map(item => item.date);
       const labelSet = new Set(labels);
+      const candleByDate = new Map(candles.map((item) => [item.date, item]));
 
       const wickData = candles.map(item => ({ x: item.date, y: [item.low, item.high] }));
       const bodyData = candles.map(item => ({ x: item.date, y: [item.open, item.close], open: item.open, close: item.close }));
 
+      const lowValues = candles.map((item) => item.low);
+      const highValues = candles.map((item) => item.high);
+      const chartLow = lowValues.length ? Math.min(...lowValues) : 0;
+      const chartHigh = highValues.length ? Math.max(...highValues) : 0;
+      const chartRange = Math.max(chartHigh - chartLow, 1);
+      const markerOffset = chartRange * 0.035;
+      const axisPadding = chartRange * 0.08;
+
       const buyPoints = (events || [])
         .filter(event => event.side === 'Buy' && labelSet.has(event.date))
-        .map(event => ({ x: event.date, y: Number(event.price) }));
+        .map(event => {
+          const candle = candleByDate.get(event.date);
+          const markerY = candle ? candle.low - markerOffset : Number(event.price);
+          return { x: event.date, y: markerY };
+        });
 
       const sellPoints = (events || [])
         .filter(event => event.side === 'Sell' && labelSet.has(event.date))
-        .map(event => ({ x: event.date, y: Number(event.price) }));
+        .map(event => {
+          const candle = candleByDate.get(event.date);
+          const markerY = candle ? candle.high + markerOffset : Number(event.price);
+          return { x: event.date, y: markerY };
+        });
 
       const ctx = document.getElementById('strategyCandleChart');
       if (!ctx) return;
@@ -1105,20 +1122,24 @@ return month <= 8;
               type: 'scatter',
               label: 'Buy Occurrence',
               data: buyPoints,
-              pointBackgroundColor: '#00d26a',
-              pointBorderColor: '#00d26a',
+              pointBackgroundColor: '#00f5b8',
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 1.5,
               pointStyle: 'triangle',
-              pointRadius: 5,
+              pointRadius: 7,
+              pointHoverRadius: 8,
               order: 3
             },
             {
               type: 'scatter',
               label: 'Sell Occurrence',
               data: sellPoints,
-              pointBackgroundColor: '#ff4d7d',
-              pointBorderColor: '#ff4d7d',
+              pointBackgroundColor: '#ffd166',
+              pointBorderColor: '#ffffff',
+              pointBorderWidth: 1.5,
               pointStyle: 'rectRot',
-              pointRadius: 5,
+              pointRadius: 7,
+              pointHoverRadius: 8,
               order: 3
             }
           ]
@@ -1159,6 +1180,8 @@ return month <= 8;
               grid: { color: '#1a1a1e' }
             },
             y: {
+              min: chartLow - axisPadding,
+              max: chartHigh + axisPadding,
               ticks: {
                 color: '#9999a5',
                 callback: (value) => fmtCurrency(value)
