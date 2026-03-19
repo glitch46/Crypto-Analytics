@@ -418,16 +418,34 @@ def build_daily_prices(rows, max_days=1095):
     prices = []
     for row in rows:
         date_value = row.get("date") or row.get("Date")
+        open_value = row.get("open") if row.get("open") is not None else row.get("Open")
+        high_value = row.get("high") if row.get("high") is not None else row.get("High")
+        low_value = row.get("low") if row.get("low") is not None else row.get("Low")
         close_value = row.get("close") or row.get("Close")
         if not date_value:
             continue
         parsed = parse_maturity(date_value)
         if parsed is None:
             continue
+        open_price = parse_float(open_value)
+        high_price = parse_float(high_value)
+        low_price = parse_float(low_value)
         close_price = parse_float(close_value)
         if close_price is None:
             continue
-        prices.append({"date": parsed.strftime("%Y-%m-%d"), "close": close_price})
+        if open_price is None:
+            open_price = close_price
+        if high_price is None:
+            high_price = max(open_price, close_price)
+        if low_price is None:
+            low_price = min(open_price, close_price)
+        prices.append({
+            "date": parsed.strftime("%Y-%m-%d"),
+            "open": open_price,
+            "high": high_price,
+            "low": low_price,
+            "close": close_price
+        })
     prices.sort(key=lambda x: x["date"])
     if max_days and len(prices) > max_days:
         prices = prices[-max_days:]

@@ -599,6 +599,11 @@
           <tbody></tbody>
         </table>
       </div>
+      <div class="chart-title" style="margin-top: 28px;">90-Day Strategy Candlestick View</div>
+      <div class="chart-subtitle">Daily BTC candles with strategy buy and sell occurrences</div>
+      <div class="chart-wrap" style="margin-top: 8px;">
+        <canvas id="strategyCandleChart"></canvas>
+      </div>
     </section>
 
     <footer class="footer" id="footerNote">
@@ -614,7 +619,8 @@
         prices: [],
         weeklyRsi: [],
         lunarEvents: []
-      }
+      },
+      strategyChart: null
     };
 
     const CANONICAL_LUNAR_EVENTS = [
@@ -1027,6 +1033,143 @@ return month <= 8;
       });
     }
 
+    function buildCandleWindow(prices, days) {
+      const source = Array.isArray(prices) ? prices : [];
+      const start = Math.max(source.length - days, 0);
+      const window = source.slice(start);
+      return window.map((row, idx) => {
+        const prev = idx > 0 ? window[idx - 1] : null;
+        const fallbackOpen = prev && prev.close !== undefined && prev.close !== null ? Number(prev.close) : Number(row.close);
+        const open = Number(row.open !== undefined && row.open !== null ? row.open : fallbackOpen);
+        const close = Number(row.close);
+        const highCandidate = row.high !== undefined && row.high !== null ? Number(row.high) : Math.max(open, close);
+        const lowCandidate = row.low !== undefined && row.low !== null ? Number(row.low) : Math.min(open, close);
+        const high = Math.max(highCandidate, open, close);
+        const low = Math.min(lowCandidate, open, close);
+        return {
+          date: row.date,
+          open,
+          high,
+          low,
+          close
+        };
+      });
+    }
+
+    function renderStrategyCandleChart(prices, events) {
+      const candles = buildCandleWindow(prices, 90);
+      const labels = candles.map(item => item.date);
+      const labelSet = new Set(labels);
+
+      const wickData = candles.map(item => ({ x: item.date, y: [item.low, item.high] }));
+      const bodyData = candles.map(item => ({ x: item.date, y: [item.open, item.close], open: item.open, close: item.close }));
+
+      const buyPoints = (events || [])
+        .filter(event => event.side === 'Buy' && labelSet.has(event.date))
+        .map(event => ({ x: event.date, y: Number(event.price) }));
+
+      const sellPoints = (events || [])
+        .filter(event => event.side === 'Sell' && labelSet.has(event.date))
+        .map(event => ({ x: event.date, y: Number(event.price) }));
+
+      const ctx = document.getElementById('strategyCandleChart');
+      if (!ctx) return;
+      if (state.strategyChart) state.strategyChart.destroy();
+
+      state.strategyChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [
+            {
+              label: 'Daily Range',
+              data: wickData,
+              borderWidth: 0,
+              backgroundColor: '#6b6b76',
+              barThickness: 2,
+              order: 1
+            },
+            {
+              label: 'Candle Body',
+              data: bodyData,
+              borderWidth: 0,
+              barThickness: 8,
+              borderRadius: 2,
+              backgroundColor: (ctx) => {
+                const raw = ctx.raw || {};
+                return raw.close >= raw.open ? 'rgba(0, 210, 106, 0.9)' : 'rgba(255, 77, 125, 0.9)';
+              },
+              order: 2
+            },
+            {
+              type: 'scatter',
+              label: 'Buy Occurrence',
+              data: buyPoints,
+              pointBackgroundColor: '#00d26a',
+              pointBorderColor: '#00d26a',
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              order: 3
+            },
+            {
+              type: 'scatter',
+              label: 'Sell Occurrence',
+              data: sellPoints,
+              pointBackgroundColor: '#ff4d7d',
+              pointBorderColor: '#ff4d7d',
+              pointStyle: 'rectRot',
+              pointRadius: 5,
+              order: 3
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              labels: { color: '#e8e8ed' }
+            },
+            tooltip: {
+              callbacks: {
+                label: (context) => {
+                  const datasetLabel = context.dataset.label || '';
+                  const raw = context.raw || {};
+                  if (datasetLabel === 'Candle Body') {
+                    return `O ${fmtCurrency(raw.open)} C ${fmtCurrency(raw.close)}`;
+                  }
+                  if (datasetLabel === 'Daily Range') {
+                    const range = raw.y || [];
+                    return `L ${fmtCurrency(range[0])} H ${fmtCurrency(range[1])}`;
+                  }
+                  return `${datasetLabel}: ${fmtCurrency(context.parsed.y)}`;
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              ticks: {
+                color: '#9999a5',
+                maxRotation: 0,
+                autoSkip: true,
+                maxTicksLimit: 12
+              },
+              grid: { color: '#1a1a1e' }
+            },
+            y: {
+              ticks: {
+                color: '#9999a5',
+                callback: (value) => fmtCurrency(value)
+              },
+              grid: { color: '#1a1a1e' }
+            }
+          }
+        }
+      });
+    }
+
     function updateMetadata(meta) {
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
       document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Strategy tester uses 3-year BTC history.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Strategy tester uses 3-year BTC history.';
@@ -1064,6 +1207,7 @@ return month <= 8;
           renderStrategySummary(result);
           renderQuarterTable(buildQuarterTable(result.records));
           renderEventTable(result.events || []);
+          renderStrategyCandleChart(series, result.events || []);
           document.getElementById('strategyFinal').textContent = formatUSD(result.finalValue);
           document.getElementById('strategyReturn').textContent = formatPercent(result.totalReturn);
           document.getElementById('strategyCagr').textContent = formatPercent(result.cagr);
@@ -1096,6 +1240,7 @@ return month <= 8;
         renderStrategySummary(result);
         renderQuarterTable(buildQuarterTable(result.records));
         renderEventTable(result.events || []);
+        renderStrategyCandleChart(series, result.events || []);
         document.getElementById('strategyFinal').textContent = formatUSD(result.finalValue);
         document.getElementById('strategyReturn').textContent = formatPercent(result.totalReturn);
         document.getElementById('strategyCagr').textContent = formatPercent(result.cagr);
