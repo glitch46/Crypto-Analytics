@@ -617,6 +617,84 @@
       }
     };
 
+    const CANONICAL_LUNAR_EVENTS = [
+      { date: '2023-10-28', type: 'full' },
+      { date: '2023-11-13', type: 'new' },
+      { date: '2023-11-27', type: 'full' },
+      { date: '2023-12-12', type: 'new' },
+      { date: '2023-12-26', type: 'full' },
+      { date: '2024-01-11', type: 'new' },
+      { date: '2024-01-25', type: 'full' },
+      { date: '2024-02-09', type: 'new' },
+      { date: '2024-02-24', type: 'full' },
+      { date: '2024-03-10', type: 'new' },
+      { date: '2024-03-25', type: 'full' },
+      { date: '2024-04-08', type: 'new' },
+      { date: '2024-04-23', type: 'full' },
+      { date: '2024-05-07', type: 'new' },
+      { date: '2024-05-23', type: 'full' },
+      { date: '2024-06-06', type: 'new' },
+      { date: '2024-06-21', type: 'full' },
+      { date: '2024-07-05', type: 'new' },
+      { date: '2024-07-21', type: 'full' },
+      { date: '2024-08-04', type: 'new' },
+      { date: '2024-08-19', type: 'full' },
+      { date: '2024-09-02', type: 'new' },
+      { date: '2024-09-17', type: 'full' },
+      { date: '2024-10-02', type: 'new' },
+      { date: '2024-10-17', type: 'full' },
+      { date: '2024-11-01', type: 'new' },
+      { date: '2024-11-15', type: 'full' },
+      { date: '2024-12-01', type: 'new' },
+      { date: '2024-12-15', type: 'full' },
+      { date: '2024-12-30', type: 'new' },
+      { date: '2025-01-13', type: 'full' },
+      { date: '2025-01-29', type: 'new' },
+      { date: '2025-02-12', type: 'full' },
+      { date: '2025-02-27', type: 'new' },
+      { date: '2025-03-14', type: 'full' },
+      { date: '2025-03-29', type: 'new' },
+      { date: '2025-04-12', type: 'full' },
+      { date: '2025-04-27', type: 'new' },
+      { date: '2025-05-12', type: 'full' },
+      { date: '2025-05-26', type: 'new' },
+      { date: '2025-06-11', type: 'full' },
+      { date: '2025-06-25', type: 'new' },
+      { date: '2025-07-10', type: 'full' },
+      { date: '2025-07-24', type: 'new' },
+      { date: '2025-08-09', type: 'full' },
+      { date: '2025-08-23', type: 'new' },
+      { date: '2025-09-07', type: 'full' },
+      { date: '2025-09-21', type: 'new' },
+      { date: '2025-10-06', type: 'full' },
+      { date: '2025-10-21', type: 'new' },
+      { date: '2025-11-05', type: 'full' },
+      { date: '2025-11-20', type: 'new' },
+      { date: '2025-12-04', type: 'full' },
+      { date: '2025-12-19', type: 'new' },
+      { date: '2026-01-03', type: 'full' },
+      { date: '2026-01-18', type: 'new' },
+      { date: '2026-02-01', type: 'full' },
+      { date: '2026-02-17', type: 'new' },
+      { date: '2026-03-03', type: 'full' },
+      { date: '2026-03-18', type: 'new' }
+    ];
+
+    function normalizeLunarEvents(lunarEvents) {
+      const firstCanonicalDate = CANONICAL_LUNAR_EVENTS[0].date;
+      const preserved = (lunarEvents || [])
+        .filter((event) => event && event.date && event.date < firstCanonicalDate && (event.type === 'new' || event.type === 'full'))
+        .map((event) => ({ date: event.date, type: event.type }));
+
+      const merged = [...preserved, ...CANONICAL_LUNAR_EVENTS];
+      const unique = new Map();
+      merged.forEach((event) => {
+        unique.set(`${event.date}:${event.type}`, event);
+      });
+
+      return Array.from(unique.values()).sort((a, b) => a.date.localeCompare(b.date));
+    }
+
     async function loadJSON(path) {
       const res = await fetch(path, { cache: 'no-cache' });
       return res.json();
@@ -792,9 +870,9 @@ return month <= 8;
       var maxSlots = Math.round(1 / pct);
       var buySlots = 0;
 
-      for (var i = 0; i < prices.length - 1; i++) {
+      for (var i = 0; i < prices.length; i++) {
         var row  = prices[i];
-        var next = prices[i + 1];
+        var next = prices[i + 1] || row;
         var prevRows = prices.slice(0, i + 1);
 
         var buySignal  = strategy.buy(row, prevRows);
@@ -804,14 +882,14 @@ return month <= 8;
         if (buySignal) {
           if (buySlots >= maxSlots) {
             /* All slots full → SKIP */
-            events.push({ date: next.date, price: next.close, side: 'Skip (Buy)',
+            events.push({ date: row.date, price: next.close, side: 'Skip (Buy)',
               totalValue: pv, cashPct: pv ? cash / pv : 0,
               btcPct: pv ? (btc * next.close) / pv : 0 });
           } else {
             var allocation = pv * pct;
             if (cash < allocation * 0.99) {
               /* Not enough cash → SKIP */
-              events.push({ date: next.date, price: next.close, side: 'Skip (Buy)',
+              events.push({ date: row.date, price: next.close, side: 'Skip (Buy)',
                 totalValue: pv, cashPct: pv ? cash / pv : 0,
                 btcPct: pv ? (btc * next.close) / pv : 0 });
             } else {
@@ -822,7 +900,7 @@ return month <= 8;
               buySlots += 1;
               entryValue = allocation;
               var tv = cash + btc * next.close;
-              events.push({ date: next.date, price: next.close, side: 'Buy',
+              events.push({ date: row.date, price: next.close, side: 'Buy',
                 totalValue: tv, cashPct: tv ? cash / tv : 0,
                 btcPct: tv ? (btc * next.close) / tv : 0 });
             }
@@ -830,7 +908,7 @@ return month <= 8;
         } else if (sellSignal) {
           if (buySlots <= 0 || btc <= 1e-12) {
             /* No BTC to sell → SKIP */
-            events.push({ date: next.date, price: next.close, side: 'Skip (Sell)',
+            events.push({ date: row.date, price: next.close, side: 'Skip (Sell)',
               totalValue: pv, cashPct: pv ? cash / pv : 0,
               btcPct: pv ? (btc * next.close) / pv : 0 });
           } else {
@@ -848,7 +926,7 @@ return month <= 8;
               entryValue = null;
             }
             var tv2 = cash + btc * next.close;
-            events.push({ date: next.date, price: next.close, side: 'Sell',
+            events.push({ date: row.date, price: next.close, side: 'Sell',
               totalValue: tv2, cashPct: tv2 ? cash / tv2 : 0,
               btcPct: tv2 ? (btc * next.close) / tv2 : 0 });
           }
@@ -965,7 +1043,7 @@ return month <= 8;
       state.strategy.prices = strategySignals?.prices || [];
       state.strategy.weeklyRsi = strategySignals?.weekly_rsi || [];
       state.strategy.dailyRsi = strategySignals?.daily_rsi || [];
-      state.strategy.lunarEvents = strategySignals?.lunar_events || [];
+      state.strategy.lunarEvents = normalizeLunarEvents(strategySignals?.lunar_events || []);
       const strategies = createStrategies();
       const select = document.getElementById('strategySelect');
       strategies.forEach(strategy => {
