@@ -1,14 +1,14 @@
 {
   "BTC": {
-    "funding_rate": "0.0002%",
+    "funding_rate": "0.0005%",
     "perp_basis": "$42.60",
-    "rv_iv": "54.1% / 54.7%",
+    "rv_iv": "54.3% / 54.7%",
     "sources": "Deribit + Binance (CDD)"
   },
   "ETH": {
-    "funding_rate": "0.0000%",
+    "funding_rate": "0.0068%",
     "perp_basis": "$1.25",
-    "rv_iv": "79.3% / 80.1%",
+    "rv_iv": "78.5% / 80.1%",
     "sources": "Deribit + Binance (CDD)"
   }
 }
