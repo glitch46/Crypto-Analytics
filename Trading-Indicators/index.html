@@ -438,6 +438,15 @@
       return Number(v).toLocaleString("en-US", { maximumFractionDigits: 2 });
     }
 
+    function shortDateLabel(ts) {
+      if (!ts) return "";
+      const parts = ts.split(" ");
+      const day = parts[0] || "";
+      const parsed = new Date(`${day}T00:00:00Z`);
+      if (Number.isNaN(parsed.getTime())) return day;
+      return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    }
+
     function setTone(el, v) {
       el.classList.remove("good", "bad", "warn");
       if (v > 0) el.classList.add("good");
@@ -570,7 +579,26 @@
             { label: "Aggregate CVD", data: a, borderColor: "#ff4d7d", backgroundColor: "transparent", tension: 0.25, borderWidth: 2.2, fill: false, pointRadius: 0 }
           ]
         },
-        options: commonChartOptions()
+        options: {
+          ...commonChartOptions(),
+          scales: {
+            ...commonChartOptions().scales,
+            x: {
+              ...commonChartOptions().scales.x,
+              ticks: {
+                ...commonChartOptions().scales.x.ticks,
+                maxTicksLimit: 12,
+                padding: 12,
+                callback: function(value, index) {
+                  const label = this.getLabelForValue(value);
+                  if (!label) return "";
+                  if (!label.endsWith("00:00") && !label.endsWith("00:15")) return "";
+                  return shortDateLabel(label);
+                }
+              }
+            }
+          }
+        }
       });
     }
 
