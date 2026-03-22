@@ -565,7 +565,7 @@
     function renderCvdChart(assetData) {
       destroyChart("cvd");
       const rows = (assetData.cvd_history || []).slice(-2880);
-      const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
+      const labels = rows.map(r => shortDateLabel(r.timestamp));
       const b = rows.map(r => r.binance || 0);
       const c = rows.map(r => r.coinbase || 0);
       const a = rows.map(r => r.aggregate || 0);
@@ -590,10 +590,9 @@
                 maxTicksLimit: 12,
                 padding: 12,
                 callback: function(value, index) {
+                  if (index % 96 !== 0) return "";
                   const label = this.getLabelForValue(value);
-                  if (!label) return "";
-                  if (!label.endsWith("00:00") && !label.endsWith("00:15")) return "";
-                  return shortDateLabel(label);
+                  return label || "";
                 }
               }
             }
