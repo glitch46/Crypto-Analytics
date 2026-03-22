@@ -196,7 +196,9 @@
     .chart-subtitle { margin-top: 5px; font-size: 13px; color: var(--gray-light); }
 
     .chart-wrap { margin-top: 12px; }
+    .chart-wrap.tall { height: 460px; }
     canvas { max-height: 320px; }
+    #cvdChart { max-height: 460px; }
 
     .depth-table {
       width: 100%;
@@ -359,7 +361,7 @@
       <section class="panel" style="margin-top: 18px;">
         <div class="chart-title">Spot CVD by Exchange</div>
         <div class="chart-subtitle">Cumulative aggressive flow (buy volume - sell volume), rolling 30-day history</div>
-        <div class="chart-wrap">
+        <div class="chart-wrap tall">
           <canvas id="cvdChart"></canvas>
         </div>
       </section>

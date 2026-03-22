@@ -4,6 +4,7 @@ import datetime
 import json
 import math
 import os
+from datetime import timedelta
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
@@ -29,6 +30,7 @@ DEPTH_WINDOWS = [0.025, 0.05, 0.10, 0.25]
 SNAPSHOT_RETENTION = 30 * 24 * 4
 HEATMAP_POINTS_PER_SIDE = 6
 HEATMAP_RETENTION = SNAPSHOT_RETENTION * 24
+CVD_GRANULARITY_SECONDS = 900
 
 
 def fetch_json(url: str, params: Optional[dict] = None, headers: Optional[dict] = None) -> Any:
@@ -95,6 +97,107 @@ def fetch_binance_trades(symbol: str, limit: int = 1000) -> List[dict]:
 def fetch_coinbase_trades(product: str, limit: int = 300) -> List[dict]:
     headers = {"User-Agent": "crypto-analytics-trading-indicators/1.0"}
     return fetch_json(f"{COINBASE_API}/products/{product}/trades", {"limit": limit}, headers=headers)
+
+
+def fetch_binance_klines(symbol: str, interval: str, start_ms: int, end_ms: int, limit: int = 1000) -> List[list]:
+    params = {
+        "symbol": symbol,
+        "interval": interval,
+        "startTime": start_ms,
+        "endTime": end_ms,
+        "limit": limit,
+    }
+    data = fetch_json(f"{BINANCE_API}/api/v3/klines", params)
+    return data if isinstance(data, list) else []
+
+
+def fetch_coinbase_candles(product: str, start_iso: str, end_iso: str, granularity: int = 900) -> List[list]:
+    params = {"start": start_iso, "end": end_iso, "granularity": granularity}
+    headers = {"User-Agent": "crypto-analytics-trading-indicators/1.0"}
+    data = fetch_json(f"{COINBASE_API}/products/{product}/candles", params, headers=headers)
+    return data if isinstance(data, list) else []
+
+
+def build_binance_cvd_history(symbol: str, now_utc: datetime.datetime) -> List[dict]:
+    start_dt = now_utc - timedelta(days=30)
+    start_ms = int(start_dt.timestamp() * 1000)
+    end_ms = int(now_utc.timestamp() * 1000)
+
+    klines = []
+    cursor = start_ms
+    while cursor < end_ms:
+        chunk = fetch_binance_klines(symbol, "15m", cursor, end_ms, 1000)
+        if not chunk:
+            break
+        klines.extend(chunk)
+        last_open = int(chunk[-1][0])
+        next_cursor = last_open + CVD_GRANULARITY_SECONDS * 1000
+        if next_cursor <= cursor:
+            break
+        cursor = next_cursor
+        if len(chunk) < 1000:
+            break
+
+    dedup = {}
+    for k in klines:
+        if len(k) < 11:
+            continue
+        open_ms = int(k[0])
+        quote_volume = safe_float(k[7])
+        taker_buy_quote = safe_float(k[10])
+        flow = (2.0 * taker_buy_quote) - quote_volume
+        ts = datetime.datetime.fromtimestamp(open_ms / 1000, datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
+        dedup[ts] = flow
+
+    out = []
+    running = 0.0
+    for ts in sorted(dedup.keys()):
+        flow = dedup[ts]
+        running += flow
+        out.append({"timestamp": ts, "flow": flow, "cumulative": running})
+    return out[-SNAPSHOT_RETENTION:]
+
+
+def build_coinbase_cvd_history(product: str, now_utc: datetime.datetime) -> List[dict]:
+    start_dt = now_utc - timedelta(days=30)
+    all_candles = []
+    chunk_size = timedelta(minutes=300 * 15)
+    cursor = start_dt
+    while cursor < now_utc:
+        end_chunk = min(cursor + chunk_size, now_utc)
+        rows = fetch_coinbase_candles(
+            product,
+            cursor.isoformat().replace("+00:00", "Z"),
+            end_chunk.isoformat().replace("+00:00", "Z"),
+            granularity=CVD_GRANULARITY_SECONDS,
+        )
+        all_candles.extend(rows)
+        cursor = end_chunk
+
+    dedup = {}
+    for c in all_candles:
+        if len(c) < 6:
+            continue
+        # Coinbase candle format: [time, low, high, open, close, volume]
+        ts_unix = int(c[0])
+        low = safe_float(c[1])
+        high = safe_float(c[2])
+        open_px = safe_float(c[3])
+        close_px = safe_float(c[4])
+        vol = safe_float(c[5])
+        vwap = (low + high + open_px + close_px) / 4.0
+        direction = 1.0 if close_px > open_px else (-1.0 if close_px < open_px else 0.0)
+        flow = direction * vol * vwap
+        ts = datetime.datetime.fromtimestamp(ts_unix, datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
+        dedup[ts] = flow
+
+    out = []
+    running = 0.0
+    for ts in sorted(dedup.keys()):
+        flow = dedup[ts]
+        running += flow
+        out.append({"timestamp": ts, "flow": flow, "cumulative": running})
+    return out[-SNAPSHOT_RETENTION:]
 
 
 def orderbook_mid(bids: List[Tuple[float, float]], asks: List[Tuple[float, float]]) -> Optional[float]:
@@ -340,7 +443,8 @@ def main():
 
     existing = load_existing(output_path)
     assets_store = existing.get("assets", {})
-    ts = datetime.datetime.now(datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
+    now_utc = datetime.datetime.now(datetime.UTC)
+    ts = now_utc.strftime("%Y-%m-%d %H:%M UTC")
 
     cot_latest = parse_cot_commercial_history()
 
@@ -389,22 +493,33 @@ def main():
         depth_history.append(depth_snapshot)
         depth_history = depth_history[-SNAPSHOT_RETENTION:]
 
-        b_trades = fetch_binance_trades(cfg["binance_symbol"], 1000)
-        c_trades = fetch_coinbase_trades(cfg["coinbase_product"], 300)
-        b_flow = binance_cvd_notional(b_trades)
-        c_flow = coinbase_cvd_notional(c_trades)
-
-        prev_agg = cvd_history[-1]["aggregate"] if cvd_history else 0.0
-        prev_b = cvd_history[-1]["binance"] if cvd_history else 0.0
-        prev_c = cvd_history[-1]["coinbase"] if cvd_history else 0.0
-        cvd_history.append({
-            "timestamp": ts,
-            "binance": prev_b + b_flow,
-            "coinbase": prev_c + c_flow,
-            "aggregate": prev_agg + b_flow + c_flow,
-            "binance_flow": b_flow,
-            "coinbase_flow": c_flow,
-        })
+        b_cvd = build_binance_cvd_history(cfg["binance_symbol"], now_utc)
+        c_cvd = build_coinbase_cvd_history(cfg["coinbase_product"], now_utc)
+        b_map = {x["timestamp"]: x for x in b_cvd}
+        c_map = {x["timestamp"]: x for x in c_cvd}
+        merged_ts = sorted(set(b_map.keys()) | set(c_map.keys()))
+        cvd_history = []
+        last_b = 0.0
+        last_c = 0.0
+        for t in merged_ts:
+            if t in b_map:
+                last_b = b_map[t]["cumulative"]
+                b_flow = b_map[t]["flow"]
+            else:
+                b_flow = 0.0
+            if t in c_map:
+                last_c = c_map[t]["cumulative"]
+                c_flow = c_map[t]["flow"]
+            else:
+                c_flow = 0.0
+            cvd_history.append({
+                "timestamp": t,
+                "binance": last_b,
+                "coinbase": last_c,
+                "aggregate": last_b + last_c,
+                "binance_flow": b_flow,
+                "coinbase_flow": c_flow,
+            })
         cvd_history = cvd_history[-SNAPSHOT_RETENTION:]
 
         heatmap_points.extend(top_heatmap_points(binance_ob["bids"], binance_ob["asks"], ts, "Binance Spot"))
@@ -462,6 +577,7 @@ def main():
         "notes": [
             "Depth delta is liquidity imbalance, not a direct direction predictor.",
             "Commercial short increases are interpreted as contrarian caution in crowded long conditions.",
+            "Coinbase CVD is derived from 15m candle direction proxy due public trade-history pagination limits.",
             "Signals are visual-only and intended for discretionary confirmation.",
         ],
     }
