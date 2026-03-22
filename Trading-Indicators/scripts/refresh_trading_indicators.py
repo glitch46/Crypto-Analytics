@@ -588,6 +588,8 @@ def main():
             "exchanges": ["Binance Spot", "Coinbase Spot"],
             "depth_windows": ["2.5%", "5.0%", "10.0%", "25.0%"],
             "heatmap_points_per_side": HEATMAP_POINTS_PER_SIDE,
+            "snapshot_retention": SNAPSHOT_RETENTION,
+            "heatmap_retention": HEATMAP_RETENTION,
         },
         "assets": assets_payload,
     }

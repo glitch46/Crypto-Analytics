@@ -197,8 +197,11 @@
 
     .chart-wrap { margin-top: 12px; }
     .chart-wrap.tall { height: 460px; }
+    .chart-wrap.taller { height: 520px; }
     canvas { max-height: 320px; }
     #cvdChart { max-height: 460px; }
+    #overlayChart,
+    #heatmapChart { max-height: 520px; }
 
     .depth-table {
       width: 100%;
@@ -375,15 +378,15 @@
 
         <div class="panel">
           <div class="chart-title">Depth Overlay Bands by Price Level</div>
-          <div class="chart-subtitle">Vertical bars of strongest support/resistance liquidity levels by price point.</div>
-          <div class="chart-wrap"><canvas id="overlayChart"></canvas></div>
+          <div class="chart-subtitle">Vertical bars of strongest support/resistance liquidity levels by price point across stored 30-day snapshots.</div>
+          <div class="chart-wrap taller"><canvas id="overlayChart"></canvas></div>
         </div>
       </section>
 
       <section class="panel" style="margin-top: 18px;">
         <div class="chart-title">Orderbook Heatmap Proxy by Price Level</div>
-        <div class="chart-subtitle">Vertical bars for highest resting bid/ask levels across the 30-day window.</div>
-        <div class="chart-wrap"><canvas id="heatmapChart"></canvas></div>
+        <div class="chart-subtitle">Vertical bars for highest resting bid/ask levels across stored 30-day snapshots.</div>
+        <div class="chart-wrap taller"><canvas id="heatmapChart"></canvas></div>
       </section>
 
       <section class="panel" style="margin-top: 18px;">
@@ -594,11 +597,11 @@
     function renderOverlayChart(assetData) {
       destroyChart("overlay");
       const latest = assetData.latest || {};
-      const points = (assetData.heatmap_points || []).slice(-2880);
+      const points = (assetData.heatmap_points || []).slice(-30000);
       const levels = aggregateLevels(points, latest.mid_price || 0)
         .map(x => ({ ...x, score: x.notional * (1 + Math.min(3, x.touches / 24)) }))
         .sort((a, b) => b.score - a.score)
-        .slice(0, 18)
+        .slice(0, 40)
         .sort((a, b) => a.price - b.price);
 
       const labels = levels.map(x => fmtPrice(x.price));
@@ -621,10 +624,10 @@
     function renderHeatmapChart(assetData) {
       destroyChart("heatmap");
       const latest = assetData.latest || {};
-      const points = (assetData.heatmap_points || []).slice(-2880);
+      const points = (assetData.heatmap_points || []).slice(-30000);
       const levels = aggregateLevels(points, latest.mid_price || 0)
         .sort((a, b) => b.notional - a.notional)
-        .slice(0, 24)
+        .slice(0, 48)
         .sort((a, b) => a.price - b.price);
 
       const labels = levels.map(x => fmtPrice(x.price));

@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-03-22 22:20 UTC",
+    "last_updated": "2026-03-22 22:22 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Binance Spot REST",
@@ -25,22 +25,24 @@
       "10.0%",
       "25.0%"
     ],
-    "heatmap_points_per_side": 6
+    "heatmap_points_per_side": 6,
+    "snapshot_retention": 2880,
+    "heatmap_retention": 69120
   },
   "assets": {
     "BTC": {
       "latest": {
-        "timestamp": "2026-03-22 22:20 UTC",
-        "mid_price": 67979.185,
-        "binance_mid": 67987.67499999999,
-        "coinbase_mid": 67970.695,
-        "depth_5_delta": 22437775.508346282,
-        "depth_5_norm": 0.3079805829369296,
-        "depth_10_delta": 44732649.32747948,
-        "depth_10_norm": 0.39438840786354085,
-        "depth_25_delta": 127476186.67459741,
-        "depth_25_norm": 0.38359935859783206,
-        "cvd_aggregate": 260197976.99550605
+        "timestamp": "2026-03-22 22:22 UTC",
+        "mid_price": 68159.05,
+        "binance_mid": 68169.845,
+        "coinbase_mid": 68148.255,
+        "depth_5_delta": 25664873.93160057,
+        "depth_5_norm": 0.37946439483338357,
+        "depth_10_delta": 46028766.10867494,
+        "depth_10_norm": 0.426434729829362,
+        "depth_25_delta": 122833857.17062482,
+        "depth_25_norm": 0.3785781676317943,
+        "cvd_aggregate": 265538272.20584184
       },
       "depth_delta_history": [
         {
@@ -286,6 +288,88 @@
               "ask_notional": 102419883.49113002,
               "delta": 127476186.67459741,
               "normalized_delta": 0.38359935859783206
+            }
+          }
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "mid_price": 68159.05,
+          "binance": {
+            "2.5%": {
+              "bid_notional": 10124386.1856359,
+              "ask_notional": 4013596.4253262,
+              "delta": 6110789.7603097,
+              "normalized_delta": 0.4322250160055796
+            },
+            "5.0%": {
+              "bid_notional": 10124386.1856359,
+              "ask_notional": 4013596.4253262,
+              "delta": 6110789.7603097,
+              "normalized_delta": 0.4322250160055796
+            },
+            "10.0%": {
+              "bid_notional": 10124386.1856359,
+              "ask_notional": 4013596.4253262,
+              "delta": 6110789.7603097,
+              "normalized_delta": 0.4322250160055796
+            },
+            "25.0%": {
+              "bid_notional": 10124386.1856359,
+              "ask_notional": 4013596.4253262,
+              "delta": 6110789.7603097,
+              "normalized_delta": 0.4322250160055796
+            }
+          },
+          "coinbase": {
+            "2.5%": {
+              "bid_notional": 19805308.50072679,
+              "ask_notional": 10881458.384599874,
+              "delta": 8923850.116126915,
+              "normalized_delta": 0.2908045070200598
+            },
+            "5.0%": {
+              "bid_notional": 36525286.706699185,
+              "ask_notional": 16971202.535408314,
+              "delta": 19554084.17129087,
+              "normalized_delta": 0.36552088647902714
+            },
+            "10.0%": {
+              "bid_notional": 66859294.96866329,
+              "ask_notional": 26941318.620298043,
+              "delta": 39917976.34836525,
+              "normalized_delta": 0.4255619960364831
+            },
+            "25.0%": {
+              "bid_notional": 213523050.75019133,
+              "ask_notional": 96799983.3398762,
+              "delta": 116723067.41031513,
+              "normalized_delta": 0.37613407510200375
+            }
+          },
+          "combined": {
+            "2.5%": {
+              "bid_notional": 29929694.68636269,
+              "ask_notional": 14895054.809926074,
+              "delta": 15034639.876436617,
+              "normalized_delta": 0.335409345180644
+            },
+            "5.0%": {
+              "bid_notional": 46649672.89233509,
+              "ask_notional": 20984798.960734516,
+              "delta": 25664873.93160057,
+              "normalized_delta": 0.37946439483338357
+            },
+            "10.0%": {
+              "bid_notional": 76983681.15429918,
+              "ask_notional": 30954915.04562424,
+              "delta": 46028766.10867494,
+              "normalized_delta": 0.426434729829362
+            },
+            "25.0%": {
+              "bid_notional": 223647436.93582723,
+              "ask_notional": 100813579.7652024,
+              "delta": 122833857.17062482,
+              "normalized_delta": 0.3785781676317943
             }
           }
         }
@@ -23325,11 +23409,11 @@
         },
         {
           "timestamp": "2026-03-22 22:15 UTC",
-          "binance": -347948305.0552118,
-          "coinbase": 608146282.0507178,
-          "aggregate": 260197976.99550605,
-          "binance_flow": 1290815.4342502002,
-          "coinbase_flow": 2075388.337841923
+          "binance": -345002335.62936157,
+          "coinbase": 610540607.8352034,
+          "aggregate": 265538272.20584184,
+          "binance_flow": 4236784.8601004,
+          "coinbase_flow": 4469714.122327472
         }
       ],
       "heatmap_points": [
@@ -23908,6 +23992,198 @@
           "price": 67975.99,
           "size": 0.09276021,
           "notional": 6305.4671073579
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 68169.84,
+          "size": 0.92876,
+          "notional": 63313.4205984
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 68169.83,
+          "size": 0.00064,
+          "notional": 43.628691200000006
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 68169.81,
+          "size": 0.00024,
+          "notional": 16.3607544
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 68169.8,
+          "size": 0.05032,
+          "notional": 3430.3043359999997
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 68169.78,
+          "size": 0.00016,
+          "notional": 10.9071648
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 68169.77,
+          "size": 0.20063,
+          "notional": 13676.900955100002
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 68169.85,
+          "size": 1.17825,
+          "notional": 80321.12576250001
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 68169.86,
+          "size": 0.00048,
+          "notional": 32.7215328
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 68170.0,
+          "size": 0.00213,
+          "notional": 145.2021
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 68170.48,
+          "size": 8e-05,
+          "notional": 5.4536384
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 68170.62,
+          "size": 0.00013,
+          "notional": 8.862180599999999
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 68170.65,
+          "size": 9e-05,
+          "notional": 6.1353585
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 68148.25,
+          "size": 0.04326436,
+          "notional": 2948.3904213700002
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 68146.55,
+          "size": 0.00044247,
+          "notional": 30.1528039785
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 68146.01,
+          "size": 0.01836368,
+          "notional": 1251.4115209167999
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 68146.0,
+          "size": 0.0153,
+          "notional": 1042.6338
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 68145.87,
+          "size": 0.00014673,
+          "notional": 9.9990435051
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 68144.0,
+          "size": 0.0153,
+          "notional": 1042.6032
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 68148.26,
+          "size": 0.12471967,
+          "notional": 8499.4284982742
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 68149.05,
+          "size": 0.015,
+          "notional": 1022.23575
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 68150.0,
+          "size": 0.0153,
+          "notional": 1042.695
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 68150.25,
+          "size": 1.7e-05,
+          "notional": 1.15855425
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 68152.0,
+          "size": 0.0153,
+          "notional": 1042.7256
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 68153.4,
+          "size": 1.7e-05,
+          "notional": 1.1586078
         }
       ],
       "overlay_history": [
@@ -23937,6 +24213,15 @@
           "inner_support": 67639.289075,
           "inner_resistance": 68319.08092499999,
           "depth_bias_10": 0.39438840786354085
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "mid_price": 68159.05,
+          "support": 66965.35363331877,
+          "resistance": 68840.64050000001,
+          "inner_support": 67818.25475000001,
+          "inner_resistance": 68499.84525,
+          "depth_bias_10": 0.426434729829362
         }
       ],
       "commercials": [
@@ -23949,33 +24234,33 @@
         }
       ],
       "wall_stats": {
-        "bid_wall_price": 67987.67,
-        "ask_wall_price": 67987.68,
+        "bid_wall_price": 68169.84,
+        "ask_wall_price": 68169.85,
         "bid_wall_persistence": 0,
         "ask_wall_persistence": 0
       },
       "signals": {
-        "depth_score": 85.12,
-        "cvd_score": 45.63,
+        "depth_score": 90.29,
+        "cvd_score": 55.77,
         "wall_score": 50.0,
         "commercial_caution": 50.0,
-        "long_readiness": 60.76,
-        "label": "Neutral"
+        "long_readiness": 66.12,
+        "label": "Constructive for longs"
       }
     },
     "ETH": {
       "latest": {
-        "timestamp": "2026-03-22 22:20 UTC",
-        "mid_price": 2046.68,
-        "binance_mid": 2046.795,
-        "coinbase_mid": 2046.565,
-        "depth_5_delta": 4587973.61625647,
-        "depth_5_norm": 0.17002493607809174,
-        "depth_10_delta": 6628047.313148461,
-        "depth_10_norm": 0.19070910148661152,
-        "depth_25_delta": 18322040.2067161,
-        "depth_25_norm": 0.2948869655613721,
-        "cvd_aggregate": 331697923.50807095
+        "timestamp": "2026-03-22 22:22 UTC",
+        "mid_price": 2051.235,
+        "binance_mid": 2051.545,
+        "coinbase_mid": 2050.925,
+        "depth_5_delta": 5338330.659553107,
+        "depth_5_norm": 0.1949676621675335,
+        "depth_10_delta": 7175839.765676707,
+        "depth_10_norm": 0.202628568795918,
+        "depth_25_delta": 19071231.876148663,
+        "depth_25_norm": 0.305140087783389,
+        "cvd_aggregate": 333158047.8554828
       },
       "depth_delta_history": [
         {
@@ -24221,6 +24506,88 @@
               "ask_notional": 21905188.896142308,
               "delta": 18322040.2067161,
               "normalized_delta": 0.2948869655613721
+            }
+          }
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "mid_price": 2051.235,
+          "binance": {
+            "2.5%": {
+              "bid_notional": 6341296.808413,
+              "ask_notional": 5950297.665469,
+              "delta": 390999.14294399973,
+              "normalized_delta": 0.03181028659665113
+            },
+            "5.0%": {
+              "bid_notional": 6341296.808413,
+              "ask_notional": 5950297.665469,
+              "delta": 390999.14294399973,
+              "normalized_delta": 0.03181028659665113
+            },
+            "10.0%": {
+              "bid_notional": 6341296.808413,
+              "ask_notional": 5950297.665469,
+              "delta": 390999.14294399973,
+              "normalized_delta": 0.03181028659665113
+            },
+            "25.0%": {
+              "bid_notional": 6341296.808413,
+              "ask_notional": 5950297.665469,
+              "delta": 390999.14294399973,
+              "normalized_delta": 0.03181028659665113
+            }
+          },
+          "coinbase": {
+            "2.5%": {
+              "bid_notional": 8335654.158951087,
+              "ask_notional": 4575419.695873427,
+              "delta": 3760234.4630776597,
+              "normalized_delta": 0.2912410311767029
+            },
+            "5.0%": {
+              "bid_notional": 10018166.184588185,
+              "ask_notional": 5070834.667979077,
+              "delta": 4947331.516609107,
+              "normalized_delta": 0.3278766808318764
+            },
+            "10.0%": {
+              "bid_notional": 14953503.718941027,
+              "ask_notional": 8168663.09620832,
+              "delta": 6784840.622732707,
+              "normalized_delta": 0.2934344638620705
+            },
+            "25.0%": {
+              "bid_notional": 34444280.441999346,
+              "ask_notional": 15764047.708794681,
+              "delta": 18680232.733204663,
+              "normalized_delta": 0.37205446628497707
+            }
+          },
+          "combined": {
+            "2.5%": {
+              "bid_notional": 14676950.967364088,
+              "ask_notional": 10525717.361342426,
+              "delta": 4151233.6060216613,
+              "normalized_delta": 0.16471405138055542
+            },
+            "5.0%": {
+              "bid_notional": 16359462.993001185,
+              "ask_notional": 11021132.333448078,
+              "delta": 5338330.659553107,
+              "normalized_delta": 0.1949676621675335
+            },
+            "10.0%": {
+              "bid_notional": 21294800.527354028,
+              "ask_notional": 14118960.761677321,
+              "delta": 7175839.765676707,
+              "normalized_delta": 0.202628568795918
+            },
+            "25.0%": {
+              "bid_notional": 40785577.250412345,
+              "ask_notional": 21714345.37426368,
+              "delta": 19071231.876148663,
+              "normalized_delta": 0.305140087783389
             }
           }
         }
@@ -47260,11 +47627,11 @@
         },
         {
           "timestamp": "2026-03-22 22:15 UTC",
-          "binance": -92898668.21503694,
-          "coinbase": 424596591.7231079,
-          "aggregate": 331697923.50807095,
-          "binance_flow": 479302.80916299997,
-          "coinbase_flow": 1328458.6736115946
+          "binance": -92149422.04661995,
+          "coinbase": 425307469.90210277,
+          "aggregate": 333158047.8554828,
+          "binance_flow": 1228548.9775800006,
+          "coinbase_flow": 2039336.8526064546
         }
       ],
       "heatmap_points": [
@@ -47843,6 +48210,198 @@
           "price": 2046.87,
           "size": 0.84454248,
           "notional": 1728.6686660376
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 2051.54,
+          "size": 19.1969,
+          "notional": 39383.208225999995
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 2051.53,
+          "size": 0.0177,
+          "notional": 36.312081000000006
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 2051.52,
+          "size": 10.577,
+          "notional": 21698.92704
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 2051.51,
+          "size": 0.0076,
+          "notional": 15.591476000000002
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 2051.5,
+          "size": 0.0181,
+          "notional": 37.13215
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "bid",
+          "price": 2051.49,
+          "size": 0.0101,
+          "notional": 20.720048999999996
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 2051.55,
+          "size": 5.4777,
+          "notional": 11237.775435
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 2051.56,
+          "size": 0.0026,
+          "notional": 5.3340559999999995
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 2051.57,
+          "size": 0.0026,
+          "notional": 5.334082
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 2051.59,
+          "size": 0.0026,
+          "notional": 5.334134
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 2051.6,
+          "size": 0.0127,
+          "notional": 26.05532
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Binance Spot",
+          "side": "ask",
+          "price": 2051.61,
+          "size": 0.0051,
+          "notional": 10.463211000000001
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 2050.92,
+          "size": 0.67100243,
+          "notional": 1376.1723037356
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 2050.9,
+          "size": 0.229,
+          "notional": 469.65610000000004
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 2050.83,
+          "size": 0.001,
+          "notional": 2.05083
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 2050.8,
+          "size": 0.229,
+          "notional": 469.63320000000004
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 2050.77,
+          "size": 0.614,
+          "notional": 1259.1727799999999
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "bid",
+          "price": 2050.75,
+          "size": 2.09545909,
+          "notional": 4297.2627288175
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 2050.93,
+          "size": 0.21228,
+          "notional": 435.3714204
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 2051.19,
+          "size": 0.09947778,
+          "notional": 204.0478275582
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 2051.2,
+          "size": 0.229,
+          "notional": 469.72479999999996
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 2051.24,
+          "size": 0.53621545,
+          "notional": 1099.906579658
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 2051.25,
+          "size": 0.89818334,
+          "notional": 1842.398576175
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "exchange": "Coinbase Spot",
+          "side": "ask",
+          "price": 2051.27,
+          "size": 0.5849961,
+          "notional": 1199.984950047
         }
       ],
       "overlay_history": [
@@ -47872,6 +48431,15 @@
           "inner_support": 2036.4466,
           "inner_resistance": 2056.9134,
           "depth_bias_10": 0.19070910148661152
+        },
+        {
+          "timestamp": "2026-03-22 22:22 UTC",
+          "mid_price": 2051.235,
+          "support": 2022.804145048377,
+          "resistance": 2071.74735,
+          "inner_support": 2040.9788250000001,
+          "inner_resistance": 2061.491175,
+          "depth_bias_10": 0.202628568795918
         }
       ],
       "commercials": [
@@ -47884,17 +48452,17 @@
         }
       ],
       "wall_stats": {
-        "bid_wall_price": 2046.79,
-        "ask_wall_price": 2046.8,
+        "bid_wall_price": 2051.54,
+        "ask_wall_price": 2051.55,
         "bid_wall_persistence": 0,
         "ask_wall_persistence": 0
       },
       "signals": {
-        "depth_score": 68.04,
-        "cvd_score": 37.06,
+        "depth_score": 69.88,
+        "cvd_score": 39.3,
         "wall_score": 50.0,
         "commercial_caution": 50.0,
-        "long_readiness": 51.78,
+        "long_readiness": 53.21,
         "label": "Neutral"
       }
     }
