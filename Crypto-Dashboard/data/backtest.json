@@ -1,10 +1,10 @@
 {
   "BTC": {
     "summary": {
-      "win_rate": 0.5,
+      "win_rate": 0.4166666666666667,
       "months": 12,
-      "puts_over_calls": 3,
-      "avg_max_pain_dev": 0.21305089233489782
+      "puts_over_calls": 4,
+      "avg_max_pain_dev": 0.2154836354803605
     },
     "months": [
       {
@@ -207,21 +207,21 @@
       },
       {
         "month": "2026-03",
-        "expiry": "2026-03-21",
-        "settlement_price": 70746.89000000003,
-        "spot_30d": 67003.73,
+        "expiry": "2026-03-22",
+        "settlement_price": 69029.22000000007,
+        "spot_30d": 68020.01,
         "spot_expiry": 69930.0,
-        "put_call": 0.9266014234875443,
-        "call_oi": 2472.7999999999997,
-        "put_oi": 2291.2999999999993,
+        "put_call": 1.3056854540979574,
+        "call_oi": 2437.7999999999997,
+        "put_oi": 3183.0000000000005,
         "max_pain": 83000.0,
-        "max_pain_dev": -12253.109999999971,
-        "max_pain_dev_pct": 0.17319644722191982,
-        "price_change": 3743.1600000000326,
-        "price_change_pct": 0.055864949608029776,
-        "skew_direction": "up",
+        "max_pain_dev": -13970.779999999926,
+        "max_pain_dev_pct": 0.2023893649674719,
+        "price_change": 1009.2100000000792,
+        "price_change_pct": 0.014836957536467273,
+        "skew_direction": "down",
         "outcome_direction": "up",
-        "skew_followed": true
+        "skew_followed": false
       }
     ]
   },
@@ -230,7 +230,7 @@
       "win_rate": 0.3333333333333333,
       "months": 12,
       "puts_over_calls": 5,
-      "avg_max_pain_dev": 0.42416238002406775
+      "avg_max_pain_dev": 0.4268541235194263
     },
     "months": [
       {
@@ -433,18 +433,18 @@
       },
       {
         "month": "2026-03",
-        "expiry": "2026-03-21",
-        "settlement_price": 2156.5800000000013,
-        "spot_30d": 1949.08,
+        "expiry": "2026-03-22",
+        "settlement_price": 2102.339999999998,
+        "spot_30d": 1968.88,
         "spot_expiry": 2137.81,
-        "put_call": 1.249072524914527,
-        "call_oi": 13747.0,
-        "put_oi": 17171.0,
+        "put_call": 1.18132376135313,
+        "call_oi": 18387.0,
+        "put_oi": 21721.0,
         "max_pain": 2700.0,
-        "max_pain_dev": -543.4199999999987,
-        "max_pain_dev_pct": 0.25198230531675075,
-        "price_change": 207.50000000000136,
-        "price_change_pct": 0.10646048392061966,
+        "max_pain_dev": -597.6600000000021,
+        "max_pain_dev_pct": 0.28428322726105326,
+        "price_change": 133.45999999999776,
+        "price_change_pct": 0.06778473040510227,
         "skew_direction": "down",
         "outcome_direction": "up",
         "skew_followed": false
