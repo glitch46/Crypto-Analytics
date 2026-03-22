@@ -394,14 +394,19 @@
          </div>
 
         <div class="panel">
-          <div class="chart-title">Depth Overlay Bands by Price Level</div>
-          <div class="chart-subtitle">Vertical bars of strongest support/resistance liquidity levels by price point across stored 30-day snapshots.</div>
-          <div class="chart-wrap taller"><canvas id="overlayChart"></canvas></div>
-          <div class="note-box">
-            Each bar is now a stacked depth profile at one price level: green is bid-side resting liquidity (support), red is ask-side resting liquidity (resistance).
-            Levels shown are selected by total persistent liquidity over the rolling history, then sorted by price so structure is readable.
-            If one side appears small at a level, it reflects weaker relative liquidity there, not missing data.
-          </div>
+           <div class="chart-title">Liquidity Depth Map</div>
+           <div class="chart-subtitle">Where are buyers and sellers stacking limit orders? Green extends left = bid support, red extends right = ask resistance.</div>
+           <div class="chart-wrap taller"><canvas id="overlayChart"></canvas></div>
+           <div class="note-box">
+             <strong>How to read this chart:</strong> Each row is a price level. Green bars extending left show accumulated bid (buy) liquidity — the wider the bar,
+             the stronger the passive support at that level. Red bars extending right show accumulated ask (sell) liquidity — the wider the bar, the stronger the resistance.
+             The dashed line marks the current mid price.
+             <br><br>
+             <strong>What to look for:</strong> Thick green bars below price = strong support cushion. Thick red bars above price = significant resistance overhead.
+             Thin red above + thick green below = favorable for longs. If you see large ask walls building very close to price, that typically means sellers are
+             defending that level and price may need a strong catalyst to break through. Levels with persistent liquidity across many snapshots carry more weight
+             than one-time spikes that may be spoofing.
+           </div>
         </div>
       </section>
 
@@ -770,51 +775,117 @@
      }
 
     function renderOverlayChart(assetData) {
-      destroyChart("overlay");
-      const latest = assetData.latest || {};
-      const points = (assetData.heatmap_points || []).slice(-30000);
-      let levels = buildPriceLevelMatrix(points, latest.mid_price || 0)
-        .filter((x) => x.bidNotional > 0 && x.askNotional > 0)
-        .sort((a, b) => b.score - a.score)
-        .slice(0, 40)
-        .sort((a, b) => a.price - b.price);
+       destroyChart("overlay");
+       const latest = assetData.latest || {};
+       const midPrice = latest.mid_price || 0;
+       const points = (assetData.heatmap_points || []).slice(-30000);
+       const levels = buildPriceLevelMatrix(points, midPrice)
+         .filter(x => x.totalNotional > 0)
+         .sort((a, b) => b.score - a.score)
+         .slice(0, 30)
+         .sort((a, b) => a.price - b.price);
 
-      if (!levels.length) {
-        levels = buildPriceLevelMatrix(points, latest.mid_price || 0)
-          .sort((a, b) => b.score - a.score)
-          .slice(0, 40)
-          .sort((a, b) => a.price - b.price);
-      }
+       const labels = levels.map(x => `$${fmtPrice(x.price)}`);
+       const bidBars = levels.map(x => -(x.bidNotional || 0));
+       const askBars = levels.map(x => x.askNotional || 0);
 
-      const labels = levels.map(x => fmtPrice(x.price));
-      const bidBars = levels.map(x => x.bidNotional);
-      const askBars = levels.map(x => x.askNotional);
+       const midIdx = levels.findIndex(x => x.price >= midPrice);
+       const annotation = midIdx >= 0 ? {
+         type: "line",
+         yMin: midIdx - 0.5,
+         yMax: midIdx - 0.5,
+         borderColor: "#ffffff",
+         borderWidth: 1.5,
+         borderDash: [6, 4],
+         label: {
+           display: true,
+           content: `Mid $${fmtPrice(midPrice)}`,
+           position: "start",
+           color: "#ffffff",
+           font: { size: 11, weight: "bold" },
+           backgroundColor: "rgba(0,0,0,0.6)",
+           padding: 4
+         }
+       } : null;
 
-      state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "Support Bands (Bid)", data: bidBars, backgroundColor: "rgba(0,210,106,0.78)", borderColor: "#00d26a", borderWidth: 1, stack: "depth" },
-            { label: "Resistance Bands (Ask)", data: askBars, backgroundColor: "rgba(255,92,122,0.78)", borderColor: "#ff5c7a", borderWidth: 1, stack: "depth" }
-          ]
-        },
-        options: {
-          ...commonChartOptions(),
-          scales: {
-            ...commonChartOptions().scales,
-            x: {
-              ...commonChartOptions().scales.x,
-              stacked: true,
-            },
-            y: {
-              ...commonChartOptions().scales.y,
-              stacked: true,
-            }
-          }
-        }
-      });
-    }
+       const annotations = {};
+       if (annotation) annotations.midLine = annotation;
+
+       state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
+         type: "bar",
+         data: {
+           labels,
+           datasets: [
+             {
+               label: "Bid Support (buyers)",
+               data: bidBars,
+               backgroundColor: "rgba(0,210,106,0.72)",
+               borderColor: "#00d26a",
+               borderWidth: 1,
+               borderSkipped: false,
+             },
+             {
+               label: "Ask Resistance (sellers)",
+               data: askBars,
+               backgroundColor: "rgba(255,92,122,0.72)",
+               borderColor: "#ff5c7a",
+               borderWidth: 1,
+               borderSkipped: false,
+             }
+           ]
+         },
+         options: {
+           indexAxis: "y",
+           maintainAspectRatio: false,
+           plugins: {
+             legend: { labels: { color: "#e8e8ed" } },
+             tooltip: {
+               backgroundColor: "#121214",
+               borderColor: "#2a2a30",
+               borderWidth: 1,
+               titleColor: "#ffffff",
+               bodyColor: "#e8e8ed",
+               displayColors: false,
+               callbacks: {
+                 label: function(context) {
+                   const raw = Math.abs(context.parsed.x);
+                   const side = context.parsed.x < 0 ? "Bid support" : "Ask resistance";
+                   return `${side}: $${fmtNumber(raw)}`;
+                 }
+               }
+             }
+           },
+           scales: {
+             x: {
+               stacked: true,
+               ticks: {
+                 color: "#9999a5",
+                 callback: (v) => `$${fmtNumber(Math.abs(Number(v)))}`
+               },
+               grid: {
+                 color: function(context) {
+                   return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                 },
+                 lineWidth: function(context) {
+                   return context.tick && context.tick.value === 0 ? 2 : 1;
+                 }
+               },
+               title: {
+                 display: true,
+                 text: "← Bid support          Ask resistance →",
+                 color: "#9999a5",
+                 font: { size: 12, weight: "600" }
+               }
+             },
+             y: {
+               stacked: true,
+               ticks: { color: "#e8e8ed", font: { size: 11 } },
+               grid: { color: "#1a1a1e" }
+             }
+           }
+         }
+       });
+     }
 
     function renderHeatmapChart(assetData) {
       destroyChart("heatmap");
