@@ -377,16 +377,21 @@
       </section>
 
       <section class="grid two-col" style="margin-top: 18px;">
-        <div class="panel">
-          <div class="chart-title">Depth Delta Timeline (5% vs 25%)</div>
-          <div class="chart-subtitle">Use 5% for tactical range shifts and 25% for broader reversal context.</div>
-          <div class="chart-wrap taller"><canvas id="depthTimelineChart"></canvas></div>
-          <div class="note-box">
-            This chart tracks liquidity imbalance over time, where green bars indicate bid-side dominance and red bars indicate ask-side dominance in the 5% range,
-            while the white line shows broader 25% depth context. Read it as a structure map: improving 5% delta with stable/rising 25% context often supports longs,
-            and persistent negative 5% with weakening 25% context signals rising downside pressure or failed breakout risk.
-          </div>
-        </div>
+         <div class="panel">
+           <div class="chart-title">Orderbook Balance Over Time</div>
+           <div class="chart-subtitle">Are buyers or sellers stacking more passive liquidity? Green = buyers dominate, red = sellers dominate.</div>
+           <div class="chart-wrap taller"><canvas id="depthTimelineChart"></canvas></div>
+           <div class="note-box">
+             <strong>How to read this chart:</strong> The green shaded area shows periods where buy-side (bid) liquidity exceeds sell-side (ask) liquidity
+             within 5% of the current price. The red shaded area shows the opposite. The white line tracks the same imbalance across a wider 25% range,
+             which moves more slowly and reflects structural shifts.
+             <br><br>
+             <strong>What to look for:</strong> Sustained green (positive) readings suggest passive buyers are building walls, creating a supportive environment for longs.
+             Sustained red (negative) readings suggest sellers are stacking resistance. The strongest setups occur when the 5% reading flips green while the 25% line is
+             already positive or rising — this signals both near-term and structural support aligning. When both are deeply negative, it often precedes further downside
+             or signals risk of failed breakout attempts.
+           </div>
+         </div>
 
         <div class="panel">
           <div class="chart-title">Depth Overlay Bands by Price Level</div>
@@ -657,30 +662,112 @@
     }
 
     function renderDepthTimeline(assetData) {
-      destroyChart("depthTimeline");
-      const rows = assetData.depth_delta_history || [];
-      const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
-      const d5 = rows.map(r => ((r.combined || {})["5.0%"] || {}).normalized_delta || 0);
-      const d25 = rows.map(r => ((r.combined || {})["25.0%"] || {}).normalized_delta || 0);
+       destroyChart("depthTimeline");
+       const rows = assetData.depth_delta_history || [];
+       const labels = rows.map(r => shortDateLabel(r.timestamp));
+       const d5 = rows.map(r => ((r.combined || {})["5.0%"] || {}).normalized_delta || 0);
+       const d25 = rows.map(r => ((r.combined || {})["25.0%"] || {}).normalized_delta || 0);
 
-      const depthCanvas = document.getElementById("depthTimelineChart");
-      const parent = depthCanvas.parentElement;
-      if (parent && parent.clientHeight) {
-        depthCanvas.height = parent.clientHeight;
-      }
+       const d5pos = d5.map(v => Math.max(0, v));
+       const d5neg = d5.map(v => Math.min(0, v));
 
-      state.charts.depthTimeline = new Chart(depthCanvas, {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "5% Depth Norm Delta", data: d5, backgroundColor: d5.map(v => v >= 0 ? "rgba(0,210,106,0.65)" : "rgba(255,92,122,0.65)") },
-            { label: "25% Depth Norm Delta", data: d25, type: "line", borderColor: "#ffffff", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, pointRadius: 0 }
-          ]
-        },
-        options: commonChartOptions("percent")
-      });
-    }
+       const depthCanvas = document.getElementById("depthTimelineChart");
+       const parent = depthCanvas.parentElement;
+       if (parent && parent.clientHeight) {
+         depthCanvas.height = parent.clientHeight;
+       }
+
+       state.charts.depthTimeline = new Chart(depthCanvas, {
+         type: "line",
+         data: {
+           labels,
+           datasets: [
+             {
+               label: "5% Buyers Dominate",
+               data: d5pos,
+               borderColor: "#00d26a",
+               backgroundColor: "rgba(0,210,106,0.25)",
+               borderWidth: 0,
+               fill: "origin",
+               tension: 0.3,
+               pointRadius: 0,
+             },
+             {
+               label: "5% Sellers Dominate",
+               data: d5neg,
+               borderColor: "#ff5c7a",
+               backgroundColor: "rgba(255,92,122,0.25)",
+               borderWidth: 0,
+               fill: "origin",
+               tension: 0.3,
+               pointRadius: 0,
+             },
+             {
+               label: "25% Structural Balance",
+               data: d25,
+               borderColor: "#ffffff",
+               backgroundColor: "transparent",
+               borderWidth: 2,
+               fill: false,
+               tension: 0.3,
+               pointRadius: 0,
+               borderDash: [],
+             }
+           ]
+         },
+         options: {
+           ...commonChartOptions("percent"),
+           scales: {
+             ...commonChartOptions("percent").scales,
+             x: {
+               ...commonChartOptions("percent").scales.x,
+               ticks: {
+                 ...commonChartOptions("percent").scales.x.ticks,
+                 maxTicksLimit: 14,
+                 padding: 10,
+                 callback: function(value, index, ticks) {
+                   const total = ticks.length;
+                   const step = Math.max(1, Math.floor(total / 14));
+                   if (index % step !== 0) return "";
+                   const label = this.getLabelForValue(value);
+                   return label || "";
+                 }
+               }
+             },
+             y: {
+               ...commonChartOptions("percent").scales.y,
+               grid: {
+                 color: function(context) {
+                   return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                 },
+                 lineWidth: function(context) {
+                   return context.tick && context.tick.value === 0 ? 2 : 1;
+                 }
+               }
+             }
+           },
+           plugins: {
+             ...commonChartOptions("percent").plugins,
+             tooltip: {
+               ...commonChartOptions("percent").plugins.tooltip,
+               callbacks: {
+                 title: function(items) {
+                   return items[0] ? items[0].label : "";
+                 },
+                 label: function(context) {
+                   const val = context.parsed.y;
+                   const pct = (val * 100).toFixed(2);
+                   const sign = val > 0 ? "+" : "";
+                   const tag = context.dataset.label.includes("25%") ? "25% range" : "5% range";
+                   const meaning = val > 0 ? "bids > asks" : val < 0 ? "asks > bids" : "balanced";
+                   return `${tag}: ${sign}${pct}% (${meaning})`;
+                 }
+               }
+             }
+           }
+         }
+       });
+     }
 
     function renderOverlayChart(assetData) {
       destroyChart("overlay");
