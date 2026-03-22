@@ -364,15 +364,16 @@
 
       <section class="panel" style="margin-top: 18px;">
         <div class="chart-title">Spot CVD by Exchange</div>
-        <div class="chart-subtitle">Cumulative aggressive flow (buy volume - sell volume), rolling 30-day history</div>
+        <div class="chart-subtitle">Cumulative aggressive flow across Binance, Coinbase, Kraken, OKX, and Bybit — rolling 30-day history</div>
         <div class="chart-wrap tall">
           <canvas id="cvdChart"></canvas>
         </div>
         <div class="note-box">
           Spot CVD (Cumulative Volume Delta) tracks net aggressive flow over time: buyer-initiated volume minus seller-initiated volume.
-          Rising CVD suggests sustained market buy pressure; falling CVD suggests sustained market sell pressure. Traders often watch for
-          divergence: price flat/down while CVD rises can hint at absorption and potential rebound, while price up with weakening CVD can
-          signal a fragile move. Use CVD with depth delta and liquidity walls for confirmation rather than as a standalone entry trigger.
+           Each line represents one exchange (Binance, Coinbase, Kraken, OKX, Bybit) and the dashed pink line is the aggregate across all five.
+           Rising CVD suggests sustained market buy pressure; falling CVD suggests sustained sell pressure. When one exchange diverges from others
+           (e.g. Coinbase CVD rising while Binance falls), it can signal regional or institutional flow differences. Traders watch for
+           divergence vs price: price flat/down while aggregate CVD rises hints at absorption; price up with weakening CVD signals fragility.
         </div>
       </section>
 
@@ -395,26 +396,35 @@
 
         <div class="panel">
            <div class="chart-title">Liquidity Depth Map</div>
-           <div class="chart-subtitle">Where are buyers and sellers stacking limit orders? Green extends left = bid support, red extends right = ask resistance.</div>
+           <div class="chart-subtitle">Who controls each price level? Green = bid support (left), Red = ask resistance (right). The colored dot shows who dominates.</div>
            <div class="chart-wrap taller"><canvas id="overlayChart"></canvas></div>
            <div class="note-box">
-             <strong>How to read this chart:</strong> Each row is a price level. Green bars extending left show accumulated bid (buy) liquidity — the wider the bar,
-             the stronger the passive support at that level. Red bars extending right show accumulated ask (sell) liquidity — the wider the bar, the stronger the resistance.
-             The dashed line marks the current mid price.
+             <strong>How to read this chart:</strong> Each row is a price level. Green bars extending left show accumulated bid (buy) liquidity.
+             Red bars extending right show accumulated ask (sell) liquidity. The colored dot on each row shows the <strong>net winner</strong> at that level:
+             green dot = buyers dominate, red dot = sellers dominate, size reflects how lopsided the imbalance is.
              <br><br>
-             <strong>What to look for:</strong> Thick green bars below price = strong support cushion. Thick red bars above price = significant resistance overhead.
-             Thin red above + thick green below = favorable for longs. If you see large ask walls building very close to price, that typically means sellers are
-             defending that level and price may need a strong catalyst to break through. Levels with persistent liquidity across many snapshots carry more weight
-             than one-time spikes that may be spoofing.
+             <strong>What to look for:</strong> Rows below the current price with large green bars and green dots = strong support floor.
+             Rows above price with large red bars and red dots = resistance ceiling. The best long setups show thick green below, thinning red above,
+             and green dots clustering below price. If you see red dots appearing at levels below price, it means sellers are building positions
+             inside the support zone — a warning sign that support may not hold.
            </div>
         </div>
       </section>
 
-      <section class="panel" style="margin-top: 18px;">
-        <div class="chart-title">Orderbook Heatmap Proxy by Price Level</div>
-        <div class="chart-subtitle">Vertical bars for highest resting bid/ask levels across stored 30-day snapshots.</div>
-        <div class="chart-wrap taller"><canvas id="heatmapChart"></canvas></div>
-      </section>
+       <section class="panel" style="margin-top: 18px;">
+         <div class="chart-title">Wall Strength Scanner</div>
+         <div class="chart-subtitle">Which price levels have the most persistent liquidity across all 5 exchanges? Persistence-weighted: walls that survive multiple snapshots rank higher.</div>
+         <div class="chart-wrap taller"><canvas id="heatmapChart"></canvas></div>
+         <div class="note-box">
+           <strong>How to read this chart:</strong> Each row is a price level. Green bars extending left show how persistently bid walls have appeared at that level
+           across snapshots. Red bars extending right show persistent ask walls. Wider bars = more reliable walls (appeared many times across many snapshots),
+           not just large one-time orders that may be spoofing.
+           <br><br>
+           <strong>What to look for:</strong> Levels with wide green bars below price = reliable support. Wide red bars above price = tested resistance.
+           If a level shows strong persistence on both sides, it is a contested zone where significant activity is expected.
+           Thin bars may indicate fleeting liquidity or market-maker repositioning.
+         </div>
+       </section>
 
       <section class="panel" style="margin-top: 18px;">
         <div class="chart-title">Confluence Guide</div>
@@ -628,22 +638,28 @@
     }
 
     function renderCvdChart(assetData) {
-      destroyChart("cvd");
-      const rows = (assetData.cvd_history || []).slice(-2880);
-      const labels = rows.map(r => shortDateLabel(r.timestamp));
-      const b = rows.map(r => r.binance || 0);
-      const c = rows.map(r => r.coinbase || 0);
-      const a = rows.map(r => r.aggregate || 0);
-      state.charts.cvd = new Chart(document.getElementById("cvdChart"), {
-        type: "line",
-        data: {
-          labels,
-          datasets: [
-            { label: "Binance Spot CVD", data: b, borderColor: "#00b4d8", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
-            { label: "Coinbase Spot CVD", data: c, borderColor: "#ffb800", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
-            { label: "Aggregate CVD", data: a, borderColor: "#ff4d7d", backgroundColor: "transparent", tension: 0.25, borderWidth: 2.2, fill: false, pointRadius: 0 }
-          ]
-        },
+       destroyChart("cvd");
+       const rows = (assetData.cvd_history || []).slice(-2880);
+       const labels = rows.map(r => shortDateLabel(r.timestamp));
+       const b = rows.map(r => r.binance || 0);
+       const c = rows.map(r => r.coinbase || 0);
+       const k = rows.map(r => r.kraken || 0);
+       const o = rows.map(r => r.okx || 0);
+       const y = rows.map(r => r.bybit || 0);
+       const a = rows.map(r => r.aggregate || 0);
+       state.charts.cvd = new Chart(document.getElementById("cvdChart"), {
+         type: "line",
+         data: {
+           labels,
+           datasets: [
+             { label: "Binance", data: b, borderColor: "#00b4d8", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
+             { label: "Coinbase", data: c, borderColor: "#ffb800", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
+             { label: "Kraken", data: k, borderColor: "#7b61ff", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5, fill: false, pointRadius: 0 },
+             { label: "OKX", data: o, borderColor: "#00e5a0", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5, fill: false, pointRadius: 0 },
+             { label: "Bybit", data: y, borderColor: "#f5a623", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5, fill: false, pointRadius: 0 },
+             { label: "Aggregate", data: a, borderColor: "#ff4d7d", backgroundColor: "transparent", tension: 0.25, borderWidth: 2.5, fill: false, pointRadius: 0, borderDash: [6, 3] }
+           ]
+         },
         options: {
           ...commonChartOptions(),
           scales: {
@@ -683,15 +699,31 @@
        }
 
        state.charts.depthTimeline = new Chart(depthCanvas, {
-         type: "line",
-         data: {
-           labels,
-           datasets: [
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+             {
+               label: "5% Orderbook Balance",
+               data: d5,
+               borderColor: d5.map(v => v >= 0 ? "#00d26a" : "#ff5c7a"),
+               backgroundColor: "transparent",
+               borderWidth: 2,
+               fill: false,
+               tension: 0.3,
+               pointRadius: 0,
+               segment: {
+                 borderColor: function(ctx) {
+                   const yVal = ctx.p1.parsed.y;
+                   return yVal >= 0 ? "#00d26a" : "#ff5c7a";
+                 }
+               }
+             },
              {
                label: "5% Buyers Dominate",
                data: d5pos,
-               borderColor: "#00d26a",
-               backgroundColor: "rgba(0,210,106,0.25)",
+               borderColor: "transparent",
+               backgroundColor: "rgba(0,210,106,0.22)",
                borderWidth: 0,
                fill: "origin",
                tension: 0.3,
@@ -700,8 +732,8 @@
              {
                label: "5% Sellers Dominate",
                data: d5neg,
-               borderColor: "#ff5c7a",
-               backgroundColor: "rgba(255,92,122,0.25)",
+               borderColor: "transparent",
+               backgroundColor: "rgba(255,92,122,0.22)",
                borderWidth: 0,
                fill: "origin",
                tension: 0.3,
@@ -716,10 +748,10 @@
                fill: false,
                tension: 0.3,
                pointRadius: 0,
-               borderDash: [],
+               borderDash: [6, 3],
              }
-           ]
-         },
+            ]
+          },
          options: {
            ...commonChartOptions("percent"),
            scales: {
@@ -752,23 +784,34 @@
              }
            },
            plugins: {
-             ...commonChartOptions("percent").plugins,
-             tooltip: {
-               ...commonChartOptions("percent").plugins.tooltip,
-               callbacks: {
-                 title: function(items) {
-                   return items[0] ? items[0].label : "";
-                 },
-                 label: function(context) {
-                   const val = context.parsed.y;
-                   const pct = (val * 100).toFixed(2);
-                   const sign = val > 0 ? "+" : "";
-                   const tag = context.dataset.label.includes("25%") ? "25% range" : "5% range";
-                   const meaning = val > 0 ? "bids > asks" : val < 0 ? "asks > bids" : "balanced";
-                   return `${tag}: ${sign}${pct}% (${meaning})`;
-                 }
-               }
-             }
+             legend: {
+                labels: {
+                  color: "#e8e8ed",
+                  filter: function(item) {
+                    return item.text !== "5% Buyers Dominate" && item.text !== "5% Sellers Dominate";
+                  }
+                }
+              },
+              tooltip: {
+                ...commonChartOptions("percent").plugins.tooltip,
+                filter: function(item) {
+                  return item.dataset.label === "5% Orderbook Balance" || item.dataset.label === "25% Structural Balance";
+                },
+                callbacks: {
+                  title: function(items) {
+                    return items[0] ? items[0].label : "";
+                  },
+                  label: function(context) {
+                    const val = context.parsed.y;
+                    const pct = (val * 100).toFixed(2);
+                    const sign = val > 0 ? "+" : "";
+                    const is25 = context.dataset.label.includes("25%");
+                    const tag = is25 ? "25% structural" : "5% near-price";
+                    const meaning = val > 0.01 ? "buyers dominate" : val < -0.01 ? "sellers dominate" : "balanced";
+                    return `${tag}: ${sign}${pct}% — ${meaning}`;
+                  }
+                }
+              }
            }
          }
        });
@@ -788,28 +831,21 @@
        const labels = levels.map(x => `$${fmtPrice(x.price)}`);
        const bidBars = levels.map(x => -(x.bidNotional || 0));
        const askBars = levels.map(x => x.askNotional || 0);
-
-       const midIdx = levels.findIndex(x => x.price >= midPrice);
-       const annotation = midIdx >= 0 ? {
-         type: "line",
-         yMin: midIdx - 0.5,
-         yMax: midIdx - 0.5,
-         borderColor: "#ffffff",
-         borderWidth: 1.5,
-         borderDash: [6, 4],
-         label: {
-           display: true,
-           content: `Mid $${fmtPrice(midPrice)}`,
-           position: "start",
-           color: "#ffffff",
-           font: { size: 11, weight: "bold" },
-           backgroundColor: "rgba(0,0,0,0.6)",
-           padding: 4
-         }
-       } : null;
-
-       const annotations = {};
-       if (annotation) annotations.midLine = annotation;
+       const maxNotional = Math.max(...levels.map(x => Math.max(x.bidNotional, x.askNotional)), 1);
+       const imbalanceDots = levels.map(x => {
+         const net = (x.bidNotional || 0) - (x.askNotional || 0);
+         return net * 0.3;
+       });
+       const dotColors = levels.map(x => {
+         const net = (x.bidNotional || 0) - (x.askNotional || 0);
+         return net >= 0 ? "rgba(0,210,106,0.95)" : "rgba(255,92,122,0.95)";
+       });
+       const dotSizes = levels.map(x => {
+         const total = (x.bidNotional || 0) + (x.askNotional || 0);
+         if (total === 0) return 3;
+         const ratio = Math.abs((x.bidNotional || 0) - (x.askNotional || 0)) / total;
+         return 4 + ratio * 10;
+       });
 
        state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
          type: "bar",
@@ -819,7 +855,7 @@
              {
                label: "Bid Support (buyers)",
                data: bidBars,
-               backgroundColor: "rgba(0,210,106,0.72)",
+               backgroundColor: levels.map(x => x.price < midPrice ? "rgba(0,210,106,0.75)" : "rgba(0,210,106,0.40)"),
                borderColor: "#00d26a",
                borderWidth: 1,
                borderSkipped: false,
@@ -827,10 +863,22 @@
              {
                label: "Ask Resistance (sellers)",
                data: askBars,
-               backgroundColor: "rgba(255,92,122,0.72)",
+               backgroundColor: levels.map(x => x.price >= midPrice ? "rgba(255,92,122,0.75)" : "rgba(255,92,122,0.40)"),
                borderColor: "#ff5c7a",
                borderWidth: 1,
                borderSkipped: false,
+             },
+             {
+               label: "Net Imbalance",
+               type: "line",
+               data: imbalanceDots,
+               borderColor: "transparent",
+               backgroundColor: dotColors,
+               pointRadius: dotSizes,
+               pointStyle: "circle",
+               showLine: false,
+               xAxisID: "x",
+               yAxisID: "y",
              }
            ]
          },
@@ -838,7 +886,12 @@
            indexAxis: "y",
            maintainAspectRatio: false,
            plugins: {
-             legend: { labels: { color: "#e8e8ed" } },
+             legend: {
+               labels: {
+                 color: "#e8e8ed",
+                 filter: function(item) { return item.text !== "Net Imbalance"; }
+               }
+             },
              tooltip: {
                backgroundColor: "#121214",
                borderColor: "#2a2a30",
@@ -848,9 +901,20 @@
                displayColors: false,
                callbacks: {
                  label: function(context) {
+                   const idx = context.dataIndex;
+                   const level = levels[idx];
+                   if (!level) return "";
+                   if (context.dataset.label === "Net Imbalance") {
+                     const net = (level.bidNotional || 0) - (level.askNotional || 0);
+                     const total = (level.bidNotional || 0) + (level.askNotional || 0);
+                     const pct = total > 0 ? Math.abs(net / total * 100).toFixed(1) : "0";
+                     const winner = net >= 0 ? "Buyers" : "Sellers";
+                     return `${winner} dominate by ${pct}%`;
+                   }
                    const raw = Math.abs(context.parsed.x);
                    const side = context.parsed.x < 0 ? "Bid support" : "Ask resistance";
-                   return `${side}: $${fmtNumber(raw)}`;
+                   const position = level.price < midPrice ? "(below price)" : level.price > midPrice ? "(above price)" : "(at price)";
+                   return `${side}: $${fmtNumber(raw)} ${position}`;
                  }
                }
              }
@@ -888,30 +952,106 @@
      }
 
     function renderHeatmapChart(assetData) {
-      destroyChart("heatmap");
-      const latest = assetData.latest || {};
-      const points = (assetData.heatmap_points || []).slice(-30000);
-      const levels = aggregateSideLevels(points, latest.mid_price || 0)
-        .sort((a, b) => b.notional - a.notional)
-        .slice(0, 48)
-        .sort((a, b) => a.price - b.price);
+       destroyChart("heatmap");
+       const latest = assetData.latest || {};
+       const midPrice = latest.mid_price || 0;
+       const points = (assetData.heatmap_points || []).slice(-30000);
+       const levels = buildPriceLevelMatrix(points, midPrice)
+         .filter(x => x.totalNotional > 0)
+         .map(x => ({
+           ...x,
+           bidPersistence: x.bidNotional * (1 + Math.min(4, x.bidTouches / 12)),
+           askPersistence: x.askNotional * (1 + Math.min(4, x.askTouches / 12)),
+         }))
+         .map(x => ({ ...x, totalPersistence: x.bidPersistence + x.askPersistence }))
+         .sort((a, b) => b.totalPersistence - a.totalPersistence)
+         .slice(0, 30)
+         .sort((a, b) => a.price - b.price);
 
-      const labels = levels.map(x => fmtPrice(x.price));
-      const bid = levels.map(x => x.side === "bid" ? x.notional : 0);
-      const ask = levels.map(x => x.side === "ask" ? x.notional : 0);
+       const labels = levels.map(x => `$${fmtPrice(x.price)}`);
+       const bidBars = levels.map(x => -(x.bidPersistence || 0));
+       const askBars = levels.map(x => x.askPersistence || 0);
 
-      state.charts.heatmap = new Chart(document.getElementById("heatmapChart"), {
-        type: "bar",
-        data: {
-          labels,
-          datasets: [
-            { label: "Bid Liquidity (Green)", data: bid, backgroundColor: "rgba(0,210,106,0.7)", borderColor: "#00d26a", borderWidth: 1 },
-            { label: "Ask Liquidity (Red)", data: ask, backgroundColor: "rgba(255,92,122,0.7)", borderColor: "#ff5c7a", borderWidth: 1 }
-          ]
-        },
-        options: commonChartOptions()
-      });
-    }
+       state.charts.heatmap = new Chart(document.getElementById("heatmapChart"), {
+         type: "bar",
+         data: {
+           labels,
+           datasets: [
+             {
+               label: "Persistent Bid Walls",
+               data: bidBars,
+               backgroundColor: levels.map(x => x.price < midPrice ? "rgba(0,210,106,0.75)" : "rgba(0,210,106,0.40)"),
+               borderColor: "#00d26a",
+               borderWidth: 1,
+               borderSkipped: false,
+             },
+             {
+               label: "Persistent Ask Walls",
+               data: askBars,
+               backgroundColor: levels.map(x => x.price >= midPrice ? "rgba(255,92,122,0.75)" : "rgba(255,92,122,0.40)"),
+               borderColor: "#ff5c7a",
+               borderWidth: 1,
+               borderSkipped: false,
+             }
+           ]
+         },
+         options: {
+           indexAxis: "y",
+           maintainAspectRatio: false,
+           plugins: {
+             legend: { labels: { color: "#e8e8ed" } },
+             tooltip: {
+               backgroundColor: "#121214",
+               borderColor: "#2a2a30",
+               borderWidth: 1,
+               titleColor: "#ffffff",
+               bodyColor: "#e8e8ed",
+               displayColors: false,
+               callbacks: {
+                 label: function(context) {
+                   const idx = context.dataIndex;
+                   const level = levels[idx];
+                   if (!level) return "";
+                   const raw = Math.abs(context.parsed.x);
+                   const side = context.parsed.x < 0 ? "Bid persistence" : "Ask persistence";
+                   const touches = context.parsed.x < 0 ? level.bidTouches : level.askTouches;
+                   const position = level.price < midPrice ? "below price" : level.price > midPrice ? "above price" : "at price";
+                   return `${side}: $${fmtNumber(raw)} (${touches} snapshots, ${position})`;
+                 }
+               }
+             }
+           },
+           scales: {
+             x: {
+               stacked: true,
+               ticks: {
+                 color: "#9999a5",
+                 callback: (v) => `$${fmtNumber(Math.abs(Number(v)))}`
+               },
+               grid: {
+                 color: function(context) {
+                   return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                 },
+                 lineWidth: function(context) {
+                   return context.tick && context.tick.value === 0 ? 2 : 1;
+                 }
+               },
+               title: {
+                 display: true,
+                 text: "← Bid walls (persistent)          Ask walls (persistent) →",
+                 color: "#9999a5",
+                 font: { size: 12, weight: "600" }
+               }
+             },
+             y: {
+               stacked: true,
+               ticks: { color: "#e8e8ed", font: { size: 11 } },
+               grid: { color: "#1a1a1e" }
+             }
+           }
+         }
+       });
+     }
 
     function updateGuide(assetData) {
       const sig = assetData.signals || {};

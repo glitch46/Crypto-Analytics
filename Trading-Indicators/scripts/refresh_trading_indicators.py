@@ -11,17 +11,30 @@ import requests
 
 BINANCE_API = "https://data-api.binance.vision"
 COINBASE_API = "https://api.exchange.coinbase.com"
+KRAKEN_API = "https://api.kraken.com/0/public"
+OKX_API = "https://www.okx.com/api/v5/market"
+BYBIT_API = "https://api.bybit.com/v5/market"
 CFTC_DEA_FUT = "https://www.cftc.gov/dea/newcot/deafut.txt"
+
+EXCHANGES = ["binance", "coinbase", "kraken", "okx", "bybit"]
 
 ASSETS = {
     "BTC": {
         "binance_symbol": "BTCUSDT",
         "coinbase_product": "BTC-USD",
+        "kraken_pair": "XBTUSD",
+        "kraken_result_key": "XXBTZUSD",
+        "okx_inst": "BTC-USDT",
+        "bybit_symbol": "BTCUSDT",
         "cot_market": "BITCOIN - CHICAGO MERCANTILE EXCHANGE",
     },
     "ETH": {
         "binance_symbol": "ETHUSDT",
         "coinbase_product": "ETH-USD",
+        "kraken_pair": "ETHUSD",
+        "kraken_result_key": "XETHZUSD",
+        "okx_inst": "ETH-USDT",
+        "bybit_symbol": "ETHUSDT",
         "cot_market": "ETHER CASH SETTLED - CHICAGO MERCANTILE EXCHANGE",
     },
 }
@@ -97,6 +110,138 @@ def fetch_binance_trades(symbol: str, limit: int = 1000) -> List[dict]:
 def fetch_coinbase_trades(product: str, limit: int = 300) -> List[dict]:
     headers = {"User-Agent": "crypto-analytics-trading-indicators/1.0"}
     return fetch_json(f"{COINBASE_API}/products/{product}/trades", {"limit": limit}, headers=headers)
+
+
+def fetch_kraken_orderbook(pair: str, result_key: str, count: int = 500) -> Dict[str, List[Tuple[float, float]]]:
+    data = fetch_json(f"{KRAKEN_API}/Depth", {"pair": pair, "count": count})
+    result = data.get("result", {}).get(result_key, {})
+    bids = normalize_depth(result.get("bids", []), is_bid=True)
+    asks = normalize_depth(result.get("asks", []), is_bid=False)
+    return {"bids": bids, "asks": asks}
+
+
+def fetch_okx_orderbook(inst_id: str, sz: int = 400) -> Dict[str, List[Tuple[float, float]]]:
+    data = fetch_json(f"{OKX_API}/books", {"instId": inst_id, "sz": sz})
+    book = data.get("data", [{}])[0] if data.get("data") else {}
+    bids = normalize_depth(book.get("bids", []), is_bid=True)
+    asks = normalize_depth(book.get("asks", []), is_bid=False)
+    return {"bids": bids, "asks": asks}
+
+
+def fetch_bybit_orderbook(symbol: str, limit: int = 200) -> Dict[str, List[Tuple[float, float]]]:
+    data = fetch_json(f"{BYBIT_API}/orderbook", {"category": "spot", "symbol": symbol, "limit": limit})
+    result = data.get("result", {})
+    bids = normalize_depth(result.get("b", []), is_bid=True)
+    asks = normalize_depth(result.get("a", []), is_bid=False)
+    return {"bids": bids, "asks": asks}
+
+
+def fetch_kraken_ohlc(pair: str, result_key: str, interval: int = 15) -> List[list]:
+    data = fetch_json(f"{KRAKEN_API}/OHLC", {"pair": pair, "interval": interval})
+    rows = data.get("result", {}).get(result_key, [])
+    return rows if isinstance(rows, list) else []
+
+
+def fetch_okx_candles(inst_id: str, bar: str = "15m", limit: int = 300) -> List[list]:
+    data = fetch_json(f"{OKX_API}/candles", {"instId": inst_id, "bar": bar, "limit": limit})
+    return data.get("data", []) if isinstance(data.get("data"), list) else []
+
+
+def fetch_bybit_klines(symbol: str, interval: str = "15", limit: int = 1000) -> List[list]:
+    data = fetch_json(f"{BYBIT_API}/kline", {"category": "spot", "symbol": symbol, "interval": interval, "limit": limit})
+    return data.get("result", {}).get("list", []) if isinstance(data.get("result", {}).get("list"), list) else []
+
+
+def build_kraken_cvd_history(pair: str, result_key: str, now_utc: datetime.datetime) -> List[dict]:
+    rows = fetch_kraken_ohlc(pair, result_key, interval=15)
+    cutoff = (now_utc - timedelta(days=30)).timestamp()
+    dedup = {}
+    for r in rows:
+        if len(r) < 7:
+            continue
+        ts_unix = int(r[0])
+        if ts_unix < cutoff:
+            continue
+        open_px = safe_float(r[1])
+        close_px = safe_float(r[4])
+        vol = safe_float(r[6])
+        vwap = safe_float(r[5]) if safe_float(r[5]) > 0 else (open_px + close_px) / 2
+        direction = 1.0 if close_px > open_px else (-1.0 if close_px < open_px else 0.0)
+        flow = direction * vol * vwap
+        ts = datetime.datetime.fromtimestamp(ts_unix, datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
+        dedup[ts] = flow
+    out = []
+    running = 0.0
+    for ts in sorted(dedup.keys()):
+        running += dedup[ts]
+        out.append({"timestamp": ts, "flow": dedup[ts], "cumulative": running})
+    return out[-SNAPSHOT_RETENTION:]
+
+
+def build_okx_cvd_history(inst_id: str, now_utc: datetime.datetime) -> List[dict]:
+    all_candles = []
+    after = ""
+    for _ in range(10):
+        params: Dict[str, Any] = {"instId": inst_id, "bar": "15m", "limit": "300"}
+        if after:
+            params["after"] = after
+        data = fetch_json(f"{OKX_API}/candles", params)
+        rows = data.get("data", [])
+        if not rows:
+            break
+        all_candles.extend(rows)
+        after = rows[-1][0]
+        oldest = datetime.datetime.fromtimestamp(int(after) / 1000, datetime.UTC)
+        if oldest < now_utc - timedelta(days=30):
+            break
+
+    cutoff = (now_utc - timedelta(days=30)).timestamp() * 1000
+    dedup = {}
+    for c in all_candles:
+        if len(c) < 7:
+            continue
+        ts_ms = int(c[0])
+        if ts_ms < cutoff:
+            continue
+        open_px = safe_float(c[1])
+        close_px = safe_float(c[4])
+        vol_quote = safe_float(c[6]) if safe_float(c[6]) > 0 else safe_float(c[5]) * (open_px + close_px) / 2
+        direction = 1.0 if close_px > open_px else (-1.0 if close_px < open_px else 0.0)
+        flow = direction * vol_quote
+        ts = datetime.datetime.fromtimestamp(ts_ms / 1000, datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
+        dedup[ts] = flow
+    out = []
+    running = 0.0
+    for ts in sorted(dedup.keys()):
+        running += dedup[ts]
+        out.append({"timestamp": ts, "flow": dedup[ts], "cumulative": running})
+    return out[-SNAPSHOT_RETENTION:]
+
+
+def build_bybit_cvd_history(symbol: str, now_utc: datetime.datetime) -> List[dict]:
+    rows = fetch_bybit_klines(symbol, interval="15", limit=1000)
+    cutoff = (now_utc - timedelta(days=30)).timestamp() * 1000
+    dedup = {}
+    for r in rows:
+        if len(r) < 6:
+            continue
+        ts_ms = int(r[0])
+        if ts_ms < cutoff:
+            continue
+        open_px = safe_float(r[1])
+        close_px = safe_float(r[4])
+        vol = safe_float(r[5])
+        vwap = (open_px + close_px) / 2 if (open_px + close_px) > 0 else 1.0
+        direction = 1.0 if close_px > open_px else (-1.0 if close_px < open_px else 0.0)
+        flow = direction * vol * vwap
+        ts = datetime.datetime.fromtimestamp(ts_ms / 1000, datetime.UTC).strftime("%Y-%m-%d %H:%M UTC")
+        dedup[ts] = flow
+    out = []
+    running = 0.0
+    for ts in sorted(dedup.keys()):
+        running += dedup[ts]
+        out.append({"timestamp": ts, "flow": dedup[ts], "cumulative": running})
+    return out[-SNAPSHOT_RETENTION:]
 
 
 def fetch_binance_klines(symbol: str, interval: str, start_ms: int, end_ms: int, limit: int = 1000) -> List[list]:
@@ -457,23 +602,44 @@ def main():
         overlay_history = prev.get("overlay_history", [])
         commercials_history = prev.get("commercials", [])
 
-        binance_ob = fetch_binance_orderbook(cfg["binance_symbol"], limit=1000)
-        coinbase_ob = fetch_coinbase_orderbook(cfg["coinbase_product"], level=2)
+        # Fetch orderbooks from all exchanges
+        orderbooks: Dict[str, Dict] = {}
+        try:
+            orderbooks["binance"] = fetch_binance_orderbook(cfg["binance_symbol"], limit=1000)
+        except Exception:
+            orderbooks["binance"] = {"bids": [], "asks": []}
+        try:
+            orderbooks["coinbase"] = fetch_coinbase_orderbook(cfg["coinbase_product"], level=2)
+        except Exception:
+            orderbooks["coinbase"] = {"bids": [], "asks": []}
+        try:
+            orderbooks["kraken"] = fetch_kraken_orderbook(cfg["kraken_pair"], cfg["kraken_result_key"], count=500)
+        except Exception:
+            orderbooks["kraken"] = {"bids": [], "asks": []}
+        try:
+            orderbooks["okx"] = fetch_okx_orderbook(cfg["okx_inst"], sz=400)
+        except Exception:
+            orderbooks["okx"] = {"bids": [], "asks": []}
+        try:
+            orderbooks["bybit"] = fetch_bybit_orderbook(cfg["bybit_symbol"], limit=200)
+        except Exception:
+            orderbooks["bybit"] = {"bids": [], "asks": []}
 
-        binance_mid = orderbook_mid(binance_ob["bids"], binance_ob["asks"])
-        coinbase_mid = orderbook_mid(coinbase_ob["bids"], coinbase_ob["asks"])
-        mids = [m for m in [binance_mid, coinbase_mid] if m is not None]
-        mid = sum(mids) / len(mids) if mids else 0.0
+        exchange_mids: Dict[str, Optional[float]] = {}
+        for ex, ob in orderbooks.items():
+            exchange_mids[ex] = orderbook_mid(ob["bids"], ob["asks"])
+        valid_mids = [m for m in exchange_mids.values() if m is not None]
+        mid = sum(valid_mids) / len(valid_mids) if valid_mids else 0.0
 
-        binance_depth = compute_depth_metrics(binance_ob["bids"], binance_ob["asks"], binance_mid or mid)
-        coinbase_depth = compute_depth_metrics(coinbase_ob["bids"], coinbase_ob["asks"], coinbase_mid or mid)
+        exchange_depth: Dict[str, Dict] = {}
+        for ex, ob in orderbooks.items():
+            ex_mid = exchange_mids[ex] or mid
+            exchange_depth[ex] = compute_depth_metrics(ob["bids"], ob["asks"], ex_mid)
 
         combined_depth = {}
         for window in [f"{x * 100:.1f}%" for x in DEPTH_WINDOWS]:
-            b = binance_depth[window]
-            c = coinbase_depth[window]
-            bid_notional = b["bid_notional"] + c["bid_notional"]
-            ask_notional = b["ask_notional"] + c["ask_notional"]
+            bid_notional = sum(exchange_depth[ex][window]["bid_notional"] for ex in EXCHANGES)
+            ask_notional = sum(exchange_depth[ex][window]["ask_notional"] for ex in EXCHANGES)
             delta = bid_notional - ask_notional
             total = bid_notional + ask_notional
             combined_depth[window] = {
@@ -486,44 +652,62 @@ def main():
         depth_snapshot = {
             "timestamp": ts,
             "mid_price": mid,
-            "binance": binance_depth,
-            "coinbase": coinbase_depth,
-            "combined": combined_depth,
         }
+        for ex in EXCHANGES:
+            depth_snapshot[ex] = exchange_depth[ex]
+        depth_snapshot["combined"] = combined_depth
         depth_history.append(depth_snapshot)
         depth_history = depth_history[-SNAPSHOT_RETENTION:]
 
-        b_cvd = build_binance_cvd_history(cfg["binance_symbol"], now_utc)
-        c_cvd = build_coinbase_cvd_history(cfg["coinbase_product"], now_utc)
-        b_map = {x["timestamp"]: x for x in b_cvd}
-        c_map = {x["timestamp"]: x for x in c_cvd}
-        merged_ts = sorted(set(b_map.keys()) | set(c_map.keys()))
+        # Build 30-day CVD per exchange
+        cvd_sources: Dict[str, List[dict]] = {}
+        try:
+            cvd_sources["binance"] = build_binance_cvd_history(cfg["binance_symbol"], now_utc)
+        except Exception:
+            cvd_sources["binance"] = []
+        try:
+            cvd_sources["coinbase"] = build_coinbase_cvd_history(cfg["coinbase_product"], now_utc)
+        except Exception:
+            cvd_sources["coinbase"] = []
+        try:
+            cvd_sources["kraken"] = build_kraken_cvd_history(cfg["kraken_pair"], cfg["kraken_result_key"], now_utc)
+        except Exception:
+            cvd_sources["kraken"] = []
+        try:
+            cvd_sources["okx"] = build_okx_cvd_history(cfg["okx_inst"], now_utc)
+        except Exception:
+            cvd_sources["okx"] = []
+        try:
+            cvd_sources["bybit"] = build_bybit_cvd_history(cfg["bybit_symbol"], now_utc)
+        except Exception:
+            cvd_sources["bybit"] = []
+
+        cvd_maps: Dict[str, Dict[str, dict]] = {}
+        all_ts: set = set()
+        for ex in EXCHANGES:
+            m = {x["timestamp"]: x for x in cvd_sources.get(ex, [])}
+            cvd_maps[ex] = m
+            all_ts |= set(m.keys())
+
         cvd_history = []
-        last_b = 0.0
-        last_c = 0.0
-        for t in merged_ts:
-            if t in b_map:
-                last_b = b_map[t]["cumulative"]
-                b_flow = b_map[t]["flow"]
-            else:
-                b_flow = 0.0
-            if t in c_map:
-                last_c = c_map[t]["cumulative"]
-                c_flow = c_map[t]["flow"]
-            else:
-                c_flow = 0.0
-            cvd_history.append({
-                "timestamp": t,
-                "binance": last_b,
-                "coinbase": last_c,
-                "aggregate": last_b + last_c,
-                "binance_flow": b_flow,
-                "coinbase_flow": c_flow,
-            })
+        last_vals = {ex: 0.0 for ex in EXCHANGES}
+        for t in sorted(all_ts):
+            row: Dict[str, Any] = {"timestamp": t}
+            for ex in EXCHANGES:
+                if t in cvd_maps[ex]:
+                    last_vals[ex] = cvd_maps[ex][t]["cumulative"]
+                    row[f"{ex}_flow"] = cvd_maps[ex][t]["flow"]
+                else:
+                    row[f"{ex}_flow"] = 0.0
+                row[ex] = last_vals[ex]
+            row["aggregate"] = sum(last_vals[ex] for ex in EXCHANGES)
+            cvd_history.append(row)
         cvd_history = cvd_history[-SNAPSHOT_RETENTION:]
 
-        heatmap_points.extend(top_heatmap_points(binance_ob["bids"], binance_ob["asks"], ts, "Binance Spot"))
-        heatmap_points.extend(top_heatmap_points(coinbase_ob["bids"], coinbase_ob["asks"], ts, "Coinbase Spot"))
+        # Collect heatmap points from all exchanges
+        exchange_labels = {"binance": "Binance", "coinbase": "Coinbase", "kraken": "Kraken", "okx": "OKX", "bybit": "Bybit"}
+        for ex, ob in orderbooks.items():
+            heatmap_points.extend(top_heatmap_points(ob["bids"], ob["asks"], ts, f"{exchange_labels[ex]} Spot"))
         heatmap_points = heatmap_points[-HEATMAP_RETENTION:]
 
         walls = latest_wall_stats(heatmap_points, ts)
@@ -546,8 +730,11 @@ def main():
             "latest": {
                 "timestamp": ts,
                 "mid_price": mid,
-                "binance_mid": binance_mid,
-                "coinbase_mid": coinbase_mid,
+                "binance_mid": exchange_mids.get("binance"),
+                "coinbase_mid": exchange_mids.get("coinbase"),
+                "kraken_mid": exchange_mids.get("kraken"),
+                "okx_mid": exchange_mids.get("okx"),
+                "bybit_mid": exchange_mids.get("bybit"),
                 "depth_5_delta": combined_depth.get("5.0%", {}).get("delta"),
                 "depth_5_norm": combined_depth.get("5.0%", {}).get("normalized_delta"),
                 "depth_10_delta": combined_depth.get("10.0%", {}).get("delta"),
@@ -572,12 +759,16 @@ def main():
         "sources": [
             "Binance Spot REST",
             "Coinbase Exchange REST",
+            "Kraken REST",
+            "OKX REST",
+            "Bybit REST",
             "CFTC COT (Legacy Futures)",
         ],
         "notes": [
             "Depth delta is liquidity imbalance, not a direct direction predictor.",
             "Commercial short increases are interpreted as contrarian caution in crowded long conditions.",
-            "Coinbase CVD is derived from 15m candle direction proxy due public trade-history pagination limits.",
+            "CVD for Coinbase/Kraken/OKX/Bybit is derived from 15m candle direction proxy.",
+            "Binance CVD uses taker buy/sell quote volume from klines (most accurate).",
             "Signals are visual-only and intended for discretionary confirmation.",
         ],
     }
@@ -585,7 +776,7 @@ def main():
     output = {
         "metadata": metadata,
         "config": {
-            "exchanges": ["Binance Spot", "Coinbase Spot"],
+            "exchanges": ["Binance Spot", "Coinbase Spot", "Kraken Spot", "OKX Spot", "Bybit Spot"],
             "depth_windows": ["2.5%", "5.0%", "10.0%", "25.0%"],
             "heatmap_points_per_side": HEATMAP_POINTS_PER_SIDE,
             "snapshot_retention": SNAPSHOT_RETENTION,
