@@ -249,12 +249,12 @@ def build_history(rows):
             oi = 0
         history.append({"date": date, "open_interest": oi})
     history.sort(key=lambda x: x["date"])
-    if len(history) < 7:
+    if len(history) < 30:
         today = datetime.date.today()
-        for i in range(7 - len(history)):
-            day = today - datetime.timedelta(days=(6 - len(history) - i))
+        for i in range(30 - len(history)):
+            day = today - datetime.timedelta(days=(29 - len(history) - i))
             history.insert(0, {"date": day.strftime("%Y-%m-%d"), "open_interest": 0})
-    return history[-7:]
+    return history[-30:]
 
 
 def extract_latest_by_symbol(options_rows):
@@ -919,21 +919,21 @@ def main():
             prev_map = {item["date"]: item["open_interest"] for item in prev_map if item.get("date")}
         today_str = datetime.date.today().strftime("%Y-%m-%d")
         prev_map[today_str] = total_oi_usd or total_oi or 0
-        # Remove entries older than 14 days to keep file small
-        cutoff_oi = (datetime.date.today() - datetime.timedelta(days=14)).strftime("%Y-%m-%d")
+        # Remove entries older than 35 days to keep file small but retain 30 days of history
+        cutoff_oi = (datetime.date.today() - datetime.timedelta(days=35)).strftime("%Y-%m-%d")
         prev_map = {k: v for k, v in prev_map.items() if k >= cutoff_oi}
         history = sorted([{"date": k, "open_interest": v} for k, v in prev_map.items()], key=lambda x: x["date"])
-        if len(history) < 7:
+        if len(history) < 30:
             last_value = history[-1]["open_interest"] if history else total_oi_usd or total_oi or 0
             today = datetime.date.today()
             history_map = {item["date"]: item["open_interest"] for item in history}
             padded = []
-            for offset in range(6, -1, -1):
+            for offset in range(29, -1, -1):
                 day = (today - datetime.timedelta(days=offset)).strftime("%Y-%m-%d")
                 padded.append({"date": day, "open_interest": history_map.get(day, last_value)})
             history = padded
         else:
-            history = history[-7:]
+            history = history[-30:]
         oi_history[asset] = history
 
         oi_change = None
