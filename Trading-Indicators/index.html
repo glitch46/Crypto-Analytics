@@ -200,8 +200,9 @@
     .chart-wrap.taller { height: 520px; }
     canvas { max-height: 320px; }
     #cvdChart { max-height: 460px; }
+    #depthTimelineChart { max-height: 520px; height: 100% !important; }
     #overlayChart,
-    #heatmapChart { max-height: 520px; }
+    #heatmapChart { max-height: 520px; height: 100% !important; }
 
     .depth-table {
       width: 100%;
@@ -656,7 +657,13 @@
       const d5 = rows.map(r => ((r.combined || {})["5.0%"] || {}).normalized_delta || 0);
       const d25 = rows.map(r => ((r.combined || {})["25.0%"] || {}).normalized_delta || 0);
 
-      state.charts.depthTimeline = new Chart(document.getElementById("depthTimelineChart"), {
+      const depthCanvas = document.getElementById("depthTimelineChart");
+      const parent = depthCanvas.parentElement;
+      if (parent && parent.clientHeight) {
+        depthCanvas.height = parent.clientHeight;
+      }
+
+      state.charts.depthTimeline = new Chart(depthCanvas, {
         type: "bar",
         data: {
           labels,
