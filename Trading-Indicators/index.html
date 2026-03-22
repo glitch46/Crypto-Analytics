@@ -373,7 +373,12 @@
         <div class="panel">
           <div class="chart-title">Depth Delta Timeline (5% vs 25%)</div>
           <div class="chart-subtitle">Use 5% for tactical range shifts and 25% for broader reversal context.</div>
-          <div class="chart-wrap"><canvas id="depthTimelineChart"></canvas></div>
+          <div class="chart-wrap taller"><canvas id="depthTimelineChart"></canvas></div>
+          <div class="note-box">
+            This chart tracks liquidity imbalance over time, where green bars indicate bid-side dominance and red bars indicate ask-side dominance in the 5% range,
+            while the white line shows broader 25% depth context. Read it as a structure map: improving 5% delta with stable/rising 25% context often supports longs,
+            and persistent negative 5% with weakening 25% context signals rising downside pressure or failed breakout risk.
+          </div>
         </div>
 
         <div class="panel">
