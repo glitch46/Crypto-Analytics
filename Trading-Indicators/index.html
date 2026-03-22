@@ -215,14 +215,10 @@
     .depth-table td:first-child { text-align: left; }
 
     .note-box {
-      border-left: 3px solid #ff4d7d;
-      background: var(--black-elevated);
-      padding: 12px;
-      border-radius: 10px;
       margin-top: 10px;
       font-size: 13px;
-      color: var(--white-soft);
-      line-height: 1.5;
+      color: var(--gray-light);
+      line-height: 1.55;
     }
 
     .info-grid { display: grid; gap: 10px; margin-top: 10px; }
@@ -353,15 +349,16 @@
           <div class="chart-subtitle">CFTC legacy futures: commercial short increases often imply caution before mean reversion windows.</div>
           <div class="info-grid" id="commercialGrid"></div>
           <div class="note-box">
-            Commercials are typically hedgers, not momentum chasers. When commercial net shorts grow while spot orderbook depth flips more positive,
-            a rebound setup can build over time rather than immediately.
+            Commercials are typically hedgers, not momentum chasers. Caution Score rises when commercial short exposure expands relative to its own history.
+            High Caution Score means higher probability of crowded longs and failed breakouts unless spot structure confirms. Use it with depth delta and CVD,
+            not as a standalone trigger.
           </div>
         </div>
       </section>
 
       <section class="panel" style="margin-top: 18px;">
         <div class="chart-title">Spot CVD by Exchange</div>
-        <div class="chart-subtitle">Cumulative aggressive flow (buy volume - sell volume)</div>
+        <div class="chart-subtitle">Cumulative aggressive flow (buy volume - sell volume), rolling 30-day history</div>
         <div class="chart-wrap">
           <canvas id="cvdChart"></canvas>
         </div>
@@ -375,15 +372,15 @@
         </div>
 
         <div class="panel">
-          <div class="chart-title">Depth Overlay Bands</div>
-          <div class="chart-subtitle">Visual support/resistance from liquidity imbalance + top bid/ask walls.</div>
+          <div class="chart-title">Depth Overlay Bands by Price Level</div>
+          <div class="chart-subtitle">Vertical bars of strongest support/resistance liquidity levels by price point.</div>
           <div class="chart-wrap"><canvas id="overlayChart"></canvas></div>
         </div>
       </section>
 
       <section class="panel" style="margin-top: 18px;">
-        <div class="chart-title">Orderbook Heatmap Proxy (Top Resting Levels)</div>
-        <div class="chart-subtitle">Binance + Coinbase spot levels, filtered to meaningful top walls.</div>
+        <div class="chart-title">Orderbook Heatmap Proxy by Price Level</div>
+        <div class="chart-subtitle">Vertical bars for highest resting bid/ask levels across the 30-day window.</div>
         <div class="chart-wrap"><canvas id="heatmapChart"></canvas></div>
       </section>
 
@@ -391,6 +388,10 @@
         <div class="chart-title">Confluence Guide</div>
         <div class="chart-subtitle">Practical interpretation framework</div>
         <div class="info-grid" id="guideGrid"></div>
+        <div class="note-box">
+          Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
+          Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
+        </div>
       </section>
 
       <footer class="footer" id="footerNote">
@@ -427,6 +428,11 @@
       return `${sign}${(v * 100).toFixed(2)}%`;
     }
 
+    function fmtPrice(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "-";
+      return Number(v).toLocaleString("en-US", { maximumFractionDigits: 2 });
+    }
+
     function setTone(el, v) {
       el.classList.remove("good", "bad", "warn");
       if (v > 0) el.classList.add("good");
@@ -444,6 +450,25 @@
 
     function destroyChart(key) {
       if (state.charts[key]) state.charts[key].destroy();
+    }
+
+    function aggregateLevels(points, midPrice) {
+      const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
+      const byBucket = {};
+      points.forEach((p) => {
+        const price = Number(p.price || 0);
+        const notional = Number(p.notional || 0);
+        const side = p.side || "bid";
+        if (!price || !notional) return;
+        const bucket = Math.round(price / step) * step;
+        const key = `${side}_${bucket}`;
+        if (!byBucket[key]) {
+          byBucket[key] = { side, price: bucket, notional: 0, touches: 0 };
+        }
+        byBucket[key].notional += notional;
+        byBucket[key].touches += 1;
+      });
+      return Object.values(byBucket);
     }
 
     function updateKpis(assetData) {
@@ -525,7 +550,7 @@
 
     function renderCvdChart(assetData) {
       destroyChart("cvd");
-      const rows = assetData.cvd_history || [];
+      const rows = (assetData.cvd_history || []).slice(-2880);
       const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
       const b = rows.map(r => r.binance || 0);
       const c = rows.map(r => r.coinbase || 0);
@@ -535,9 +560,9 @@
         data: {
           labels,
           datasets: [
-            { label: "Binance Spot CVD", data: b, borderColor: "#00b4d8", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 },
-            { label: "Coinbase Spot CVD", data: c, borderColor: "#ffb800", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 },
-            { label: "Aggregate CVD", data: a, borderColor: "#ff4d7d", backgroundColor: "rgba(255,77,125,0.12)", tension: 0.25, fill: true, borderWidth: 2 }
+            { label: "Binance Spot CVD", data: b, borderColor: "#00b4d8", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
+            { label: "Coinbase Spot CVD", data: c, borderColor: "#ffb800", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
+            { label: "Aggregate CVD", data: a, borderColor: "#ff4d7d", backgroundColor: "transparent", tension: 0.25, borderWidth: 2.2, fill: false, pointRadius: 0 }
           ]
         },
         options: commonChartOptions()
@@ -566,20 +591,25 @@
 
     function renderOverlayChart(assetData) {
       destroyChart("overlay");
-      const rows = assetData.overlay_history || [];
-      const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
-      const mid = rows.map(r => r.mid_price || 0);
-      const support = rows.map(r => r.support || 0);
-      const resistance = rows.map(r => r.resistance || 0);
+      const latest = assetData.latest || {};
+      const points = (assetData.heatmap_points || []).slice(-2880);
+      const levels = aggregateLevels(points, latest.mid_price || 0)
+        .map(x => ({ ...x, score: x.notional * (1 + Math.min(3, x.touches / 24)) }))
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 18)
+        .sort((a, b) => a.price - b.price);
+
+      const labels = levels.map(x => fmtPrice(x.price));
+      const bidBars = levels.map(x => x.side === "bid" ? x.score : 0);
+      const askBars = levels.map(x => x.side === "ask" ? x.score : 0);
 
       state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
-        type: "line",
+        type: "bar",
         data: {
           labels,
           datasets: [
-            { label: "Resistance Overlay", data: resistance, borderColor: "#ff5c7a", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 },
-            { label: "Mid Price", data: mid, borderColor: "#ffffff", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5 },
-            { label: "Support Overlay", data: support, borderColor: "#00d26a", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 }
+            { label: "Support Bands (Bid)", data: bidBars, backgroundColor: "rgba(0,210,106,0.7)", borderColor: "#00d26a", borderWidth: 1 },
+            { label: "Resistance Bands (Ask)", data: askBars, backgroundColor: "rgba(255,92,122,0.7)", borderColor: "#ff5c7a", borderWidth: 1 }
           ]
         },
         options: commonChartOptions()
@@ -588,27 +618,24 @@
 
     function renderHeatmapChart(assetData) {
       destroyChart("heatmap");
-      const points = assetData.heatmap_points || [];
-      const recent = points.slice(-220);
-      const labels = Array.from(new Set(recent.map(p => p.timestamp.replace(" UTC", ""))));
+      const latest = assetData.latest || {};
+      const points = (assetData.heatmap_points || []).slice(-2880);
+      const levels = aggregateLevels(points, latest.mid_price || 0)
+        .sort((a, b) => b.notional - a.notional)
+        .slice(0, 24)
+        .sort((a, b) => a.price - b.price);
 
-      const ask = [];
-      const bid = [];
-      labels.forEach(ts => {
-        const slice = recent.filter(p => p.timestamp.replace(" UTC", "") === ts);
-        const askTop = slice.filter(p => p.side === "ask").sort((a, b) => b.notional - a.notional)[0];
-        const bidTop = slice.filter(p => p.side === "bid").sort((a, b) => b.notional - a.notional)[0];
-        ask.push(askTop ? askTop.price : null);
-        bid.push(bidTop ? bidTop.price : null);
-      });
+      const labels = levels.map(x => fmtPrice(x.price));
+      const bid = levels.map(x => x.side === "bid" ? x.notional : 0);
+      const ask = levels.map(x => x.side === "ask" ? x.notional : 0);
 
       state.charts.heatmap = new Chart(document.getElementById("heatmapChart"), {
-        type: "line",
+        type: "bar",
         data: {
           labels,
           datasets: [
-            { label: "Top Ask Walls", data: ask, borderColor: "#ff5c7a", backgroundColor: "rgba(255,92,122,0.1)", tension: 0, borderWidth: 2, pointRadius: 1 },
-            { label: "Top Bid Walls", data: bid, borderColor: "#00d26a", backgroundColor: "rgba(0,210,106,0.1)", tension: 0, borderWidth: 2, pointRadius: 1 }
+            { label: "Bid Liquidity (Green)", data: bid, backgroundColor: "rgba(0,210,106,0.7)", borderColor: "#00d26a", borderWidth: 1 },
+            { label: "Ask Liquidity (Red)", data: ask, backgroundColor: "rgba(255,92,122,0.7)", borderColor: "#ff5c7a", borderWidth: 1 }
           ]
         },
         options: commonChartOptions()
@@ -665,7 +692,7 @@
         },
         scales: {
           x: {
-            ticks: { color: "#9999a5", maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+            ticks: { color: "#9999a5", maxRotation: 0, autoSkip: true, maxTicksLimit: 14 },
             grid: { color: "#1a1a1e" }
           },
           y: {
