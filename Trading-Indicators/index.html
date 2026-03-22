@@ -385,6 +385,11 @@
           <div class="chart-title">Depth Overlay Bands by Price Level</div>
           <div class="chart-subtitle">Vertical bars of strongest support/resistance liquidity levels by price point across stored 30-day snapshots.</div>
           <div class="chart-wrap taller"><canvas id="overlayChart"></canvas></div>
+          <div class="note-box">
+            Each bar is now a stacked depth profile at one price level: green is bid-side resting liquidity (support), red is ask-side resting liquidity (resistance).
+            Levels shown are selected by total persistent liquidity over the rolling history, then sorted by price so structure is readable.
+            If one side appears small at a level, it reflects weaker relative liquidity there, not missing data.
+          </div>
         </div>
       </section>
 
@@ -471,7 +476,7 @@
       if (state.charts[key]) state.charts[key].destroy();
     }
 
-    function aggregateLevels(points, midPrice) {
+    function aggregateSideLevels(points, midPrice) {
       const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
       const byBucket = {};
       points.forEach((p) => {
@@ -488,6 +493,44 @@
         byBucket[key].touches += 1;
       });
       return Object.values(byBucket);
+    }
+
+    function buildPriceLevelMatrix(points, midPrice) {
+      const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
+      const matrix = {};
+      points.forEach((p) => {
+        const price = Number(p.price || 0);
+        const notional = Number(p.notional || 0);
+        const side = p.side || "bid";
+        if (!price || !notional) return;
+        const bucket = Math.round(price / step) * step;
+        if (!matrix[bucket]) {
+          matrix[bucket] = {
+            price: bucket,
+            bidNotional: 0,
+            askNotional: 0,
+            bidTouches: 0,
+            askTouches: 0,
+          };
+        }
+        if (side === "bid") {
+          matrix[bucket].bidNotional += notional;
+          matrix[bucket].bidTouches += 1;
+        } else {
+          matrix[bucket].askNotional += notional;
+          matrix[bucket].askTouches += 1;
+        }
+      });
+
+      return Object.values(matrix).map((x) => {
+        const total = x.bidNotional + x.askNotional;
+        const touches = x.bidTouches + x.askTouches;
+        return {
+          ...x,
+          totalNotional: total,
+          score: total * (1 + Math.min(3, touches / 24)),
+        };
+      });
     }
 
     function updateKpis(assetData) {
@@ -630,26 +673,46 @@
       destroyChart("overlay");
       const latest = assetData.latest || {};
       const points = (assetData.heatmap_points || []).slice(-30000);
-      const levels = aggregateLevels(points, latest.mid_price || 0)
-        .map(x => ({ ...x, score: x.notional * (1 + Math.min(3, x.touches / 24)) }))
+      let levels = buildPriceLevelMatrix(points, latest.mid_price || 0)
+        .filter((x) => x.bidNotional > 0 && x.askNotional > 0)
         .sort((a, b) => b.score - a.score)
         .slice(0, 40)
         .sort((a, b) => a.price - b.price);
 
+      if (!levels.length) {
+        levels = buildPriceLevelMatrix(points, latest.mid_price || 0)
+          .sort((a, b) => b.score - a.score)
+          .slice(0, 40)
+          .sort((a, b) => a.price - b.price);
+      }
+
       const labels = levels.map(x => fmtPrice(x.price));
-      const bidBars = levels.map(x => x.side === "bid" ? x.score : 0);
-      const askBars = levels.map(x => x.side === "ask" ? x.score : 0);
+      const bidBars = levels.map(x => x.bidNotional);
+      const askBars = levels.map(x => x.askNotional);
 
       state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
         type: "bar",
         data: {
           labels,
           datasets: [
-            { label: "Support Bands (Bid)", data: bidBars, backgroundColor: "rgba(0,210,106,0.7)", borderColor: "#00d26a", borderWidth: 1 },
-            { label: "Resistance Bands (Ask)", data: askBars, backgroundColor: "rgba(255,92,122,0.7)", borderColor: "#ff5c7a", borderWidth: 1 }
+            { label: "Support Bands (Bid)", data: bidBars, backgroundColor: "rgba(0,210,106,0.78)", borderColor: "#00d26a", borderWidth: 1, stack: "depth" },
+            { label: "Resistance Bands (Ask)", data: askBars, backgroundColor: "rgba(255,92,122,0.78)", borderColor: "#ff5c7a", borderWidth: 1, stack: "depth" }
           ]
         },
-        options: commonChartOptions()
+        options: {
+          ...commonChartOptions(),
+          scales: {
+            ...commonChartOptions().scales,
+            x: {
+              ...commonChartOptions().scales.x,
+              stacked: true,
+            },
+            y: {
+              ...commonChartOptions().scales.y,
+              stacked: true,
+            }
+          }
+        }
       });
     }
 
@@ -657,7 +720,7 @@
       destroyChart("heatmap");
       const latest = assetData.latest || {};
       const points = (assetData.heatmap_points || []).slice(-30000);
-      const levels = aggregateLevels(points, latest.mid_price || 0)
+      const levels = aggregateSideLevels(points, latest.mid_price || 0)
         .sort((a, b) => b.notional - a.notional)
         .slice(0, 48)
         .sort((a, b) => a.price - b.price);
