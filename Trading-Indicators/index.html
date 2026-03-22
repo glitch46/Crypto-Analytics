@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trading Indicators</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
+      --accent-solid: #ff4d7d;
+      --black-deep: #000000;
+      --black-rich: #0a0a0b;
+      --black-elevated: #121214;
+      --gray-dark: #1a1a1e;
+      --gray-light: #9999a5;
+      --gray-muted: #6b6b76;
+      --white-soft: #e8e8ed;
+      --white-pure: #ffffff;
+      --success: #00d26a;
+      --danger: #ff5c7a;
+      --warning: #ffb800;
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
+      color: var(--white-soft);
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 220px;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
+      border-right: 1px solid var(--gray-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      height: 100vh;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+    }
+
+    .sidebar-nav { display: grid; gap: 10px; }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--black-rich);
+      color: var(--white-soft);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 200ms ease-out;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      border-color: #ff4d7d70;
+      box-shadow: var(--shadow-sm);
+      color: var(--white-pure);
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 52px 24px 80px;
+      flex: 1;
+    }
+
+    .hero { margin-bottom: 24px; }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white-pure);
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 880px;
+      color: var(--gray-light);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0 24px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      gap: 8px;
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 999px;
+      padding: 6px;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      color: var(--gray-light);
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 200ms ease-out;
+    }
+
+    .toggle-btn.active {
+      background: var(--gradient-primary);
+      color: var(--white-pure);
+    }
+
+    .pill {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #1a1a1e;
+      border: 1px solid #2a2a30;
+      color: var(--gray-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .grid { display: grid; gap: 18px; }
+    .kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .panel {
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--gray-muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      margin-top: 8px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--gray-light);
+    }
+
+    .good { color: var(--success); }
+    .bad { color: var(--danger); }
+    .warn { color: var(--warning); }
+
+    .chart-title { font-size: 18px; font-weight: 700; color: var(--white-pure); }
+    .chart-subtitle { margin-top: 5px; font-size: 13px; color: var(--gray-light); }
+
+    .chart-wrap { margin-top: 12px; }
+    canvas { max-height: 320px; }
+
+    .depth-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .depth-table th,
+    .depth-table td {
+      border-bottom: 1px solid var(--gray-dark);
+      padding: 9px 6px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .depth-table th:first-child,
+    .depth-table td:first-child { text-align: left; }
+
+    .note-box {
+      border-left: 3px solid #ff4d7d;
+      background: rgba(255, 77, 125, 0.08);
+      padding: 12px;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--white-soft);
+      line-height: 1.5;
+    }
+
+    .info-grid { display: grid; gap: 10px; margin-top: 10px; }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--gray-dark);
+      background: var(--black-elevated);
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: var(--gray-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1100px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sidebar-nav { grid-auto-flow: column; grid-auto-columns: max-content; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 38px 16px 64px; }
+      .hero h1 { font-size: 30px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Dashboards</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="../index.html">Home</a>
+        <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
+        <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
+        <a class="sidebar-link" href="../Strategy-Tester/index.html">Strategy Tester</a>
+        <a class="sidebar-link active" href="index.html">Trading Indicators</a>
+      </nav>
+    </aside>
+
+    <main class="page">
+      <header class="hero">
+        <h1>Trading Indicators</h1>
+        <p>
+          Spot-first orderbook intelligence for BTC and ETH using Binance + Coinbase depth, heatmap levels,
+          depth delta, depth overlay bands, spot CVD by exchange, and CFTC commercial positioning context.
+        </p>
+      </header>
+
+      <section class="controls">
+        <div class="toggle-group" role="tablist" aria-label="Asset selection">
+          <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
+          <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
+        </div>
+        <span class="pill" id="dataStamp">Updated -</span>
+        <span class="pill">Refresh cadence 15m</span>
+      </section>
+
+      <section class="grid kpis">
+        <div class="panel">
+          <div class="kpi-label">Long Readiness Score</div>
+          <div class="kpi-value" id="longReadiness">-</div>
+          <div class="kpi-sub" id="longReadinessLabel">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Depth Delta (5%)</div>
+          <div class="kpi-value" id="depth5Delta">-</div>
+          <div class="kpi-sub" id="depth5Norm">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Depth Delta (25%)</div>
+          <div class="kpi-value" id="depth25Delta">-</div>
+          <div class="kpi-sub" id="depth25Norm">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Spot CVD Aggregate</div>
+          <div class="kpi-value" id="cvdAgg">-</div>
+          <div class="kpi-sub" id="cvdFlow">Binance + Coinbase</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Commercial Shorts Context</div>
+          <div class="kpi-value" id="commercialShortRatio">-</div>
+          <div class="kpi-sub" id="commercialDate">CFTC weekly</div>
+        </div>
+      </section>
+
+      <section class="grid two-col" style="margin-top: 18px;">
+        <div class="panel">
+          <div class="chart-title">Depth Delta Multi-Range</div>
+          <div class="chart-subtitle">2.5%, 5%, 10%, 25% liquidity imbalance (Bid - Ask)</div>
+          <table class="depth-table">
+            <thead>
+              <tr>
+                <th>Window</th>
+                <th>Bid Notional</th>
+                <th>Ask Notional</th>
+                <th>Delta</th>
+                <th>Norm</th>
+              </tr>
+            </thead>
+            <tbody id="depthRows"></tbody>
+          </table>
+          <div class="note-box">
+            Depth delta shows liquidity imbalance, not guaranteed direction. Positive deltas are most useful when paired
+            with improving spot CVD and persistent bid walls.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="chart-title">Commercial Positioning (Contrarian)</div>
+          <div class="chart-subtitle">CFTC legacy futures: commercial short increases often imply caution before mean reversion windows.</div>
+          <div class="info-grid" id="commercialGrid"></div>
+          <div class="note-box">
+            Commercials are typically hedgers, not momentum chasers. When commercial net shorts grow while spot orderbook depth flips more positive,
+            a rebound setup can build over time rather than immediately.
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Spot CVD by Exchange</div>
+        <div class="chart-subtitle">Cumulative aggressive flow (buy volume - sell volume)</div>
+        <div class="chart-wrap">
+          <canvas id="cvdChart"></canvas>
+        </div>
+      </section>
+
+      <section class="grid two-col" style="margin-top: 18px;">
+        <div class="panel">
+          <div class="chart-title">Depth Delta Timeline (5% vs 25%)</div>
+          <div class="chart-subtitle">Use 5% for tactical range shifts and 25% for broader reversal context.</div>
+          <div class="chart-wrap"><canvas id="depthTimelineChart"></canvas></div>
+        </div>
+
+        <div class="panel">
+          <div class="chart-title">Depth Overlay Bands</div>
+          <div class="chart-subtitle">Visual support/resistance from liquidity imbalance + top bid/ask walls.</div>
+          <div class="chart-wrap"><canvas id="overlayChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Orderbook Heatmap Proxy (Top Resting Levels)</div>
+        <div class="chart-subtitle">Binance + Coinbase spot levels, filtered to meaningful top walls.</div>
+        <div class="chart-wrap"><canvas id="heatmapChart"></canvas></div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Confluence Guide</div>
+        <div class="chart-subtitle">Practical interpretation framework</div>
+        <div class="info-grid" id="guideGrid"></div>
+      </section>
+
+      <footer class="footer" id="footerNote">
+        Sources: Binance Spot, Coinbase Spot, CFTC COT. Visual signals only.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      asset: "BTC",
+      raw: null,
+      charts: {}
+    };
+
+    async function loadJSON(path) {
+      const res = await fetch(path, { cache: "no-cache" });
+      if (!res.ok) throw new Error(`Failed to load ${path}`);
+      return res.json();
+    }
+
+    function fmtNumber(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "-";
+      const abs = Math.abs(v);
+      if (abs >= 1e9) return `${(v / 1e9).toFixed(2)}B`;
+      if (abs >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
+      if (abs >= 1e3) return `${(v / 1e3).toFixed(2)}K`;
+      return Number(v).toFixed(2);
+    }
+
+    function fmtPercent(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "-";
+      const sign = v > 0 ? "+" : "";
+      return `${sign}${(v * 100).toFixed(2)}%`;
+    }
+
+    function setTone(el, v) {
+      el.classList.remove("good", "bad", "warn");
+      if (v > 0) el.classList.add("good");
+      else if (v < 0) el.classList.add("bad");
+      else el.classList.add("warn");
+    }
+
+    function updateToggle(asset) {
+      document.querySelectorAll(".toggle-btn").forEach(btn => {
+        const active = btn.dataset.asset === asset;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-selected", active ? "true" : "false");
+      });
+    }
+
+    function destroyChart(key) {
+      if (state.charts[key]) state.charts[key].destroy();
+    }
+
+    function updateKpis(assetData) {
+      const latest = assetData.latest || {};
+      const sig = assetData.signals || {};
+      const cot = (assetData.commercials || [])[assetData.commercials.length - 1] || {};
+
+      const longEl = document.getElementById("longReadiness");
+      longEl.textContent = sig.long_readiness !== undefined ? Number(sig.long_readiness).toFixed(1) : "-";
+      document.getElementById("longReadinessLabel").textContent = sig.label || "-";
+
+      const d5 = document.getElementById("depth5Delta");
+      d5.textContent = fmtNumber(latest.depth_5_delta);
+      setTone(d5, latest.depth_5_delta || 0);
+      document.getElementById("depth5Norm").textContent = `Norm ${fmtPercent(latest.depth_5_norm)}`;
+
+      const d25 = document.getElementById("depth25Delta");
+      d25.textContent = fmtNumber(latest.depth_25_delta);
+      setTone(d25, latest.depth_25_delta || 0);
+      document.getElementById("depth25Norm").textContent = `Norm ${fmtPercent(latest.depth_25_norm)}`;
+
+      const cvd = document.getElementById("cvdAgg");
+      cvd.textContent = fmtNumber(latest.cvd_aggregate);
+      setTone(cvd, latest.cvd_aggregate || 0);
+
+      const sr = document.getElementById("commercialShortRatio");
+      sr.textContent = cot.commercial_short_ratio !== undefined ? fmtPercent(cot.commercial_short_ratio) : "-";
+      setTone(sr, -((cot.commercial_net || 0)));
+      document.getElementById("commercialDate").textContent = cot.date ? `CFTC ${cot.date}` : "CFTC weekly";
+    }
+
+    function updateDepthTable(assetData) {
+      const latest = (assetData.depth_delta_history || []).slice(-1)[0] || {};
+      const combined = latest.combined || {};
+      const tbody = document.getElementById("depthRows");
+      tbody.innerHTML = "";
+      ["2.5%", "5.0%", "10.0%", "25.0%"].forEach(k => {
+        const row = combined[k] || {};
+        const tr = document.createElement("tr");
+        const d = row.delta || 0;
+        tr.innerHTML = `
+          <td>${k}</td>
+          <td>${fmtNumber(row.bid_notional)}</td>
+          <td>${fmtNumber(row.ask_notional)}</td>
+          <td class="${d > 0 ? "good" : d < 0 ? "bad" : "warn"}">${fmtNumber(d)}</td>
+          <td class="${(row.normalized_delta || 0) > 0 ? "good" : (row.normalized_delta || 0) < 0 ? "bad" : "warn"}">${fmtPercent(row.normalized_delta)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateCommercialGrid(assetData) {
+      const cot = assetData.commercials || [];
+      const latest = cot[cot.length - 1] || {};
+      const prev = cot[cot.length - 2] || {};
+      const netDelta = (latest.commercial_net || 0) - (prev.commercial_net || 0);
+      const shortDelta = (latest.commercial_short || 0) - (prev.commercial_short || 0);
+      const shortRatioDelta = (latest.commercial_short_ratio || 0) - (prev.commercial_short_ratio || 0);
+      const sig = assetData.signals || {};
+
+      const rows = [
+        { label: "Commercial Net", value: fmtNumber(latest.commercial_net), tone: latest.commercial_net || 0 },
+        { label: "Weekly Net Change", value: fmtNumber(netDelta), tone: netDelta },
+        { label: "Commercial Short", value: fmtNumber(latest.commercial_short), tone: -shortDelta },
+        { label: "Short Ratio", value: fmtPercent(latest.commercial_short_ratio), tone: -shortRatioDelta },
+        { label: "Caution Score", value: sig.commercial_caution !== undefined ? Number(sig.commercial_caution).toFixed(1) : "-", tone: -(sig.commercial_caution || 50) + 50 },
+      ];
+
+      const grid = document.getElementById("commercialGrid");
+      grid.innerHTML = "";
+      rows.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "info-item";
+        const cls = r.tone > 0 ? "good" : r.tone < 0 ? "bad" : "warn";
+        div.innerHTML = `<span>${r.label}</span><span class="${cls}">${r.value}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function renderCvdChart(assetData) {
+      destroyChart("cvd");
+      const rows = assetData.cvd_history || [];
+      const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
+      const b = rows.map(r => r.binance || 0);
+      const c = rows.map(r => r.coinbase || 0);
+      const a = rows.map(r => r.aggregate || 0);
+      state.charts.cvd = new Chart(document.getElementById("cvdChart"), {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            { label: "Binance Spot CVD", data: b, borderColor: "#00b4d8", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 },
+            { label: "Coinbase Spot CVD", data: c, borderColor: "#ffb800", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 },
+            { label: "Aggregate CVD", data: a, borderColor: "#ff4d7d", backgroundColor: "rgba(255,77,125,0.12)", tension: 0.25, fill: true, borderWidth: 2 }
+          ]
+        },
+        options: commonChartOptions()
+      });
+    }
+
+    function renderDepthTimeline(assetData) {
+      destroyChart("depthTimeline");
+      const rows = assetData.depth_delta_history || [];
+      const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
+      const d5 = rows.map(r => ((r.combined || {})["5.0%"] || {}).normalized_delta || 0);
+      const d25 = rows.map(r => ((r.combined || {})["25.0%"] || {}).normalized_delta || 0);
+
+      state.charts.depthTimeline = new Chart(document.getElementById("depthTimelineChart"), {
+        type: "bar",
+        data: {
+          labels,
+          datasets: [
+            { label: "5% Depth Norm Delta", data: d5, backgroundColor: d5.map(v => v >= 0 ? "rgba(0,210,106,0.65)" : "rgba(255,92,122,0.65)") },
+            { label: "25% Depth Norm Delta", data: d25, type: "line", borderColor: "#ffffff", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, pointRadius: 0 }
+          ]
+        },
+        options: commonChartOptions("percent")
+      });
+    }
+
+    function renderOverlayChart(assetData) {
+      destroyChart("overlay");
+      const rows = assetData.overlay_history || [];
+      const labels = rows.map(r => r.timestamp.replace(" UTC", ""));
+      const mid = rows.map(r => r.mid_price || 0);
+      const support = rows.map(r => r.support || 0);
+      const resistance = rows.map(r => r.resistance || 0);
+
+      state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            { label: "Resistance Overlay", data: resistance, borderColor: "#ff5c7a", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 },
+            { label: "Mid Price", data: mid, borderColor: "#ffffff", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5 },
+            { label: "Support Overlay", data: support, borderColor: "#00d26a", backgroundColor: "transparent", tension: 0.2, borderWidth: 2 }
+          ]
+        },
+        options: commonChartOptions()
+      });
+    }
+
+    function renderHeatmapChart(assetData) {
+      destroyChart("heatmap");
+      const points = assetData.heatmap_points || [];
+      const recent = points.slice(-220);
+      const labels = Array.from(new Set(recent.map(p => p.timestamp.replace(" UTC", ""))));
+
+      const ask = [];
+      const bid = [];
+      labels.forEach(ts => {
+        const slice = recent.filter(p => p.timestamp.replace(" UTC", "") === ts);
+        const askTop = slice.filter(p => p.side === "ask").sort((a, b) => b.notional - a.notional)[0];
+        const bidTop = slice.filter(p => p.side === "bid").sort((a, b) => b.notional - a.notional)[0];
+        ask.push(askTop ? askTop.price : null);
+        bid.push(bidTop ? bidTop.price : null);
+      });
+
+      state.charts.heatmap = new Chart(document.getElementById("heatmapChart"), {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            { label: "Top Ask Walls", data: ask, borderColor: "#ff5c7a", backgroundColor: "rgba(255,92,122,0.1)", tension: 0, borderWidth: 2, pointRadius: 1 },
+            { label: "Top Bid Walls", data: bid, borderColor: "#00d26a", backgroundColor: "rgba(0,210,106,0.1)", tension: 0, borderWidth: 2, pointRadius: 1 }
+          ]
+        },
+        options: commonChartOptions()
+      });
+    }
+
+    function updateGuide(assetData) {
+      const sig = assetData.signals || {};
+      const walls = assetData.wall_stats || {};
+      const rows = [
+        {
+          label: "Best long context",
+          value: "Depth 5-10% flips positive + CVD rising + bid wall persistence improving"
+        },
+        {
+          label: "Caution context",
+          value: "Commercial shorts rising + negative depth imbalance + ask walls persisting near price"
+        },
+        {
+          label: "Current wall persistence",
+          value: `Bid ${walls.bid_wall_persistence || 0} vs Ask ${walls.ask_wall_persistence || 0}`
+        },
+        {
+          label: "Current confluence",
+          value: `${sig.label || "Neutral"} (${sig.long_readiness !== undefined ? Number(sig.long_readiness).toFixed(1) : "-"}/100)`
+        },
+      ];
+
+      const grid = document.getElementById("guideGrid");
+      grid.innerHTML = "";
+      rows.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "info-item";
+        div.innerHTML = `<span>${r.label}</span><span style="max-width:64%; text-align:right; color:#e8e8ed;">${r.value}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function commonChartOptions(axisType = "number") {
+      return {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: "#e8e8ed" } },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: "#9999a5", maxRotation: 0, autoSkip: true, maxTicksLimit: 10 },
+            grid: { color: "#1a1a1e" }
+          },
+          y: {
+            ticks: {
+              color: "#9999a5",
+              callback: axisType === "percent"
+                ? (v) => `${(Number(v) * 100).toFixed(1)}%`
+                : (v) => fmtNumber(Number(v))
+            },
+            grid: { color: "#1a1a1e" }
+          }
+        }
+      };
+    }
+
+    function render(asset) {
+      const data = (state.raw.assets || {})[asset];
+      if (!data) return;
+      updateToggle(asset);
+      updateKpis(data);
+      updateDepthTable(data);
+      updateCommercialGrid(data);
+      renderCvdChart(data);
+      renderDepthTimeline(data);
+      renderOverlayChart(data);
+      renderHeatmapChart(data);
+      updateGuide(data);
+    }
+
+    async function init() {
+      state.raw = await loadJSON("data/indicators.json");
+      const meta = state.raw.metadata || {};
+      document.getElementById("dataStamp").textContent = meta.last_updated ? `Updated ${meta.last_updated}` : "Updated -";
+      const sources = (meta.sources || []).join(", ");
+      document.getElementById("footerNote").textContent = `Sources: ${sources}. Visual signals only.`;
+      render(state.asset);
+    }
+
+    document.querySelectorAll(".toggle-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.asset = btn.dataset.asset;
+        render(state.asset);
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>

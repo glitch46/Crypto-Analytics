@@ -9,12 +9,16 @@ Static GitHub Pages dashboard for crypto options analytics. The main UI lives in
 - **Options Snapshot**: Real-time KPIs including put/call ratio, ATM IV, and OI concentration
 - **Expiry Pressure Radar**: Upcoming expiration dates with significant open interest
 - **30-Day Trader Focus**: Short-term metrics including funding rates and volatility spreads
+- **Trading Indicators**: Spot orderbook depth delta, spot CVD by exchange, heatmap proxy, depth overlay, and CFTC commercial positioning context
 
 ## Data Sources
 
 - Binance Options
 - Deribit Options
 - CryptoDataDownload API
+- Binance Spot REST
+- Coinbase Exchange REST
+- CFTC COT legacy futures report
 
 ## Data Files
 
@@ -24,6 +28,7 @@ Static GitHub Pages dashboard for crypto options analytics. The main UI lives in
 - `Crypto-Dashboard/data/trader_focus.json`: short-term trader metrics
 - `Crypto-Dashboard/data/expiry_pressure.json`: upcoming expiry pressure leaderboard
 - `Crypto-Dashboard/data/metadata.json`: refresh timestamp + sources
+- `Trading-Indicators/data/indicators.json`: BTC/ETH spot depth, CVD, heatmap proxy, overlay bands, confluence signals
 
 ## Refresh
 
