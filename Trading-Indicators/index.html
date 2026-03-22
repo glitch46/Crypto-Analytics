@@ -426,17 +426,58 @@
          </div>
        </section>
 
-      <section class="panel" style="margin-top: 18px;">
-        <div class="chart-title">Confluence Guide</div>
-        <div class="chart-subtitle">Practical interpretation framework</div>
-        <div class="info-grid" id="guideGrid"></div>
-        <div class="note-box">
-          Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
-          Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
-        </div>
-      </section>
+       <section class="panel" style="margin-top: 18px;">
+         <div class="chart-title">Confluence Guide</div>
+         <div class="chart-subtitle">Practical interpretation framework</div>
+         <div class="info-grid" id="guideGrid"></div>
+         <div class="note-box">
+           Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
+           Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
+         </div>
+       </section>
 
-      <footer class="footer" id="footerNote">
+       <section class="panel" style="margin-top: 18px; border: 1px solid #2a2a30;">
+         <div class="chart-title" style="font-size: 22px;">Confluence Thesis</div>
+         <div class="chart-subtitle">Auto-generated market structure narrative from all indicators</div>
+
+         <div id="thesisBias" style="margin-top: 16px; display: flex; align-items: center; gap: 14px;">
+           <span id="thesisBiasLabel" style="font-size: 20px; font-weight: 800;"></span>
+           <span id="thesisBiasScore" style="font-size: 14px; color: var(--gray-light);"></span>
+         </div>
+
+         <div style="margin-top: 18px;">
+           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">How We Arrived at This Conclusion</div>
+           <div id="thesisReasoning" style="font-size: 13px; color: var(--gray-light); line-height: 1.6;"></div>
+         </div>
+
+         <div style="margin-top: 18px;">
+           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Price Targets Based on Current Liquidity</div>
+           <div class="info-grid" id="thesisPriceTargets"></div>
+         </div>
+
+         <div style="margin-top: 18px;">
+           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">What to Look For (Confirmation Signals)</div>
+           <div class="info-grid" id="thesisConfirmation"></div>
+         </div>
+
+         <div style="margin-top: 18px;">
+           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Caution Flags (Invalidation Risks)</div>
+           <div class="info-grid" id="thesisCaution"></div>
+         </div>
+
+         <div style="margin-top: 18px;">
+           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Score Breakdown</div>
+           <div class="info-grid" id="thesisScores"></div>
+         </div>
+
+         <div class="note-box" style="margin-top: 14px;">
+           This thesis is auto-generated from quantitative orderbook, flow, and positioning data across 5 exchanges.
+           It is not financial advice. Use it as one input alongside your own technical analysis and risk management.
+           Signals are visual-only and should be confirmed with price action before taking positions.
+         </div>
+       </section>
+
+       <footer class="footer" id="footerNote">
         Sources: Binance Spot, Coinbase Spot, CFTC COT. Visual signals only.
       </footer>
     </main>
@@ -1085,6 +1126,207 @@
       });
     }
 
+    function updateThesis(assetData) {
+       const sig = assetData.signals || {};
+       const walls = assetData.wall_stats || {};
+       const latest = assetData.latest || {};
+       const midPrice = latest.mid_price || 0;
+       const cvdHist = assetData.cvd_history || [];
+       const depthHist = assetData.depth_delta_history || [];
+       const cot = (assetData.commercials || []);
+       const cotLatest = cot[cot.length - 1] || {};
+       const cotPrev = cot[cot.length - 2] || {};
+       const points = assetData.heatmap_points || [];
+
+       const depthScore = sig.depth_score || 50;
+       const cvdScore = sig.cvd_score || 50;
+       const wallScore = sig.wall_score || 50;
+       const cautionScore = sig.commercial_caution || 50;
+       const longReadiness = sig.long_readiness || 50;
+
+       // Derive CVD trend
+       let cvdTrend = "flat";
+       let cvdSlope = 0;
+       if (cvdHist.length >= 96) {
+         const recent = cvdHist.slice(-96);
+         const first = recent[0].aggregate || 0;
+         const last = recent[recent.length - 1].aggregate || 0;
+         cvdSlope = last - first;
+         if (cvdSlope > 0) cvdTrend = "rising";
+         else if (cvdSlope < 0) cvdTrend = "falling";
+       }
+
+       // Derive depth balance
+       const d5norm = latest.depth_5_norm || 0;
+       const d10norm = latest.depth_10_norm || 0;
+       const d25norm = latest.depth_25_norm || 0;
+       let depthBias = "neutral";
+       if (d5norm > 0.05 && d25norm > 0.05) depthBias = "strongly bid-heavy";
+       else if (d5norm > 0.02) depthBias = "bid-leaning";
+       else if (d5norm < -0.05 && d25norm < -0.05) depthBias = "strongly ask-heavy";
+       else if (d5norm < -0.02) depthBias = "ask-leaning";
+
+       // Derive commercial context
+       const cotNet = cotLatest.commercial_net || 0;
+       const cotPrevNet = cotPrev.commercial_net || 0;
+       const cotShortRatio = cotLatest.commercial_short_ratio || 0;
+       let cotBias = "neutral";
+       if (cotNet < cotPrevNet && cotShortRatio > 0.3) cotBias = "increasingly short (contrarian caution)";
+       else if (cotNet > cotPrevNet) cotBias = "reducing shorts (constructive)";
+
+       // Find key support/resistance from heatmap
+       const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
+       const matrix = {};
+       points.forEach(p => {
+         const price = Number(p.price || 0);
+         const notional = Number(p.notional || 0);
+         const side = p.side || "bid";
+         if (!price || !notional) return;
+         const bucket = Math.round(price / step) * step;
+         if (!matrix[bucket]) matrix[bucket] = { price: bucket, bidN: 0, askN: 0, bidT: 0, askT: 0 };
+         if (side === "bid") { matrix[bucket].bidN += notional; matrix[bucket].bidT += 1; }
+         else { matrix[bucket].askN += notional; matrix[bucket].askT += 1; }
+       });
+       const allLevels = Object.values(matrix);
+
+       const supportLevels = allLevels
+         .filter(x => x.price < midPrice && x.bidN > 0)
+         .map(x => ({ ...x, score: x.bidN * (1 + Math.min(3, x.bidT / 12)) }))
+         .sort((a, b) => b.score - a.score)
+         .slice(0, 3);
+
+       const resistanceLevels = allLevels
+         .filter(x => x.price > midPrice && x.askN > 0)
+         .map(x => ({ ...x, score: x.askN * (1 + Math.min(3, x.askT / 12)) }))
+         .sort((a, b) => b.score - a.score)
+         .slice(0, 3);
+
+       const strongestSupport = supportLevels[0] ? `$${fmtPrice(supportLevels[0].price)}` : "N/A";
+       const strongestResistance = resistanceLevels[0] ? `$${fmtPrice(resistanceLevels[0].price)}` : "N/A";
+       const supportTotal = supportLevels.reduce((s, x) => s + x.bidN, 0);
+       const resistanceTotal = resistanceLevels.reduce((s, x) => s + x.askN, 0);
+       const srRatio = resistanceTotal > 0 ? supportTotal / resistanceTotal : 999;
+
+       // Build bias label
+       let biasLabel = "Neutral";
+       let biasClass = "warn";
+       if (longReadiness >= 70) { biasLabel = "Bullish"; biasClass = "good"; }
+       else if (longReadiness >= 60) { biasLabel = "Cautiously Bullish"; biasClass = "good"; }
+       else if (longReadiness >= 45) { biasLabel = "Neutral"; biasClass = "warn"; }
+       else if (longReadiness >= 35) { biasLabel = "Cautiously Bearish"; biasClass = "bad"; }
+       else { biasLabel = "Bearish"; biasClass = "bad"; }
+
+       // Set bias header
+       const biasEl = document.getElementById("thesisBiasLabel");
+       biasEl.textContent = biasLabel;
+       biasEl.className = biasClass;
+       document.getElementById("thesisBiasScore").textContent =
+         `Long Readiness: ${longReadiness.toFixed(1)}/100 | Depth: ${depthBias} | CVD: ${cvdTrend} | Commercial: ${cotBias}`;
+
+       // Build reasoning narrative
+       const reasons = [];
+       reasons.push(`The current mid price is $${fmtPrice(midPrice)}. Across all 5 exchanges, the orderbook depth within 5% of price is ${depthBias} with a normalized imbalance of ${(d5norm * 100).toFixed(1)}%.`);
+       reasons.push(`The 25% structural depth reads ${(d25norm * 100).toFixed(1)}%, indicating ${d25norm > 0.05 ? "broad bid dominance across the book" : d25norm < -0.05 ? "heavy ask-side pressure structurally" : "relatively balanced macro liquidity"}.`);
+       reasons.push(`Spot CVD across all exchanges is ${cvdTrend} over the last 24 hours${cvdTrend !== "flat" ? `, suggesting ${cvdTrend === "rising" ? "net aggressive buying pressure is building" : "net aggressive selling is outpacing buying"}` : ""}.`);
+
+       if (supportLevels.length > 0) {
+         const levels = supportLevels.map(x => `$${fmtPrice(x.price)}`).join(", ");
+         reasons.push(`Key persistent bid walls sit at ${levels}. Total aggregated bid liquidity at these levels is $${fmtNumber(supportTotal)}.`);
+       }
+       if (resistanceLevels.length > 0) {
+         const levels = resistanceLevels.map(x => `$${fmtPrice(x.price)}`).join(", ");
+         reasons.push(`Key persistent ask walls sit at ${levels}. Total aggregated ask liquidity at these levels is $${fmtNumber(resistanceTotal)}.`);
+       }
+       reasons.push(`The support-to-resistance ratio is ${srRatio > 100 ? "overwhelmingly in favor of buyers" : srRatio.toFixed(2) + ":1"}. ${srRatio > 1.5 ? "This suggests a favorable liquidity environment for longs." : srRatio < 0.7 ? "Sellers have more ammo positioned overhead than buyers have below." : "Neither side has a decisive structural advantage."}`);
+
+       if (cotBias !== "neutral") {
+         reasons.push(`CFTC commercial positioning is ${cotBias}. ${cotBias.includes("short") ? "This is a macro caution signal suggesting hedgers are building defensive exposure. In isolation this is bearish, but historically these extremes can become contrarian buy signals once spot structure confirms." : "Hedgers are reducing short exposure, which removes one headwind for sustained upside."}`);
+       }
+
+       const wallBias = (walls.bid_wall_persistence || 0) - (walls.ask_wall_persistence || 0);
+       reasons.push(`Near-price wall persistence: Bid walls appeared in ${walls.bid_wall_persistence || 0} recent snapshots vs Ask walls in ${walls.ask_wall_persistence || 0}. ${wallBias > 3 ? "Buyers are actively defending near current price." : wallBias < -3 ? "Sellers are capping price with persistent ask walls." : "Neither side is dominating wall placement near price."}`);
+
+       document.getElementById("thesisReasoning").textContent = reasons.join(" ");
+
+       // Price targets
+       const targetsGrid = document.getElementById("thesisPriceTargets");
+       targetsGrid.innerHTML = "";
+       const targets = [];
+       if (supportLevels.length > 0) {
+         targets.push({ label: "Nearest Persistent Support", value: `$${fmtPrice(supportLevels[0].price)}`, cls: "good" });
+         if (supportLevels.length > 1) targets.push({ label: "Secondary Support", value: `$${fmtPrice(supportLevels[1].price)}`, cls: "good" });
+         if (supportLevels.length > 2) targets.push({ label: "Deep Support", value: `$${fmtPrice(supportLevels[2].price)}`, cls: "good" });
+       }
+       if (resistanceLevels.length > 0) {
+         targets.push({ label: "Nearest Persistent Resistance", value: `$${fmtPrice(resistanceLevels[0].price)}`, cls: "bad" });
+         if (resistanceLevels.length > 1) targets.push({ label: "Secondary Resistance", value: `$${fmtPrice(resistanceLevels[1].price)}`, cls: "bad" });
+         if (resistanceLevels.length > 2) targets.push({ label: "Deep Resistance", value: `$${fmtPrice(resistanceLevels[2].price)}`, cls: "bad" });
+       }
+       targets.push({ label: "Support:Resistance Liquidity Ratio", value: srRatio > 100 ? "Extremely bid-heavy" : `${srRatio.toFixed(2)}:1`, cls: srRatio > 1.2 ? "good" : srRatio < 0.8 ? "bad" : "warn" });
+       targets.forEach(t => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${t.label}</span><span class="${t.cls}">${t.value}</span>`;
+         targetsGrid.appendChild(div);
+       });
+
+       // Confirmation signals
+       const confirmGrid = document.getElementById("thesisConfirmation");
+       confirmGrid.innerHTML = "";
+       const confirms = [];
+       if (longReadiness >= 50) {
+         confirms.push({ label: "CVD confirmation", value: `Aggregate CVD should continue ${cvdTrend === "rising" ? "rising" : "to flip positive"} on at least 3 of 5 exchanges` });
+         confirms.push({ label: "Depth confirmation", value: `5% depth delta should stay positive (currently ${(d5norm * 100).toFixed(1)}%)` });
+         confirms.push({ label: "Wall confirmation", value: `Bid wall at ${strongestSupport} should persist across multiple refresh cycles` });
+         confirms.push({ label: "Break trigger", value: `Clean break above ${strongestResistance} with volume confirms upside thesis` });
+       } else {
+         confirms.push({ label: "Reversal signal", value: "Wait for 5% depth to flip positive from current negative reading" });
+         confirms.push({ label: "CVD divergence", value: "Watch for aggregate CVD to bottom and start rising while price stabilizes" });
+         confirms.push({ label: "Wall shift", value: `Bid walls need to appear closer to price and persist (currently at ${strongestSupport})` });
+         confirms.push({ label: "Commercial easing", value: "CFTC commercial net shorts should start declining before structural thesis improves" });
+       }
+       confirms.forEach(c => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${c.label}</span><span style="max-width:60%; text-align:right; color:#e8e8ed;">${c.value}</span>`;
+         confirmGrid.appendChild(div);
+       });
+
+       // Caution flags
+       const cautionGrid = document.getElementById("thesisCaution");
+       cautionGrid.innerHTML = "";
+       const cautions = [];
+       if (d5norm < 0) cautions.push({ label: "Negative 5% depth delta", value: `Currently ${(d5norm * 100).toFixed(1)}% — sellers have more passive liquidity near price` });
+       if (cvdTrend === "falling") cautions.push({ label: "Falling CVD", value: "Aggregate aggressive selling outpacing buying over last 24h" });
+       if (cotBias.includes("short")) cautions.push({ label: "Commercial short buildup", value: `Short ratio at ${(cotShortRatio * 100).toFixed(1)}% — hedgers increasingly defensive` });
+       if (srRatio < 0.8) cautions.push({ label: "Weak support:resistance ratio", value: `${srRatio.toFixed(2)}:1 — more ask liquidity overhead than bid liquidity below` });
+       if ((walls.ask_wall_persistence || 0) > (walls.bid_wall_persistence || 0) + 3) cautions.push({ label: "Ask wall dominance near price", value: "Sellers are more aggressively defending near current price" });
+       if (cautions.length === 0) cautions.push({ label: "No major caution flags", value: "All indicators currently aligned" });
+       cautions.forEach(c => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${c.label}</span><span style="max-width:60%; text-align:right; color:var(--danger);">${c.value}</span>`;
+         cautionGrid.appendChild(div);
+       });
+
+       // Score breakdown
+       const scoresGrid = document.getElementById("thesisScores");
+       scoresGrid.innerHTML = "";
+       const scores = [
+         { label: "Depth Score (35% weight)", value: `${depthScore.toFixed(1)}/100`, cls: depthScore >= 55 ? "good" : depthScore <= 45 ? "bad" : "warn" },
+         { label: "CVD Score (35% weight)", value: `${cvdScore.toFixed(1)}/100`, cls: cvdScore >= 55 ? "good" : cvdScore <= 45 ? "bad" : "warn" },
+         { label: "Wall Score (20% weight)", value: `${wallScore.toFixed(1)}/100`, cls: wallScore >= 55 ? "good" : wallScore <= 45 ? "bad" : "warn" },
+         { label: "Commercial Caution (10% inverse weight)", value: `${cautionScore.toFixed(1)}/100`, cls: cautionScore <= 45 ? "good" : cautionScore >= 55 ? "bad" : "warn" },
+         { label: "Composite Long Readiness", value: `${longReadiness.toFixed(1)}/100`, cls: biasClass },
+       ];
+       scores.forEach(s => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${s.label}</span><span class="${s.cls}">${s.value}</span>`;
+         scoresGrid.appendChild(div);
+       });
+     }
+
     function commonChartOptions(axisType = "number") {
       return {
         maintainAspectRatio: false,
@@ -1129,9 +1371,10 @@
       renderCvdChart(data);
       renderDepthTimeline(data);
       renderOverlayChart(data);
-      renderHeatmapChart(data);
-      updateGuide(data);
-    }
+       renderHeatmapChart(data);
+       updateGuide(data);
+       updateThesis(data);
+     }
 
     async function init() {
       state.raw = await loadJSON("data/indicators.json");
