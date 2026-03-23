@@ -376,6 +376,47 @@
         </div>
       </section>
 
+      <section class="panel" style="margin-top: 18px; border: 1px solid #2a2a30;">
+        <div class="chart-title" style="font-size: 22px;">Confluence Thesis</div>
+        <div class="chart-subtitle">Auto-generated market structure narrative from all indicators</div>
+
+        <div id="thesisBias" style="margin-top: 16px; display: flex; align-items: center; gap: 14px;">
+          <span id="thesisBiasLabel" style="font-size: 20px; font-weight: 800;"></span>
+          <span id="thesisBiasScore" style="font-size: 14px; color: var(--gray-light);"></span>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">How We Arrived at This Conclusion</div>
+          <div id="thesisReasoning" style="font-size: 13px; color: var(--gray-light); line-height: 1.6;"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Price Targets Based on Current Liquidity</div>
+          <div class="info-grid" id="thesisPriceTargets"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">What to Look For (Confirmation Signals)</div>
+          <div class="info-grid" id="thesisConfirmation"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Caution Flags (Invalidation Risks)</div>
+          <div class="info-grid" id="thesisCaution"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Score Breakdown</div>
+          <div class="info-grid" id="thesisScores"></div>
+        </div>
+
+        <div class="note-box" style="margin-top: 14px;">
+          This thesis is auto-generated from quantitative orderbook, flow, and positioning data across 5 exchanges.
+          It is not financial advice. Use it as one input alongside your own technical analysis and risk management.
+          Signals are visual-only and should be confirmed with price action before taking positions.
+        </div>
+      </section>
+
       <section class="grid two-col" style="margin-top: 18px;">
          <div class="panel">
            <div class="chart-title">Orderbook Balance Over Time</div>
@@ -432,47 +473,6 @@
          <div class="note-box">
            Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
            Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
-         </div>
-       </section>
-
-       <section class="panel" style="margin-top: 18px; border: 1px solid #2a2a30;">
-         <div class="chart-title" style="font-size: 22px;">Confluence Thesis</div>
-         <div class="chart-subtitle">Auto-generated market structure narrative from all indicators</div>
-
-         <div id="thesisBias" style="margin-top: 16px; display: flex; align-items: center; gap: 14px;">
-           <span id="thesisBiasLabel" style="font-size: 20px; font-weight: 800;"></span>
-           <span id="thesisBiasScore" style="font-size: 14px; color: var(--gray-light);"></span>
-         </div>
-
-         <div style="margin-top: 18px;">
-           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">How We Arrived at This Conclusion</div>
-           <div id="thesisReasoning" style="font-size: 13px; color: var(--gray-light); line-height: 1.6;"></div>
-         </div>
-
-         <div style="margin-top: 18px;">
-           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Price Targets Based on Current Liquidity</div>
-           <div class="info-grid" id="thesisPriceTargets"></div>
-         </div>
-
-         <div style="margin-top: 18px;">
-           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">What to Look For (Confirmation Signals)</div>
-           <div class="info-grid" id="thesisConfirmation"></div>
-         </div>
-
-         <div style="margin-top: 18px;">
-           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Caution Flags (Invalidation Risks)</div>
-           <div class="info-grid" id="thesisCaution"></div>
-         </div>
-
-         <div style="margin-top: 18px;">
-           <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Score Breakdown</div>
-           <div class="info-grid" id="thesisScores"></div>
-         </div>
-
-         <div class="note-box" style="margin-top: 14px;">
-           This thesis is auto-generated from quantitative orderbook, flow, and positioning data across 5 exchanges.
-           It is not financial advice. Use it as one input alongside your own technical analysis and risk management.
-           Signals are visual-only and should be confirmed with price action before taking positions.
          </div>
        </section>
 
