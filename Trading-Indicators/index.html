@@ -361,21 +361,6 @@
         </div>
       </section>
 
-      <section class="panel" style="margin-top: 18px;">
-        <div class="chart-title">Spot CVD by Exchange</div>
-        <div class="chart-subtitle">Cumulative aggressive flow across Binance, Coinbase, Kraken, OKX, and Bybit — rolling 30-day history</div>
-        <div class="chart-wrap tall">
-          <canvas id="cvdChart"></canvas>
-        </div>
-        <div class="note-box">
-          Spot CVD (Cumulative Volume Delta) tracks net aggressive flow over time: buyer-initiated volume minus seller-initiated volume.
-           Each line represents one exchange (Binance, Coinbase, Kraken, OKX, Bybit) and the dashed pink line is the aggregate across all five.
-           Rising CVD suggests sustained market buy pressure; falling CVD suggests sustained sell pressure. When one exchange diverges from others
-           (e.g. Coinbase CVD rising while Binance falls), it can signal regional or institutional flow differences. Traders watch for
-           divergence vs price: price flat/down while aggregate CVD rises hints at absorption; price up with weakening CVD signals fragility.
-        </div>
-      </section>
-
       <section class="panel" style="margin-top: 18px; border: 1px solid #2a2a30;">
         <div class="chart-title" style="font-size: 22px;">Confluence Thesis</div>
         <div class="chart-subtitle">Auto-generated market structure narrative from all indicators</div>
@@ -414,6 +399,31 @@
           This thesis is auto-generated from quantitative orderbook, flow, and positioning data across 5 exchanges.
           It is not financial advice. Use it as one input alongside your own technical analysis and risk management.
           Signals are visual-only and should be confirmed with price action before taking positions.
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Confluence Guide</div>
+        <div class="chart-subtitle">Practical interpretation framework</div>
+        <div class="info-grid" id="guideGrid"></div>
+        <div class="note-box">
+          Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
+          Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Spot CVD by Exchange</div>
+        <div class="chart-subtitle">Cumulative aggressive flow across Binance, Coinbase, Kraken, OKX, and Bybit — rolling 30-day history</div>
+        <div class="chart-wrap tall">
+          <canvas id="cvdChart"></canvas>
+        </div>
+        <div class="note-box">
+          Spot CVD (Cumulative Volume Delta) tracks net aggressive flow over time: buyer-initiated volume minus seller-initiated volume.
+           Each line represents one exchange (Binance, Coinbase, Kraken, OKX, Bybit) and the dashed pink line is the aggregate across all five.
+           Rising CVD suggests sustained market buy pressure; falling CVD suggests sustained sell pressure. When one exchange diverges from others
+           (e.g. Coinbase CVD rising while Binance falls), it can signal regional or institutional flow differences. Traders watch for
+           divergence vs price: price flat/down while aggregate CVD rises hints at absorption; price up with weakening CVD signals fragility.
         </div>
       </section>
 
@@ -463,16 +473,6 @@
            <strong>What to look for:</strong> Levels with wide green bars below price = reliable support. Wide red bars above price = tested resistance.
            If a level shows strong persistence on both sides, it is a contested zone where significant activity is expected.
            Thin bars may indicate fleeting liquidity or market-maker repositioning.
-         </div>
-       </section>
-
-       <section class="panel" style="margin-top: 18px;">
-         <div class="chart-title">Confluence Guide</div>
-         <div class="chart-subtitle">Practical interpretation framework</div>
-         <div class="info-grid" id="guideGrid"></div>
-         <div class="note-box">
-           Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
-           Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
          </div>
        </section>
 
