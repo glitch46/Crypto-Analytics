@@ -367,7 +367,7 @@
     <aside class="sidebar">
       <div class="sidebar-title">Dashboards</div>
       <nav class="sidebar-nav">
-        <a class="sidebar-link" href="../index.html">Home</a>
+        <a class="sidebar-link" href="../Trading-Indicators/index.html">Trading Indicators</a>
         <a class="sidebar-link active" href="index.html">Options Intelligence</a>
         <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
         <a class="sidebar-link" href="../Strategy-Tester/index.html">Strategy Tester</a>
@@ -619,13 +619,13 @@ function buildChart(history, asset) {
           },
           scales: {
             x: {
-              ticks: { color: '#9999a5', maxRotation: 0 },
-              grid: { color: '#1a1a1e' }
-            },
-            y: {
-              ticks: { color: '#9999a5' },
-              grid: { color: '#1a1a1e' }
-            }
+              ticks: { color: '#9999a5', maxRotation: 0, autoSkip: true, maxTicksLimit: 15 },
+               grid: { color: '#1a1a1e' }
+             },
+             y: {
+               ticks: { color: '#9999a5' },
+               grid: { color: '#1a1a1e' }
+             }
           }
         }
       });

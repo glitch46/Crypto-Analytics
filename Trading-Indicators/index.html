@@ -1,0 +1,1397 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trading Indicators</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
+      --accent-solid: #ff4d7d;
+      --black-deep: #000000;
+      --black-rich: #0a0a0b;
+      --black-elevated: #121214;
+      --gray-dark: #1a1a1e;
+      --gray-light: #9999a5;
+      --gray-muted: #6b6b76;
+      --white-soft: #e8e8ed;
+      --white-pure: #ffffff;
+      --success: #00d26a;
+      --danger: #ff5c7a;
+      --warning: #ffb800;
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
+      color: var(--white-soft);
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 220px;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
+      border-right: 1px solid var(--gray-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      height: 100vh;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+    }
+
+    .sidebar-nav { display: grid; gap: 10px; }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--black-rich);
+      color: var(--white-soft);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 200ms ease-out;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      border-color: #ff4d7d70;
+      box-shadow: var(--shadow-sm);
+      color: var(--white-pure);
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 52px 24px 80px;
+      flex: 1;
+    }
+
+    .hero { margin-bottom: 24px; }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white-pure);
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 880px;
+      color: var(--gray-light);
+      line-height: 1.6;
+      font-size: 15px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 20px 0 24px;
+      flex-wrap: wrap;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      gap: 8px;
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 999px;
+      padding: 6px;
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      color: var(--gray-light);
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 200ms ease-out;
+    }
+
+    .toggle-btn.active {
+      background: var(--gradient-primary);
+      color: var(--white-pure);
+    }
+
+    .pill {
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: #1a1a1e;
+      border: 1px solid #2a2a30;
+      color: var(--gray-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .grid { display: grid; gap: 18px; }
+    .kpis { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .two-col { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .panel {
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 16px;
+      padding: 18px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--gray-muted);
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .kpi-value {
+      margin-top: 8px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--gray-light);
+    }
+
+    .good { color: var(--success); }
+    .bad { color: var(--danger); }
+    .warn { color: var(--warning); }
+
+    .chart-title { font-size: 18px; font-weight: 700; color: var(--white-pure); }
+    .chart-subtitle { margin-top: 5px; font-size: 13px; color: var(--gray-light); }
+
+    .chart-wrap { margin-top: 12px; }
+    .chart-wrap.tall { height: 460px; }
+    .chart-wrap.taller { height: 520px; }
+    canvas { max-height: 320px; }
+    #cvdChart { max-height: 460px; }
+    #depthTimelineChart { max-height: 520px; height: 100% !important; }
+    #overlayChart,
+    #heatmapChart { max-height: 520px; height: 100% !important; }
+
+    .depth-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 8px;
+      font-size: 13px;
+    }
+    .depth-table th,
+    .depth-table td {
+      border-bottom: 1px solid var(--gray-dark);
+      padding: 9px 6px;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+    .depth-table th:first-child,
+    .depth-table td:first-child { text-align: left; }
+
+    .note-box {
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--gray-light);
+      line-height: 1.55;
+    }
+
+    .info-grid { display: grid; gap: 10px; margin-top: 10px; }
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--gray-dark);
+      background: var(--black-elevated);
+      font-size: 13px;
+    }
+
+    .footer {
+      margin-top: 20px;
+      color: var(--gray-muted);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 1100px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .sidebar-nav { grid-auto-flow: column; grid-auto-columns: max-content; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 38px 16px 64px; }
+      .hero h1 { font-size: 30px; }
+      .kpis { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Dashboards</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link active" href="index.html">Trading Indicators</a>
+        <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
+        <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
+        <a class="sidebar-link" href="../Strategy-Tester/index.html">Strategy Tester</a>
+      </nav>
+    </aside>
+
+    <main class="page">
+      <header class="hero">
+        <h1>Trading Indicators</h1>
+        <p>
+          Spot-first orderbook intelligence for BTC and ETH using Binance + Coinbase depth, heatmap levels,
+          depth delta, depth overlay bands, spot CVD by exchange, and CFTC commercial positioning context.
+        </p>
+      </header>
+
+      <section class="controls">
+        <div class="toggle-group" role="tablist" aria-label="Asset selection">
+          <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
+          <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
+        </div>
+        <span class="pill" id="dataStamp">Updated -</span>
+        <span class="pill">Refresh cadence 15m</span>
+      </section>
+
+      <section class="grid kpis">
+        <div class="panel">
+          <div class="kpi-label">Long Readiness Score</div>
+          <div class="kpi-value" id="longReadiness">-</div>
+          <div class="kpi-sub" id="longReadinessLabel">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Depth Delta (5%)</div>
+          <div class="kpi-value" id="depth5Delta">-</div>
+          <div class="kpi-sub" id="depth5Norm">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Depth Delta (25%)</div>
+          <div class="kpi-value" id="depth25Delta">-</div>
+          <div class="kpi-sub" id="depth25Norm">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Spot CVD Aggregate</div>
+          <div class="kpi-value" id="cvdAgg">-</div>
+          <div class="kpi-sub" id="cvdFlow">Binance + Coinbase</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Commercial Shorts Context</div>
+          <div class="kpi-value" id="commercialShortRatio">-</div>
+          <div class="kpi-sub" id="commercialDate">CFTC weekly</div>
+        </div>
+      </section>
+
+      <section class="grid two-col" style="margin-top: 18px;">
+        <div class="panel">
+          <div class="chart-title">Depth Delta Multi-Range</div>
+          <div class="chart-subtitle">2.5%, 5%, 10%, 25% liquidity imbalance (Bid - Ask)</div>
+          <table class="depth-table">
+            <thead>
+              <tr>
+                <th>Window</th>
+                <th>Bid Notional</th>
+                <th>Ask Notional</th>
+                <th>Delta</th>
+                <th>Norm</th>
+              </tr>
+            </thead>
+            <tbody id="depthRows"></tbody>
+          </table>
+          <div class="note-box">
+            Depth delta shows liquidity imbalance, not guaranteed direction. Positive deltas are most useful when paired
+            with improving spot CVD and persistent bid walls.
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="chart-title">Commercial Positioning (Contrarian)</div>
+          <div class="chart-subtitle">CFTC legacy futures: commercial short increases often imply caution before mean reversion windows.</div>
+          <div class="info-grid" id="commercialGrid"></div>
+          <div class="note-box">
+            Commercials are typically hedgers, not momentum chasers. Caution Score rises when commercial short exposure expands relative to its own history.
+            High Caution Score means higher probability of crowded longs and failed breakouts unless spot structure confirms. Use it with depth delta and CVD,
+            not as a standalone trigger.
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px; border: 1px solid #2a2a30;">
+        <div class="chart-title" style="font-size: 22px;">Confluence Thesis</div>
+        <div class="chart-subtitle">Auto-generated market structure narrative from all indicators</div>
+
+        <div id="thesisBias" style="margin-top: 16px; display: flex; align-items: center; gap: 14px;">
+          <span id="thesisBiasLabel" style="font-size: 20px; font-weight: 800;"></span>
+          <span id="thesisBiasScore" style="font-size: 14px; color: var(--gray-light);"></span>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">How We Arrived at This Conclusion</div>
+          <div id="thesisReasoning" style="font-size: 13px; color: var(--gray-light); line-height: 1.6;"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Price Targets Based on Current Liquidity</div>
+          <div class="info-grid" id="thesisPriceTargets"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">What to Look For (Confirmation Signals)</div>
+          <div class="info-grid" id="thesisConfirmation"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Caution Flags (Invalidation Risks)</div>
+          <div class="info-grid" id="thesisCaution"></div>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <div style="font-weight: 700; font-size: 14px; color: var(--white-pure); margin-bottom: 8px;">Score Breakdown</div>
+          <div class="info-grid" id="thesisScores"></div>
+        </div>
+
+        <div class="note-box" style="margin-top: 14px;">
+          This thesis is auto-generated from quantitative orderbook, flow, and positioning data across 5 exchanges.
+          It is not financial advice. Use it as one input alongside your own technical analysis and risk management.
+          Signals are visual-only and should be confirmed with price action before taking positions.
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Confluence Guide</div>
+        <div class="chart-subtitle">Practical interpretation framework</div>
+        <div class="info-grid" id="guideGrid"></div>
+        <div class="note-box">
+          Current Confluence combines Depth Score, CVD Score, Wall Score, and Commercial Caution Score into a 0-100 long-confidence framework.
+          Higher score means spot structure is improving for longs; lower score means keep risk tighter and wait for confirmation.
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 18px;">
+        <div class="chart-title">Spot CVD by Exchange</div>
+        <div class="chart-subtitle">Cumulative aggressive flow across Binance, Coinbase, Kraken, OKX, and Bybit — rolling 30-day history</div>
+        <div class="chart-wrap tall">
+          <canvas id="cvdChart"></canvas>
+        </div>
+        <div class="note-box">
+          Spot CVD (Cumulative Volume Delta) tracks net aggressive flow over time: buyer-initiated volume minus seller-initiated volume.
+           Each line represents one exchange (Binance, Coinbase, Kraken, OKX, Bybit) and the dashed pink line is the aggregate across all five.
+           Rising CVD suggests sustained market buy pressure; falling CVD suggests sustained sell pressure. When one exchange diverges from others
+           (e.g. Coinbase CVD rising while Binance falls), it can signal regional or institutional flow differences. Traders watch for
+           divergence vs price: price flat/down while aggregate CVD rises hints at absorption; price up with weakening CVD signals fragility.
+        </div>
+      </section>
+
+      <section class="grid two-col" style="margin-top: 18px;">
+         <div class="panel">
+           <div class="chart-title">Orderbook Balance Over Time</div>
+           <div class="chart-subtitle">Are buyers or sellers stacking more passive liquidity? Green = buyers dominate, red = sellers dominate.</div>
+           <div class="chart-wrap taller"><canvas id="depthTimelineChart"></canvas></div>
+           <div class="note-box">
+             <strong>How to read this chart:</strong> The green shaded area shows periods where buy-side (bid) liquidity exceeds sell-side (ask) liquidity
+             within 5% of the current price. The red shaded area shows the opposite. The white line tracks the same imbalance across a wider 25% range,
+             which moves more slowly and reflects structural shifts.
+             <br><br>
+             <strong>What to look for:</strong> Sustained green (positive) readings suggest passive buyers are building walls, creating a supportive environment for longs.
+             Sustained red (negative) readings suggest sellers are stacking resistance. The strongest setups occur when the 5% reading flips green while the 25% line is
+             already positive or rising — this signals both near-term and structural support aligning. When both are deeply negative, it often precedes further downside
+             or signals risk of failed breakout attempts.
+           </div>
+         </div>
+
+        <div class="panel">
+           <div class="chart-title">Liquidity Depth Map</div>
+           <div class="chart-subtitle">Who controls each price level? Green = bid support (left), Red = ask resistance (right). The colored dot shows who dominates.</div>
+           <div class="chart-wrap taller"><canvas id="overlayChart"></canvas></div>
+           <div class="note-box">
+             <strong>How to read this chart:</strong> Each row is a price level. Green bars extending left show accumulated bid (buy) liquidity.
+             Red bars extending right show accumulated ask (sell) liquidity. The colored dot on each row shows the <strong>net winner</strong> at that level:
+             green dot = buyers dominate, red dot = sellers dominate, size reflects how lopsided the imbalance is.
+             <br><br>
+             <strong>What to look for:</strong> Rows below the current price with large green bars and green dots = strong support floor.
+             Rows above price with large red bars and red dots = resistance ceiling. The best long setups show thick green below, thinning red above,
+             and green dots clustering below price. If you see red dots appearing at levels below price, it means sellers are building positions
+             inside the support zone — a warning sign that support may not hold.
+           </div>
+        </div>
+      </section>
+
+       <section class="panel" style="margin-top: 18px;">
+         <div class="chart-title">Wall Strength Scanner</div>
+         <div class="chart-subtitle">Which price levels have the most persistent liquidity across all 5 exchanges? Persistence-weighted: walls that survive multiple snapshots rank higher.</div>
+         <div class="chart-wrap taller"><canvas id="heatmapChart"></canvas></div>
+         <div class="note-box">
+           <strong>How to read this chart:</strong> Each row is a price level. Green bars extending left show how persistently bid walls have appeared at that level
+           across snapshots. Red bars extending right show persistent ask walls. Wider bars = more reliable walls (appeared many times across many snapshots),
+           not just large one-time orders that may be spoofing.
+           <br><br>
+           <strong>What to look for:</strong> Levels with wide green bars below price = reliable support. Wide red bars above price = tested resistance.
+           If a level shows strong persistence on both sides, it is a contested zone where significant activity is expected.
+           Thin bars may indicate fleeting liquidity or market-maker repositioning.
+         </div>
+       </section>
+
+       <footer class="footer" id="footerNote">
+        Sources: Binance Spot, Coinbase Spot, CFTC COT. Visual signals only.
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    const state = {
+      asset: "BTC",
+      raw: null,
+      charts: {}
+    };
+
+    async function loadJSON(path) {
+      const res = await fetch(path, { cache: "no-cache" });
+      if (!res.ok) throw new Error(`Failed to load ${path}`);
+      return res.json();
+    }
+
+    function fmtNumber(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "-";
+      const abs = Math.abs(v);
+      if (abs >= 1e9) return `${(v / 1e9).toFixed(2)}B`;
+      if (abs >= 1e6) return `${(v / 1e6).toFixed(2)}M`;
+      if (abs >= 1e3) return `${(v / 1e3).toFixed(2)}K`;
+      return Number(v).toFixed(2);
+    }
+
+    function fmtPercent(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "-";
+      const sign = v > 0 ? "+" : "";
+      return `${sign}${(v * 100).toFixed(2)}%`;
+    }
+
+    function fmtPrice(v) {
+      if (v === null || v === undefined || Number.isNaN(v)) return "-";
+      return Number(v).toLocaleString("en-US", { maximumFractionDigits: 2 });
+    }
+
+    function shortDateLabel(ts) {
+      if (!ts) return "";
+      const parts = ts.split(" ");
+      const day = parts[0] || "";
+      const parsed = new Date(`${day}T00:00:00Z`);
+      if (Number.isNaN(parsed.getTime())) return day;
+      return parsed.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    }
+
+    function setTone(el, v) {
+      el.classList.remove("good", "bad", "warn");
+      if (v > 0) el.classList.add("good");
+      else if (v < 0) el.classList.add("bad");
+      else el.classList.add("warn");
+    }
+
+    function updateToggle(asset) {
+      document.querySelectorAll(".toggle-btn").forEach(btn => {
+        const active = btn.dataset.asset === asset;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-selected", active ? "true" : "false");
+      });
+    }
+
+    function destroyChart(key) {
+      if (state.charts[key]) state.charts[key].destroy();
+    }
+
+    function aggregateSideLevels(points, midPrice) {
+      const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
+      const byBucket = {};
+      points.forEach((p) => {
+        const price = Number(p.price || 0);
+        const notional = Number(p.notional || 0);
+        const side = p.side || "bid";
+        if (!price || !notional) return;
+        const bucket = Math.round(price / step) * step;
+        const key = `${side}_${bucket}`;
+        if (!byBucket[key]) {
+          byBucket[key] = { side, price: bucket, notional: 0, touches: 0 };
+        }
+        byBucket[key].notional += notional;
+        byBucket[key].touches += 1;
+      });
+      return Object.values(byBucket);
+    }
+
+    function buildPriceLevelMatrix(points, midPrice) {
+      const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
+      const matrix = {};
+      points.forEach((p) => {
+        const price = Number(p.price || 0);
+        const notional = Number(p.notional || 0);
+        const side = p.side || "bid";
+        if (!price || !notional) return;
+        const bucket = Math.round(price / step) * step;
+        if (!matrix[bucket]) {
+          matrix[bucket] = {
+            price: bucket,
+            bidNotional: 0,
+            askNotional: 0,
+            bidTouches: 0,
+            askTouches: 0,
+          };
+        }
+        if (side === "bid") {
+          matrix[bucket].bidNotional += notional;
+          matrix[bucket].bidTouches += 1;
+        } else {
+          matrix[bucket].askNotional += notional;
+          matrix[bucket].askTouches += 1;
+        }
+      });
+
+      return Object.values(matrix).map((x) => {
+        const total = x.bidNotional + x.askNotional;
+        const touches = x.bidTouches + x.askTouches;
+        return {
+          ...x,
+          totalNotional: total,
+          score: total * (1 + Math.min(3, touches / 24)),
+        };
+      });
+    }
+
+    function updateKpis(assetData) {
+      const latest = assetData.latest || {};
+      const sig = assetData.signals || {};
+      const cot = (assetData.commercials || [])[assetData.commercials.length - 1] || {};
+
+      const longEl = document.getElementById("longReadiness");
+      longEl.textContent = sig.long_readiness !== undefined ? Number(sig.long_readiness).toFixed(1) : "-";
+      document.getElementById("longReadinessLabel").textContent = sig.label || "-";
+
+      const d5 = document.getElementById("depth5Delta");
+      d5.textContent = fmtNumber(latest.depth_5_delta);
+      setTone(d5, latest.depth_5_delta || 0);
+      document.getElementById("depth5Norm").textContent = `Norm ${fmtPercent(latest.depth_5_norm)}`;
+
+      const d25 = document.getElementById("depth25Delta");
+      d25.textContent = fmtNumber(latest.depth_25_delta);
+      setTone(d25, latest.depth_25_delta || 0);
+      document.getElementById("depth25Norm").textContent = `Norm ${fmtPercent(latest.depth_25_norm)}`;
+
+      const cvd = document.getElementById("cvdAgg");
+      cvd.textContent = fmtNumber(latest.cvd_aggregate);
+      setTone(cvd, latest.cvd_aggregate || 0);
+
+      const sr = document.getElementById("commercialShortRatio");
+      sr.textContent = cot.commercial_short_ratio !== undefined ? fmtPercent(cot.commercial_short_ratio) : "-";
+      setTone(sr, -((cot.commercial_net || 0)));
+      document.getElementById("commercialDate").textContent = cot.date ? `CFTC ${cot.date}` : "CFTC weekly";
+    }
+
+    function updateDepthTable(assetData) {
+      const latest = (assetData.depth_delta_history || []).slice(-1)[0] || {};
+      const combined = latest.combined || {};
+      const tbody = document.getElementById("depthRows");
+      tbody.innerHTML = "";
+      ["2.5%", "5.0%", "10.0%", "25.0%"].forEach(k => {
+        const row = combined[k] || {};
+        const tr = document.createElement("tr");
+        const d = row.delta || 0;
+        tr.innerHTML = `
+          <td>${k}</td>
+          <td>${fmtNumber(row.bid_notional)}</td>
+          <td>${fmtNumber(row.ask_notional)}</td>
+          <td class="${d > 0 ? "good" : d < 0 ? "bad" : "warn"}">${fmtNumber(d)}</td>
+          <td class="${(row.normalized_delta || 0) > 0 ? "good" : (row.normalized_delta || 0) < 0 ? "bad" : "warn"}">${fmtPercent(row.normalized_delta)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateCommercialGrid(assetData) {
+      const cot = assetData.commercials || [];
+      const latest = cot[cot.length - 1] || {};
+      const prev = cot[cot.length - 2] || {};
+      const netDelta = (latest.commercial_net || 0) - (prev.commercial_net || 0);
+      const shortDelta = (latest.commercial_short || 0) - (prev.commercial_short || 0);
+      const shortRatioDelta = (latest.commercial_short_ratio || 0) - (prev.commercial_short_ratio || 0);
+      const sig = assetData.signals || {};
+
+      const rows = [
+        { label: "Commercial Net", value: fmtNumber(latest.commercial_net), tone: latest.commercial_net || 0 },
+        { label: "Weekly Net Change", value: fmtNumber(netDelta), tone: netDelta },
+        { label: "Commercial Short", value: fmtNumber(latest.commercial_short), tone: -shortDelta },
+        { label: "Short Ratio", value: fmtPercent(latest.commercial_short_ratio), tone: -shortRatioDelta },
+        { label: "Caution Score", value: sig.commercial_caution !== undefined ? Number(sig.commercial_caution).toFixed(1) : "-", tone: -(sig.commercial_caution || 50) + 50 },
+      ];
+
+      const grid = document.getElementById("commercialGrid");
+      grid.innerHTML = "";
+      rows.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "info-item";
+        const cls = r.tone > 0 ? "good" : r.tone < 0 ? "bad" : "warn";
+        div.innerHTML = `<span>${r.label}</span><span class="${cls}">${r.value}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function renderCvdChart(assetData) {
+       destroyChart("cvd");
+       const rows = (assetData.cvd_history || []).slice(-2880);
+       const labels = rows.map(r => shortDateLabel(r.timestamp));
+       const b = rows.map(r => r.binance || 0);
+       const c = rows.map(r => r.coinbase || 0);
+       const k = rows.map(r => r.kraken || 0);
+       const o = rows.map(r => r.okx || 0);
+       const y = rows.map(r => r.bybit || 0);
+       const a = rows.map(r => r.aggregate || 0);
+       state.charts.cvd = new Chart(document.getElementById("cvdChart"), {
+         type: "line",
+         data: {
+           labels,
+           datasets: [
+             { label: "Binance", data: b, borderColor: "#00b4d8", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
+             { label: "Coinbase", data: c, borderColor: "#ffb800", backgroundColor: "transparent", tension: 0.2, borderWidth: 2, fill: false, pointRadius: 0 },
+             { label: "Kraken", data: k, borderColor: "#7b61ff", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5, fill: false, pointRadius: 0 },
+             { label: "OKX", data: o, borderColor: "#00e5a0", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5, fill: false, pointRadius: 0 },
+             { label: "Bybit", data: y, borderColor: "#f5a623", backgroundColor: "transparent", tension: 0.2, borderWidth: 1.5, fill: false, pointRadius: 0 },
+             { label: "Aggregate", data: a, borderColor: "#ff4d7d", backgroundColor: "transparent", tension: 0.25, borderWidth: 2.5, fill: false, pointRadius: 0, borderDash: [6, 3] }
+           ]
+         },
+        options: {
+          ...commonChartOptions(),
+          scales: {
+            ...commonChartOptions().scales,
+            x: {
+              ...commonChartOptions().scales.x,
+              ticks: {
+                ...commonChartOptions().scales.x.ticks,
+                maxTicksLimit: 12,
+                padding: 12,
+                callback: function(value, index) {
+                  if (index % 96 !== 0) return "";
+                  const label = this.getLabelForValue(value);
+                  return label || "";
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderDepthTimeline(assetData) {
+       destroyChart("depthTimeline");
+       const rows = assetData.depth_delta_history || [];
+       const labels = rows.map(r => shortDateLabel(r.timestamp));
+       const d5 = rows.map(r => ((r.combined || {})["5.0%"] || {}).normalized_delta || 0);
+       const d25 = rows.map(r => ((r.combined || {})["25.0%"] || {}).normalized_delta || 0);
+
+       const d5pos = d5.map(v => Math.max(0, v));
+       const d5neg = d5.map(v => Math.min(0, v));
+
+       const depthCanvas = document.getElementById("depthTimelineChart");
+       const parent = depthCanvas.parentElement;
+       if (parent && parent.clientHeight) {
+         depthCanvas.height = parent.clientHeight;
+       }
+
+       state.charts.depthTimeline = new Chart(depthCanvas, {
+          type: "line",
+          data: {
+            labels,
+            datasets: [
+             {
+               label: "5% Orderbook Balance",
+               data: d5,
+               borderColor: d5.map(v => v >= 0 ? "#00d26a" : "#ff5c7a"),
+               backgroundColor: "transparent",
+               borderWidth: 2,
+               fill: false,
+               tension: 0.3,
+               pointRadius: 0,
+               segment: {
+                 borderColor: function(ctx) {
+                   const yVal = ctx.p1.parsed.y;
+                   return yVal >= 0 ? "#00d26a" : "#ff5c7a";
+                 }
+               }
+             },
+             {
+               label: "5% Buyers Dominate",
+               data: d5pos,
+               borderColor: "transparent",
+               backgroundColor: "rgba(0,210,106,0.22)",
+               borderWidth: 0,
+               fill: "origin",
+               tension: 0.3,
+               pointRadius: 0,
+             },
+             {
+               label: "5% Sellers Dominate",
+               data: d5neg,
+               borderColor: "transparent",
+               backgroundColor: "rgba(255,92,122,0.22)",
+               borderWidth: 0,
+               fill: "origin",
+               tension: 0.3,
+               pointRadius: 0,
+             },
+             {
+               label: "25% Structural Balance",
+               data: d25,
+               borderColor: "#ffffff",
+               backgroundColor: "transparent",
+               borderWidth: 2,
+               fill: false,
+               tension: 0.3,
+               pointRadius: 0,
+               borderDash: [6, 3],
+             }
+            ]
+          },
+         options: {
+           ...commonChartOptions("percent"),
+           scales: {
+             ...commonChartOptions("percent").scales,
+             x: {
+               ...commonChartOptions("percent").scales.x,
+               ticks: {
+                 ...commonChartOptions("percent").scales.x.ticks,
+                 maxTicksLimit: 14,
+                 padding: 10,
+                 callback: function(value, index, ticks) {
+                   const total = ticks.length;
+                   const step = Math.max(1, Math.floor(total / 14));
+                   if (index % step !== 0) return "";
+                   const label = this.getLabelForValue(value);
+                   return label || "";
+                 }
+               }
+             },
+             y: {
+               ...commonChartOptions("percent").scales.y,
+               grid: {
+                 color: function(context) {
+                   return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                 },
+                 lineWidth: function(context) {
+                   return context.tick && context.tick.value === 0 ? 2 : 1;
+                 }
+               }
+             }
+           },
+           plugins: {
+             legend: {
+                labels: {
+                  color: "#e8e8ed",
+                  filter: function(item) {
+                    return item.text !== "5% Buyers Dominate" && item.text !== "5% Sellers Dominate";
+                  }
+                }
+              },
+              tooltip: {
+                ...commonChartOptions("percent").plugins.tooltip,
+                filter: function(item) {
+                  return item.dataset.label === "5% Orderbook Balance" || item.dataset.label === "25% Structural Balance";
+                },
+                callbacks: {
+                  title: function(items) {
+                    return items[0] ? items[0].label : "";
+                  },
+                  label: function(context) {
+                    const val = context.parsed.y;
+                    const pct = (val * 100).toFixed(2);
+                    const sign = val > 0 ? "+" : "";
+                    const is25 = context.dataset.label.includes("25%");
+                    const tag = is25 ? "25% structural" : "5% near-price";
+                    const meaning = val > 0.01 ? "buyers dominate" : val < -0.01 ? "sellers dominate" : "balanced";
+                    return `${tag}: ${sign}${pct}% — ${meaning}`;
+                  }
+                }
+              }
+           }
+         }
+       });
+     }
+
+    function renderOverlayChart(assetData) {
+       destroyChart("overlay");
+       const latest = assetData.latest || {};
+       const midPrice = latest.mid_price || 0;
+       const points = (assetData.heatmap_points || []).slice(-30000);
+       const levels = buildPriceLevelMatrix(points, midPrice)
+         .filter(x => x.totalNotional > 0)
+         .sort((a, b) => b.score - a.score)
+         .slice(0, 30)
+         .sort((a, b) => a.price - b.price);
+
+       const labels = levels.map(x => `$${fmtPrice(x.price)}`);
+       const bidBars = levels.map(x => -(x.bidNotional || 0));
+       const askBars = levels.map(x => x.askNotional || 0);
+       const maxNotional = Math.max(...levels.map(x => Math.max(x.bidNotional, x.askNotional)), 1);
+       const imbalanceDots = levels.map(x => {
+         const net = (x.bidNotional || 0) - (x.askNotional || 0);
+         return net * 0.3;
+       });
+       const dotColors = levels.map(x => {
+         const net = (x.bidNotional || 0) - (x.askNotional || 0);
+         return net >= 0 ? "rgba(0,210,106,0.95)" : "rgba(255,92,122,0.95)";
+       });
+       const dotSizes = levels.map(x => {
+         const total = (x.bidNotional || 0) + (x.askNotional || 0);
+         if (total === 0) return 3;
+         const ratio = Math.abs((x.bidNotional || 0) - (x.askNotional || 0)) / total;
+         return 4 + ratio * 10;
+       });
+
+       state.charts.overlay = new Chart(document.getElementById("overlayChart"), {
+         type: "bar",
+         data: {
+           labels,
+           datasets: [
+             {
+               label: "Bid Support (buyers)",
+               data: bidBars,
+               backgroundColor: levels.map(x => x.price < midPrice ? "rgba(0,210,106,0.75)" : "rgba(0,210,106,0.40)"),
+               borderColor: "#00d26a",
+               borderWidth: 1,
+               borderSkipped: false,
+             },
+             {
+               label: "Ask Resistance (sellers)",
+               data: askBars,
+               backgroundColor: levels.map(x => x.price >= midPrice ? "rgba(255,92,122,0.75)" : "rgba(255,92,122,0.40)"),
+               borderColor: "#ff5c7a",
+               borderWidth: 1,
+               borderSkipped: false,
+             },
+             {
+               label: "Net Imbalance",
+               type: "line",
+               data: imbalanceDots,
+               borderColor: "transparent",
+               backgroundColor: dotColors,
+               pointRadius: dotSizes,
+               pointStyle: "circle",
+               showLine: false,
+               xAxisID: "x",
+               yAxisID: "y",
+             }
+           ]
+         },
+         options: {
+           indexAxis: "y",
+           maintainAspectRatio: false,
+           plugins: {
+             legend: {
+               labels: {
+                 color: "#e8e8ed",
+                 filter: function(item) { return item.text !== "Net Imbalance"; }
+               }
+             },
+             tooltip: {
+               backgroundColor: "#121214",
+               borderColor: "#2a2a30",
+               borderWidth: 1,
+               titleColor: "#ffffff",
+               bodyColor: "#e8e8ed",
+               displayColors: false,
+               callbacks: {
+                 label: function(context) {
+                   const idx = context.dataIndex;
+                   const level = levels[idx];
+                   if (!level) return "";
+                   if (context.dataset.label === "Net Imbalance") {
+                     const net = (level.bidNotional || 0) - (level.askNotional || 0);
+                     const total = (level.bidNotional || 0) + (level.askNotional || 0);
+                     const pct = total > 0 ? Math.abs(net / total * 100).toFixed(1) : "0";
+                     const winner = net >= 0 ? "Buyers" : "Sellers";
+                     return `${winner} dominate by ${pct}%`;
+                   }
+                   const raw = Math.abs(context.parsed.x);
+                   const side = context.parsed.x < 0 ? "Bid support" : "Ask resistance";
+                   const position = level.price < midPrice ? "(below price)" : level.price > midPrice ? "(above price)" : "(at price)";
+                   return `${side}: $${fmtNumber(raw)} ${position}`;
+                 }
+               }
+             }
+           },
+           scales: {
+             x: {
+               stacked: true,
+               ticks: {
+                 color: "#9999a5",
+                 callback: (v) => `$${fmtNumber(Math.abs(Number(v)))}`
+               },
+               grid: {
+                 color: function(context) {
+                   return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                 },
+                 lineWidth: function(context) {
+                   return context.tick && context.tick.value === 0 ? 2 : 1;
+                 }
+               },
+               title: {
+                 display: true,
+                 text: "← Bid support          Ask resistance →",
+                 color: "#9999a5",
+                 font: { size: 12, weight: "600" }
+               }
+             },
+             y: {
+               stacked: true,
+               ticks: { color: "#e8e8ed", font: { size: 11 } },
+               grid: { color: "#1a1a1e" }
+             }
+           }
+         }
+       });
+     }
+
+    function renderHeatmapChart(assetData) {
+       destroyChart("heatmap");
+       const latest = assetData.latest || {};
+       const midPrice = latest.mid_price || 0;
+       const points = (assetData.heatmap_points || []).slice(-30000);
+       const levels = buildPriceLevelMatrix(points, midPrice)
+         .filter(x => x.totalNotional > 0)
+         .map(x => ({
+           ...x,
+           bidPersistence: x.bidNotional * (1 + Math.min(4, x.bidTouches / 12)),
+           askPersistence: x.askNotional * (1 + Math.min(4, x.askTouches / 12)),
+         }))
+         .map(x => ({ ...x, totalPersistence: x.bidPersistence + x.askPersistence }))
+         .sort((a, b) => b.totalPersistence - a.totalPersistence)
+         .slice(0, 30)
+         .sort((a, b) => a.price - b.price);
+
+       const labels = levels.map(x => `$${fmtPrice(x.price)}`);
+       const bidBars = levels.map(x => -(x.bidPersistence || 0));
+       const askBars = levels.map(x => x.askPersistence || 0);
+
+       state.charts.heatmap = new Chart(document.getElementById("heatmapChart"), {
+         type: "bar",
+         data: {
+           labels,
+           datasets: [
+             {
+               label: "Persistent Bid Walls",
+               data: bidBars,
+               backgroundColor: levels.map(x => x.price < midPrice ? "rgba(0,210,106,0.75)" : "rgba(0,210,106,0.40)"),
+               borderColor: "#00d26a",
+               borderWidth: 1,
+               borderSkipped: false,
+             },
+             {
+               label: "Persistent Ask Walls",
+               data: askBars,
+               backgroundColor: levels.map(x => x.price >= midPrice ? "rgba(255,92,122,0.75)" : "rgba(255,92,122,0.40)"),
+               borderColor: "#ff5c7a",
+               borderWidth: 1,
+               borderSkipped: false,
+             }
+           ]
+         },
+         options: {
+           indexAxis: "y",
+           maintainAspectRatio: false,
+           plugins: {
+             legend: { labels: { color: "#e8e8ed" } },
+             tooltip: {
+               backgroundColor: "#121214",
+               borderColor: "#2a2a30",
+               borderWidth: 1,
+               titleColor: "#ffffff",
+               bodyColor: "#e8e8ed",
+               displayColors: false,
+               callbacks: {
+                 label: function(context) {
+                   const idx = context.dataIndex;
+                   const level = levels[idx];
+                   if (!level) return "";
+                   const raw = Math.abs(context.parsed.x);
+                   const side = context.parsed.x < 0 ? "Bid persistence" : "Ask persistence";
+                   const touches = context.parsed.x < 0 ? level.bidTouches : level.askTouches;
+                   const position = level.price < midPrice ? "below price" : level.price > midPrice ? "above price" : "at price";
+                   return `${side}: $${fmtNumber(raw)} (${touches} snapshots, ${position})`;
+                 }
+               }
+             }
+           },
+           scales: {
+             x: {
+               stacked: true,
+               ticks: {
+                 color: "#9999a5",
+                 callback: (v) => `$${fmtNumber(Math.abs(Number(v)))}`
+               },
+               grid: {
+                 color: function(context) {
+                   return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                 },
+                 lineWidth: function(context) {
+                   return context.tick && context.tick.value === 0 ? 2 : 1;
+                 }
+               },
+               title: {
+                 display: true,
+                 text: "← Bid walls (persistent)          Ask walls (persistent) →",
+                 color: "#9999a5",
+                 font: { size: 12, weight: "600" }
+               }
+             },
+             y: {
+               stacked: true,
+               ticks: { color: "#e8e8ed", font: { size: 11 } },
+               grid: { color: "#1a1a1e" }
+             }
+           }
+         }
+       });
+     }
+
+    function updateGuide(assetData) {
+      const sig = assetData.signals || {};
+      const walls = assetData.wall_stats || {};
+      const rows = [
+        {
+          label: "Best long context",
+          value: "Depth 5-10% flips positive + CVD rising + bid wall persistence improving"
+        },
+        {
+          label: "Caution context",
+          value: "Commercial shorts rising + negative depth imbalance + ask walls persisting near price"
+        },
+        {
+          label: "Current wall persistence",
+          value: `Bid ${walls.bid_wall_persistence || 0} vs Ask ${walls.ask_wall_persistence || 0}`
+        },
+        {
+          label: "Current confluence",
+          value: `${sig.label || "Neutral"} (${sig.long_readiness !== undefined ? Number(sig.long_readiness).toFixed(1) : "-"}/100)`
+        },
+      ];
+
+      const grid = document.getElementById("guideGrid");
+      grid.innerHTML = "";
+      rows.forEach(r => {
+        const div = document.createElement("div");
+        div.className = "info-item";
+        div.innerHTML = `<span>${r.label}</span><span style="max-width:64%; text-align:right; color:#e8e8ed;">${r.value}</span>`;
+        grid.appendChild(div);
+      });
+    }
+
+    function updateThesis(assetData) {
+       const sig = assetData.signals || {};
+       const walls = assetData.wall_stats || {};
+       const latest = assetData.latest || {};
+       const midPrice = latest.mid_price || 0;
+       const cvdHist = assetData.cvd_history || [];
+       const depthHist = assetData.depth_delta_history || [];
+       const cot = (assetData.commercials || []);
+       const cotLatest = cot[cot.length - 1] || {};
+       const cotPrev = cot[cot.length - 2] || {};
+       const points = assetData.heatmap_points || [];
+
+       const depthScore = sig.depth_score || 50;
+       const cvdScore = sig.cvd_score || 50;
+       const wallScore = sig.wall_score || 50;
+       const cautionScore = sig.commercial_caution || 50;
+       const longReadiness = sig.long_readiness || 50;
+
+       // Derive CVD trend
+       let cvdTrend = "flat";
+       let cvdSlope = 0;
+       if (cvdHist.length >= 96) {
+         const recent = cvdHist.slice(-96);
+         const first = recent[0].aggregate || 0;
+         const last = recent[recent.length - 1].aggregate || 0;
+         cvdSlope = last - first;
+         if (cvdSlope > 0) cvdTrend = "rising";
+         else if (cvdSlope < 0) cvdTrend = "falling";
+       }
+
+       // Derive depth balance
+       const d5norm = latest.depth_5_norm || 0;
+       const d10norm = latest.depth_10_norm || 0;
+       const d25norm = latest.depth_25_norm || 0;
+       let depthBias = "neutral";
+       if (d5norm > 0.05 && d25norm > 0.05) depthBias = "strongly bid-heavy";
+       else if (d5norm > 0.02) depthBias = "bid-leaning";
+       else if (d5norm < -0.05 && d25norm < -0.05) depthBias = "strongly ask-heavy";
+       else if (d5norm < -0.02) depthBias = "ask-leaning";
+
+       // Derive commercial context
+       const cotNet = cotLatest.commercial_net || 0;
+       const cotPrevNet = cotPrev.commercial_net || 0;
+       const cotShortRatio = cotLatest.commercial_short_ratio || 0;
+       let cotBias = "neutral";
+       if (cotNet < cotPrevNet && cotShortRatio > 0.3) cotBias = "increasingly short (contrarian caution)";
+       else if (cotNet > cotPrevNet) cotBias = "reducing shorts (constructive)";
+
+       // Find key support/resistance from heatmap
+       const step = midPrice > 10000 ? 50 : (midPrice > 1000 ? 5 : 1);
+       const matrix = {};
+       points.forEach(p => {
+         const price = Number(p.price || 0);
+         const notional = Number(p.notional || 0);
+         const side = p.side || "bid";
+         if (!price || !notional) return;
+         const bucket = Math.round(price / step) * step;
+         if (!matrix[bucket]) matrix[bucket] = { price: bucket, bidN: 0, askN: 0, bidT: 0, askT: 0 };
+         if (side === "bid") { matrix[bucket].bidN += notional; matrix[bucket].bidT += 1; }
+         else { matrix[bucket].askN += notional; matrix[bucket].askT += 1; }
+       });
+       const allLevels = Object.values(matrix);
+
+       const supportLevels = allLevels
+         .filter(x => x.price < midPrice && x.bidN > 0)
+         .map(x => ({ ...x, score: x.bidN * (1 + Math.min(3, x.bidT / 12)) }))
+         .sort((a, b) => b.score - a.score)
+         .slice(0, 3);
+
+       const resistanceLevels = allLevels
+         .filter(x => x.price > midPrice && x.askN > 0)
+         .map(x => ({ ...x, score: x.askN * (1 + Math.min(3, x.askT / 12)) }))
+         .sort((a, b) => b.score - a.score)
+         .slice(0, 3);
+
+       const strongestSupport = supportLevels[0] ? `$${fmtPrice(supportLevels[0].price)}` : "N/A";
+       const strongestResistance = resistanceLevels[0] ? `$${fmtPrice(resistanceLevels[0].price)}` : "N/A";
+       const supportTotal = supportLevels.reduce((s, x) => s + x.bidN, 0);
+       const resistanceTotal = resistanceLevels.reduce((s, x) => s + x.askN, 0);
+       const srRatio = resistanceTotal > 0 ? supportTotal / resistanceTotal : 999;
+
+       // Build bias label
+       let biasLabel = "Neutral";
+       let biasClass = "warn";
+       if (longReadiness >= 70) { biasLabel = "Bullish"; biasClass = "good"; }
+       else if (longReadiness >= 60) { biasLabel = "Cautiously Bullish"; biasClass = "good"; }
+       else if (longReadiness >= 45) { biasLabel = "Neutral"; biasClass = "warn"; }
+       else if (longReadiness >= 35) { biasLabel = "Cautiously Bearish"; biasClass = "bad"; }
+       else { biasLabel = "Bearish"; biasClass = "bad"; }
+
+       // Set bias header
+       const biasEl = document.getElementById("thesisBiasLabel");
+       biasEl.textContent = biasLabel;
+       biasEl.className = biasClass;
+       document.getElementById("thesisBiasScore").textContent =
+         `Long Readiness: ${longReadiness.toFixed(1)}/100 | Depth: ${depthBias} | CVD: ${cvdTrend} | Commercial: ${cotBias}`;
+
+       // Build reasoning narrative
+       const reasons = [];
+       reasons.push(`The current mid price is $${fmtPrice(midPrice)}. Across all 5 exchanges, the orderbook depth within 5% of price is ${depthBias} with a normalized imbalance of ${(d5norm * 100).toFixed(1)}%.`);
+       reasons.push(`The 25% structural depth reads ${(d25norm * 100).toFixed(1)}%, indicating ${d25norm > 0.05 ? "broad bid dominance across the book" : d25norm < -0.05 ? "heavy ask-side pressure structurally" : "relatively balanced macro liquidity"}.`);
+       reasons.push(`Spot CVD across all exchanges is ${cvdTrend} over the last 24 hours${cvdTrend !== "flat" ? `, suggesting ${cvdTrend === "rising" ? "net aggressive buying pressure is building" : "net aggressive selling is outpacing buying"}` : ""}.`);
+
+       if (supportLevels.length > 0) {
+         const levels = supportLevels.map(x => `$${fmtPrice(x.price)}`).join(", ");
+         reasons.push(`Key persistent bid walls sit at ${levels}. Total aggregated bid liquidity at these levels is $${fmtNumber(supportTotal)}.`);
+       }
+       if (resistanceLevels.length > 0) {
+         const levels = resistanceLevels.map(x => `$${fmtPrice(x.price)}`).join(", ");
+         reasons.push(`Key persistent ask walls sit at ${levels}. Total aggregated ask liquidity at these levels is $${fmtNumber(resistanceTotal)}.`);
+       }
+       reasons.push(`The support-to-resistance ratio is ${srRatio > 100 ? "overwhelmingly in favor of buyers" : srRatio.toFixed(2) + ":1"}. ${srRatio > 1.5 ? "This suggests a favorable liquidity environment for longs." : srRatio < 0.7 ? "Sellers have more ammo positioned overhead than buyers have below." : "Neither side has a decisive structural advantage."}`);
+
+       if (cotBias !== "neutral") {
+         reasons.push(`CFTC commercial positioning is ${cotBias}. ${cotBias.includes("short") ? "This is a macro caution signal suggesting hedgers are building defensive exposure. In isolation this is bearish, but historically these extremes can become contrarian buy signals once spot structure confirms." : "Hedgers are reducing short exposure, which removes one headwind for sustained upside."}`);
+       }
+
+       const wallBias = (walls.bid_wall_persistence || 0) - (walls.ask_wall_persistence || 0);
+       reasons.push(`Near-price wall persistence: Bid walls appeared in ${walls.bid_wall_persistence || 0} recent snapshots vs Ask walls in ${walls.ask_wall_persistence || 0}. ${wallBias > 3 ? "Buyers are actively defending near current price." : wallBias < -3 ? "Sellers are capping price with persistent ask walls." : "Neither side is dominating wall placement near price."}`);
+
+       document.getElementById("thesisReasoning").textContent = reasons.join(" ");
+
+       // Price targets
+       const targetsGrid = document.getElementById("thesisPriceTargets");
+       targetsGrid.innerHTML = "";
+       const targets = [];
+       if (supportLevels.length > 0) {
+         targets.push({ label: "Nearest Persistent Support", value: `$${fmtPrice(supportLevels[0].price)}`, cls: "good" });
+         if (supportLevels.length > 1) targets.push({ label: "Secondary Support", value: `$${fmtPrice(supportLevels[1].price)}`, cls: "good" });
+         if (supportLevels.length > 2) targets.push({ label: "Deep Support", value: `$${fmtPrice(supportLevels[2].price)}`, cls: "good" });
+       }
+       if (resistanceLevels.length > 0) {
+         targets.push({ label: "Nearest Persistent Resistance", value: `$${fmtPrice(resistanceLevels[0].price)}`, cls: "bad" });
+         if (resistanceLevels.length > 1) targets.push({ label: "Secondary Resistance", value: `$${fmtPrice(resistanceLevels[1].price)}`, cls: "bad" });
+         if (resistanceLevels.length > 2) targets.push({ label: "Deep Resistance", value: `$${fmtPrice(resistanceLevels[2].price)}`, cls: "bad" });
+       }
+       targets.push({ label: "Support:Resistance Liquidity Ratio", value: srRatio > 100 ? "Extremely bid-heavy" : `${srRatio.toFixed(2)}:1`, cls: srRatio > 1.2 ? "good" : srRatio < 0.8 ? "bad" : "warn" });
+       targets.forEach(t => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${t.label}</span><span class="${t.cls}">${t.value}</span>`;
+         targetsGrid.appendChild(div);
+       });
+
+       // Confirmation signals
+       const confirmGrid = document.getElementById("thesisConfirmation");
+       confirmGrid.innerHTML = "";
+       const confirms = [];
+       if (longReadiness >= 50) {
+         confirms.push({ label: "CVD confirmation", value: `Aggregate CVD should continue ${cvdTrend === "rising" ? "rising" : "to flip positive"} on at least 3 of 5 exchanges` });
+         confirms.push({ label: "Depth confirmation", value: `5% depth delta should stay positive (currently ${(d5norm * 100).toFixed(1)}%)` });
+         confirms.push({ label: "Wall confirmation", value: `Bid wall at ${strongestSupport} should persist across multiple refresh cycles` });
+         confirms.push({ label: "Break trigger", value: `Clean break above ${strongestResistance} with volume confirms upside thesis` });
+       } else {
+         confirms.push({ label: "Reversal signal", value: "Wait for 5% depth to flip positive from current negative reading" });
+         confirms.push({ label: "CVD divergence", value: "Watch for aggregate CVD to bottom and start rising while price stabilizes" });
+         confirms.push({ label: "Wall shift", value: `Bid walls need to appear closer to price and persist (currently at ${strongestSupport})` });
+         confirms.push({ label: "Commercial easing", value: "CFTC commercial net shorts should start declining before structural thesis improves" });
+       }
+       confirms.forEach(c => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${c.label}</span><span style="max-width:60%; text-align:right; color:#e8e8ed;">${c.value}</span>`;
+         confirmGrid.appendChild(div);
+       });
+
+       // Caution flags
+       const cautionGrid = document.getElementById("thesisCaution");
+       cautionGrid.innerHTML = "";
+       const cautions = [];
+       if (d5norm < 0) cautions.push({ label: "Negative 5% depth delta", value: `Currently ${(d5norm * 100).toFixed(1)}% — sellers have more passive liquidity near price` });
+       if (cvdTrend === "falling") cautions.push({ label: "Falling CVD", value: "Aggregate aggressive selling outpacing buying over last 24h" });
+       if (cotBias.includes("short")) cautions.push({ label: "Commercial short buildup", value: `Short ratio at ${(cotShortRatio * 100).toFixed(1)}% — hedgers increasingly defensive` });
+       if (srRatio < 0.8) cautions.push({ label: "Weak support:resistance ratio", value: `${srRatio.toFixed(2)}:1 — more ask liquidity overhead than bid liquidity below` });
+       if ((walls.ask_wall_persistence || 0) > (walls.bid_wall_persistence || 0) + 3) cautions.push({ label: "Ask wall dominance near price", value: "Sellers are more aggressively defending near current price" });
+       if (cautions.length === 0) cautions.push({ label: "No major caution flags", value: "All indicators currently aligned" });
+       cautions.forEach(c => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${c.label}</span><span style="max-width:60%; text-align:right; color:var(--danger);">${c.value}</span>`;
+         cautionGrid.appendChild(div);
+       });
+
+       // Score breakdown
+       const scoresGrid = document.getElementById("thesisScores");
+       scoresGrid.innerHTML = "";
+       const scores = [
+         { label: "Depth Score (35% weight)", value: `${depthScore.toFixed(1)}/100`, cls: depthScore >= 55 ? "good" : depthScore <= 45 ? "bad" : "warn" },
+         { label: "CVD Score (35% weight)", value: `${cvdScore.toFixed(1)}/100`, cls: cvdScore >= 55 ? "good" : cvdScore <= 45 ? "bad" : "warn" },
+         { label: "Wall Score (20% weight)", value: `${wallScore.toFixed(1)}/100`, cls: wallScore >= 55 ? "good" : wallScore <= 45 ? "bad" : "warn" },
+         { label: "Commercial Caution (10% inverse weight)", value: `${cautionScore.toFixed(1)}/100`, cls: cautionScore <= 45 ? "good" : cautionScore >= 55 ? "bad" : "warn" },
+         { label: "Composite Long Readiness", value: `${longReadiness.toFixed(1)}/100`, cls: biasClass },
+       ];
+       scores.forEach(s => {
+         const div = document.createElement("div");
+         div.className = "info-item";
+         div.innerHTML = `<span>${s.label}</span><span class="${s.cls}">${s.value}</span>`;
+         scoresGrid.appendChild(div);
+       });
+     }
+
+    function commonChartOptions(axisType = "number") {
+      return {
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { labels: { color: "#e8e8ed" } },
+          tooltip: {
+            mode: "index",
+            intersect: false,
+            backgroundColor: "#121214",
+            borderColor: "#2a2a30",
+            borderWidth: 1,
+            titleColor: "#ffffff",
+            bodyColor: "#e8e8ed",
+            displayColors: false,
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color: "#9999a5", maxRotation: 0, autoSkip: true, maxTicksLimit: 14 },
+            grid: { color: "#1a1a1e" }
+          },
+          y: {
+            ticks: {
+              color: "#9999a5",
+              callback: axisType === "percent"
+                ? (v) => `${(Number(v) * 100).toFixed(1)}%`
+                : (v) => fmtNumber(Number(v))
+            },
+            grid: { color: "#1a1a1e" }
+          }
+        }
+      };
+    }
+
+    function render(asset) {
+      const data = (state.raw.assets || {})[asset];
+      if (!data) return;
+      updateToggle(asset);
+      updateKpis(data);
+      updateDepthTable(data);
+      updateCommercialGrid(data);
+      renderCvdChart(data);
+      renderDepthTimeline(data);
+      renderOverlayChart(data);
+       renderHeatmapChart(data);
+       updateGuide(data);
+       updateThesis(data);
+     }
+
+    async function init() {
+      state.raw = await loadJSON("data/indicators.json");
+      const meta = state.raw.metadata || {};
+      document.getElementById("dataStamp").textContent = meta.last_updated ? `Updated ${meta.last_updated}` : "Updated -";
+      const sources = (meta.sources || []).join(", ");
+      document.getElementById("footerNote").textContent = `Sources: ${sources}. Visual signals only.`;
+      render(state.asset);
+    }
+
+    document.querySelectorAll(".toggle-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        state.asset = btn.dataset.asset;
+        render(state.asset);
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>
