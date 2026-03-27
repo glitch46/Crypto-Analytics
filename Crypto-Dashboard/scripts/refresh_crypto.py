@@ -6,9 +6,11 @@ import os
 import urllib.parse
 import urllib.request
 
-CRYPTO_API_KEY = os.environ.get("CRYPTODATADOWNLOAD_API_KEY")
-CRYPTO_API_BASE = "https://api.cryptodatadownload.com/v1/data"
+# Free API endpoints (no API keys required)
+BINANCE_API_BASE = "https://api.binance.com/api/v3"
+BINANCE_FUTURES_BASE = "https://fapi.binance.com/fapi/v1"
 DERIBIT_BASE = "https://www.deribit.com/api/v2/public"
+COINGECKO_BASE = "https://api.coingecko.com/api/v3"
 
 ASSETS = {
     "BTC": {
@@ -28,25 +30,24 @@ def fetch_json(url, headers=None):
         return json.loads(resp.read().decode("utf-8"))
 
 
-def build_headers():
-    if not CRYPTO_API_KEY:
-        raise RuntimeError("CRYPTODATADOWNLOAD_API_KEY is required")
-    return {
-        "Authorization": f"Token {CRYPTO_API_KEY}",
-        "User-Agent": "crypto-analytics-dashboard/1.0"
-    }
-
-
-def load_cdd(path, params=None):
-    payload = dict(params or {})
-    query = urllib.parse.urlencode(payload)
-    url = f"{CRYPTO_API_BASE}{path}"
+def fetch_binance(path, params=None, base_url=None):
+    """Fetch data from Binance Spot API (free, no auth required)"""
+    if base_url is None:
+        base_url = BINANCE_API_BASE
+    query = urllib.parse.urlencode(params or {})
+    url = f"{base_url}{path}"
     if query:
         url = f"{url}?{query}"
-    data = fetch_json(url, headers=build_headers())
-    if isinstance(data, dict) and "result" in data:
-        return data["result"]
-    return data
+    return fetch_json(url)
+
+
+def fetch_coingecko(path, params=None):
+    """Fetch data from CoinGecko API (free tier, no auth required)"""
+    query = urllib.parse.urlencode(params or {})
+    url = f"{COINGECKO_BASE}{path}"
+    if query:
+        url = f"{url}?{query}"
+    return fetch_json(url)
 
 
 def fetch_deribit(path, params=None):
@@ -60,77 +61,59 @@ def fetch_deribit(path, params=None):
     return data
 
 
-def load_binance_options_oi_summary(underlying, limit=5000):
-    return load_cdd("/summary/binance/options/oi/", {
-        "underlying": underlying,
-        "limit": limit,
-        "return": "JSON"
-    })
-
-
-def load_binance_oi_maturity(underlying, limit=5000):
-    return load_cdd("/summary/binance/options/oi/maturity/", {
-        "underlying": underlying,
-        "limit": limit,
-        "return": "JSON"
-    })
-
-
-def maturity_to_yymmdd(date_str):
-    """Convert YYYY-MM-DD to YYMMDD integer for CDD options API."""
-    try:
-        dt = datetime.datetime.strptime(date_str, "%Y-%m-%d")
-        return int(dt.strftime("%y%m%d"))
-    except (ValueError, TypeError):
-        return None
-
-
-def load_binance_options_ohlc(underlying, maturity, limit=5000):
-    return load_cdd("/ohlc/binance/options/", {
-        "underlying": underlying,
-        "maturity": maturity,
-        "limit": limit,
-        "return": "JSON"
-    })
-
-
-def load_binance_options_oi_instrument(underlying, symbol, limit=5000):
-    return load_cdd("/summary/binance/options/oi/instrument/", {
-        "underlying": underlying,
-        "symbol": symbol,
-        "limit": limit,
-        "return": "JSON"
-    })
+# Binance Options functions removed - Binance discontinued options trading in 2023
+# All options data now comes from Deribit API
 
 
 def load_spot_price(symbol):
+    """Get current spot price from Binance Spot API (free)"""
     try:
-        data = load_cdd("/ohlc/binance/spot/", {
-            "symbol": symbol,
-            "interval": "1d",
-            "limit": 1,
-            "return": "JSON"
-        })
+        data = fetch_binance("/ticker/price", {"symbol": symbol})
+        if isinstance(data, dict) and "price" in data:
+            return float(data["price"])
     except Exception:
-        return None
-    if isinstance(data, list) and data:
-        row = data[-1] if isinstance(data[-1], dict) else data[0]
-        for key in ("close", "Close"):
-            if key in row:
-                try:
-                    return float(row[key])
-                except (TypeError, ValueError):
-                    pass
+        pass
+    # Fallback to CoinGecko
+    try:
+        coin_id = "bitcoin" if "BTC" in symbol else "ethereum"
+        data = fetch_coingecko(f"/simple/price", {
+            "ids": coin_id,
+            "vs_currencies": "usd"
+        })
+        if isinstance(data, dict) and coin_id in data:
+            return float(data[coin_id]["usd"])
+    except Exception:
+        pass
     return None
 
 
 def load_spot_history(symbol, limit=450):
-    return load_cdd("/ohlc/binance/spot/", {
-        "symbol": symbol,
-        "interval": "1d",
-        "limit": limit,
-        "return": "JSON"
-    })
+    """Get historical spot data from Binance Spot API (free, max 1000 candles)"""
+    try:
+        # Binance klines: [open_time, open, high, low, close, volume, close_time, ...]
+        data = fetch_binance("/klines", {
+            "symbol": symbol,
+            "interval": "1d",
+            "limit": min(limit, 1000)
+        })
+        if isinstance(data, list):
+            result = []
+            for candle in data:
+                if len(candle) >= 6:
+                    timestamp = int(candle[0]) / 1000
+                    date = datetime.datetime.utcfromtimestamp(timestamp).strftime("%Y-%m-%d")
+                    result.append({
+                        "date": date,
+                        "open": candle[1],
+                        "high": candle[2],
+                        "low": candle[3],
+                        "close": candle[4],
+                        "volume": candle[5]
+                    })
+            return result
+    except Exception:
+        pass
+    return []
 
 
 def load_deribit_instruments(currency):
@@ -159,45 +142,73 @@ def load_deribit_book_summary(currency):
 
 
 def load_deribit_funding(symbol):
-    return load_cdd("/ohlc/deribit/futures/funding/", {
-        "symbol": symbol,
-        "limit": 3,
-        "return": "JSON"
-    })
+    """Get funding rate history from Deribit public API (free)"""
+    try:
+        data = fetch_deribit("/get_funding_rate_history", {
+            "instrument_name": symbol,
+            "count": 3
+        })
+        if isinstance(data, list):
+            # Convert to CDD-like format for compatibility
+            result = []
+            for item in data:
+                result.append({
+                    "timestamp": item.get("timestamp"),
+                    "interest_8h": item.get("interest_8h"),
+                    "index_price": item.get("index_price")
+                })
+            return result
+    except Exception:
+        pass
+    return []
 
 
 def load_deribit_volatility(symbol, limit=30):
-    return load_cdd("/ohlc/deribit/volatility/", {
-        "symbol": symbol,
-        "limit": limit,
-        "return": "JSON"
-    })
+    """Get volatility index from Deribit public API (free)"""
+    try:
+        # Get historical volatility index data
+        data = fetch_deribit("/get_volatility_index_data", {
+            "currency": symbol,
+            "resolution": "1D",
+            "count": limit
+        })
+        if isinstance(data, dict) and "data" in data:
+            # Convert to CDD-like format
+            result = []
+            for item in data["data"]:
+                if len(item) >= 2:
+                    timestamp = item[0]
+                    volatility = item[1]
+                    result.append({
+                        "timestamp": timestamp,
+                        "close": volatility
+                    })
+            return result
+    except Exception:
+        pass
+    return []
 
 
 def load_binance_basis(symbol, limit=2):
-    return load_cdd("/summary/binance/basis/", {
-        "symbol": symbol,
-        "limit": limit,
-        "return": "JSON"
-    })
-
-
-def load_binance_options_ohlc_by_underlying(underlying, limit=5000):
-    return load_cdd("/ohlc/binance/options/", {
-        "underlying": underlying,
-        "limit": limit,
-        "return": "JSON"
-    })
-
-
-def load_deribit_options_greeks_maturity(underlying, date, limit=5000):
-    return load_cdd("/summary/deribit/options/greeks/maturities/", {
-        "underlying": underlying,
-        "startdate": date,
-        "enddate": date,
-        "limit": limit,
-        "return": "JSON"
-    })
+    """Calculate basis from Binance Futures and Spot prices (free)"""
+    try:
+        # Get spot price
+        spot_data = fetch_binance("/ticker/price", {"symbol": symbol})
+        spot_price = float(spot_data["price"]) if spot_data else None
+        
+        # Get futures price
+        futures_symbol = symbol.replace("USDT", "") + "USDT"  # Ensure proper format
+        futures_data = fetch_binance("/ticker/price", 
+                                     {"symbol": futures_symbol}, 
+                                     base_url=BINANCE_FUTURES_BASE)
+        futures_price = float(futures_data["price"]) if futures_data else None
+        
+        if spot_price and futures_price:
+            basis = futures_price - spot_price
+            return [{"basis": basis, "spot": spot_price, "futures": futures_price}]
+    except Exception:
+        pass
+    return []
 
 
 def compute_max_pain(strikes, price_points):
@@ -714,30 +725,12 @@ def main():
                 "lunar_events": lunar_events
             }
 
-        maturities = load_binance_oi_maturity(underlying)
-        maturity_rows = maturities if isinstance(maturities, list) else []
-        # Get the latest date's rows only (API returns newest first)
-        latest_date = None
-        for row in maturity_rows:
-            d = row.get("date")
-            if d and (latest_date is None or d > latest_date):
-                latest_date = d
-        latest_maturity_rows = [r for r in maturity_rows if r.get("date") == latest_date] if latest_date else []
-        maturity_values = []
-        for row in latest_maturity_rows:
-            maturity = row.get("maturity")
-            parsed = parse_maturity(maturity)
-            if parsed and within_forward_window(parsed, 90):
-                maturity_values.append(parsed)
-        maturity_values = sorted(set(maturity_values))
-        nearest_maturity = maturity_values[0].strftime("%Y-%m-%d") if maturity_values else None
-
+        # Binance Options removed (discontinued in 2023) - using Deribit only
         strikes = []
         deribit_strikes = []
         expiry_strikes_map = {}
         total_oi_usd = 0.0
         total_oi_base = 0.0
-        binance_oi_usd = 0.0
         call_oi_usd = 0.0
         put_oi_usd = 0.0
         nearest_oi_usd = 0.0
@@ -745,28 +738,6 @@ def main():
         oi_usd_by_expiry = {}
         calls_usd_by_expiry = {}
         puts_usd_by_expiry = {}
-        if nearest_maturity:
-            options_rows = load_binance_options_ohlc(underlying, nearest_maturity)
-            options_rows = options_rows if isinstance(options_rows, list) else []
-            latest_by_symbol = extract_latest_by_symbol(options_rows)
-
-            for symbol, row in latest_by_symbol.items():
-                strike = parse_symbol_strike(symbol)
-                opt_type = parse_symbol_type(symbol, row.get("type"))
-                oi = row.get("openinterest_contracts")
-                try:
-                    oi_value = float(oi) if oi is not None else 0.0
-                except (TypeError, ValueError):
-                    oi_value = 0.0
-                if strike and opt_type:
-                    strikes.append({
-                        "instrument_name": symbol,
-                        "strike": strike,
-                        "option_type": opt_type,
-                        "open_interest": oi_value
-                    })
-
-        # Binance OI summary removed (CDD data stale since 2023)
 
         deribit_instruments = load_deribit_instruments(meta["spot_symbol"])
         deribit_instruments = deribit_instruments if isinstance(deribit_instruments, list) else []
@@ -889,20 +860,7 @@ def main():
 
         total_oi, call_oi, put_oi, put_call = aggregate_open_interest(combined_strikes)
 
-        if not combined_strikes and nearest_maturity:
-            for row in latest_maturity_rows:
-                maturity = row.get("maturity")
-                if maturity == nearest_maturity:
-                    calls = row.get("calls_oi") or 0
-                    puts = row.get("puts_oi") or 0
-                    try:
-                        call_oi += float(calls)
-                        put_oi += float(puts)
-                    except (TypeError, ValueError):
-                        pass
-            total_oi = call_oi + put_oi
-            put_call = (put_oi / call_oi) if call_oi else None
-
+        # Use Deribit USD-denominated values if available
         if call_oi_usd or put_oi_usd:
             call_oi = call_oi_usd
             put_oi = put_oi_usd
@@ -976,14 +934,9 @@ def main():
         if iv_7d and iv_30d:
             iv_term = f"{iv_7d:.1f}% / {iv_30d:.1f}%"
 
-        greeks_dates = load_cdd("/summary/deribit/options/greeks/available/", {
-            "underlying": meta["spot_symbol"],
-            "return": "JSON"
-        })
+        # Greeks calculation removed - CDD endpoint no longer available
+        # Using simple IV from Deribit volatility index instead
         latest_greeks_date = None
-        if isinstance(greeks_dates, dict):
-            asset_key = meta["spot_symbol"]
-            latest_greeks_date = greeks_dates.get(asset_key, {}).get("last_date")
 
         oi_concentration = None
         nearest_share = None
@@ -997,14 +950,9 @@ def main():
                     nearest_share = oi_total_by_expiry[nearest_deribit_expiry] / total_sum
 
         rv_iv = None
-        if latest_greeks_date:
-            greeks_maturity = load_deribit_options_greeks_maturity(meta["spot_symbol"], latest_greeks_date, 5000)
-            greeks_maturity = greeks_maturity if isinstance(greeks_maturity, list) else []
-            iv_values = [row.get("avg_iv") for row in greeks_maturity if row.get("avg_iv") is not None]
-            if iv_values:
-                avg_iv = sum(iv_values) / len(iv_values)
-                if iv_7d:
-                    rv_iv = f"{iv_7d:.1f}% / {avg_iv:.1f}%"
+        # Calculate simple RV/IV ratio using volatility index
+        if iv_7d and iv_30d:
+            rv_iv = f"{iv_7d:.1f}% / {iv_30d:.1f}%"
 
         snapshot[asset] = {
             "total_oi": total_oi,
@@ -1017,14 +965,14 @@ def main():
             "oi_concentration": oi_concentration,
             "nearest_expiry_share": nearest_share,
             "spot_price": spot_price,
-            "spot_source": "CryptoDataDownload"
+            "spot_source": "Binance"
         }
 
         trader[asset] = {
             "funding_rate": f"{funding_rate * 100:.4f}%" if funding_rate is not None else "—",
             "perp_basis": f"${perp_basis:.2f}" if perp_basis is not None else "—",
             "rv_iv": rv_iv or "—",
-            "sources": "Deribit + Binance (CDD)"
+            "sources": "Deribit + Binance"
         }
 
         cutoff_date = datetime.date.today() - datetime.timedelta(days=365)
@@ -1155,7 +1103,7 @@ def main():
     with open(os.path.join(output_dir, "metadata.json"), "w") as f:
         meta = {
             "last_updated": datetime.datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC"),
-            "sources": ["CryptoDataDownload", "Deribit"]
+            "sources": ["Binance", "Deribit"]
         }
         f.write(json.dumps(meta, indent=2))
 

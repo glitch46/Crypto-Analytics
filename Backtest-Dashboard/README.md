@@ -1,9 +1,15 @@
-# Crypto Options Pulse Dashboard
+# Crypto Options Backtest Dashboard
 
-Static dashboard that visualizes 7-day open interest and max pain for BTC and ETH using Binance + Deribit options data. Data refresh is handled via `scripts/refresh_crypto.py` and emitted as static JSON for the frontend.
+Static dashboard that backtests options strategies for BTC and ETH using Deribit historical settlement data and Binance spot prices. Data refresh is handled via `scripts/refresh_crypto.py` and emitted as static JSON for the frontend.
+
+## Data Sources
+
+- **Binance Spot API** - Spot prices (free, public, no authentication required)
+- **Deribit Public API** - Options settlement data, funding rates (free, public, no authentication required)
+- **Note**: Binance Options discontinued in 2023; all options data now from Deribit
 
 ## Data Files
-- `data/oi_history.json`: 7-day open interest history (BTC/ETH)
+- `data/oi_history.json`: 7-day rolling open interest history (BTC/ETH)
 - `data/max_pain.json`: max pain strike and top candidates
 - `data/options_snapshot.json`: options KPI snapshot
 - `data/trader_focus.json`: short-term trader metrics
@@ -11,10 +17,15 @@ Static dashboard that visualizes 7-day open interest and max pain for BTC and ET
 - `data/metadata.json`: refresh timestamp + sources
 
 ## Refresh
-Set `CRYPTODATADOWNLOAD_API_KEY` before running. Requests are authenticated via the `Authorization: Token <token>` header per CryptoDataDownload API docs:
 
-```
+**No API keys required!** All data sources are free public APIs:
+
+```bash
 python scripts/refresh_crypto.py
 ```
+
+The script fetches data from:
+- Binance Spot API (free, unlimited public endpoints)
+- Deribit Public API (free, unlimited public endpoints)
 
 The frontend reads static JSON and includes no embedded API keys.

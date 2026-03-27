@@ -607,7 +607,7 @@
     </section>
 
     <footer class="footer" id="footerNote">
-      Data sources: CryptoDataDownload, Deribit. Strategy tester uses 3-year BTC history.
+      Data sources: Binance, Deribit. Strategy tester uses 3-year BTC history.
     </footer>
     </div>
   </div>
@@ -1150,7 +1150,10 @@ return month <= 8;
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: {
-              labels: { color: '#e8e8ed' }
+              labels: {
+                color: '#e8e8ed',
+                filter: (legendItem) => legendItem.text !== 'Daily Range' && legendItem.text !== 'Candle Body'
+              }
             },
             tooltip: {
               callbacks: {
@@ -1195,7 +1198,7 @@ return month <= 8;
 
     function updateMetadata(meta) {
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
-      document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Strategy tester uses 3-year BTC history.` : 'Data sources: Binance Options, Deribit, CryptoDataDownload. Strategy tester uses 3-year BTC history.';
+      document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Strategy tester uses 3-year BTC history.` : 'Data sources: Binance, Deribit. Strategy tester uses 3-year BTC history.';
     }
 
 

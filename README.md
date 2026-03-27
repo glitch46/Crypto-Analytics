@@ -1,10 +1,10 @@
 # Crypto Analytics Dashboard
 
-Static GitHub Pages dashboard for crypto options analytics. The main UI lives in `Crypto-Dashboard/` and refreshes via CryptoDataDownload API.
+Static GitHub Pages dashboard for crypto options analytics. The main UI lives in `Crypto-Dashboard/` and refreshes via free public APIs (Binance, Deribit).
 
 ## Features
 
-- **30-Day Open Interest Momentum**: Aggregated options open interest from Binance and Deribit exchanges
+- **30-Day Open Interest Momentum**: Aggregated options open interest from Deribit exchange
 - **Max Pain Strike Map**: Identifies strike prices with maximum pain for option holders
 - **Options Snapshot**: Real-time KPIs including put/call ratio, ATM IV, and OI concentration
 - **Expiry Pressure Radar**: Upcoming expiration dates with significant open interest
@@ -12,9 +12,9 @@ Static GitHub Pages dashboard for crypto options analytics. The main UI lives in
 
 ## Data Sources
 
-- Binance Options
-- Deribit Options
-- CryptoDataDownload API
+- **Binance Spot API** - Spot prices and historical price data (free, unlimited)
+- **Deribit Public API** - Options data, funding rates, volatility index (free, unlimited)
+- **Note**: Binance Options discontinued in 2023; all options data now from Deribit
 
 ## Data Files
 
