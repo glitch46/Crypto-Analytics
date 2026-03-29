@@ -472,13 +472,35 @@
            <br><br>
            <strong>What to look for:</strong> Levels with wide green bars below price = reliable support. Wide red bars above price = tested resistance.
            If a level shows strong persistence on both sides, it is a contested zone where significant activity is expected.
-           Thin bars may indicate fleeting liquidity or market-maker repositioning.
+          Thin bars may indicate fleeting liquidity or market-maker repositioning.
+         </div>
+       </section>
+
+       <section class="grid two-col" style="margin-top: 18px;">
+         <div class="panel">
+           <div class="chart-title">CVD vs Price Divergence</div>
+           <div class="chart-subtitle">Indexed comparison of aggregate spot CVD and spot price over 30 days to detect hidden accumulation/distribution.</div>
+           <div class="chart-wrap tall"><canvas id="cvdDivergenceChart"></canvas></div>
+           <div class="note-box">
+             If CVD rises while price is flat/down, that is often absorption (bullish divergence). If price rises while CVD falls, that can signal distribution
+             and fragile upside. Trend confirmation is strongest when CVD and price rise together.
+           </div>
+         </div>
+
+         <div class="panel">
+           <div class="chart-title">CVD Breadth by Exchange (24h)</div>
+           <div class="chart-subtitle">How many major exchanges are net aggressive buyers vs sellers over the last 24 hours.</div>
+           <div class="chart-wrap tall"><canvas id="cvdBreadthChart"></canvas></div>
+           <div class="note-box">
+             Broad participation matters: a move is more reliable when most exchanges confirm the same CVD direction. Single-exchange spikes are weaker
+             and more prone to mean reversion.
+           </div>
          </div>
        </section>
 
        <footer class="footer" id="footerNote">
         Sources: Binance Spot, Coinbase Spot, CFTC COT. Visual signals only.
-      </footer>
+       </footer>
     </main>
   </div>
 
@@ -1125,6 +1147,146 @@
       });
     }
 
+    function renderCvdDivergenceChart(assetData) {
+      destroyChart("cvdDivergence");
+      const rows = (assetData.cvd_history || []).slice(-2880);
+      const depthRows = (assetData.depth_delta_history || []).slice(-2880);
+      if (!rows.length) return;
+
+      const priceMap = {};
+      depthRows.forEach(r => { priceMap[r.timestamp] = r.mid_price || 0; });
+
+      const labels = rows.map(r => shortDateLabel(r.timestamp));
+      const agg = rows.map(r => r.aggregate || 0);
+      const px = rows.map(r => priceMap[r.timestamp] || null);
+
+      const baseCvd = agg[0] || 1;
+      const basePx = px.find(v => v && v > 0) || 1;
+
+      const cvdIdx = agg.map(v => ((v - baseCvd) / Math.abs(baseCvd)) * 100);
+      const pxIdx = px.map(v => v ? ((v - basePx) / basePx) * 100 : null);
+
+      state.charts.cvdDivergence = new Chart(document.getElementById("cvdDivergenceChart"), {
+        type: "line",
+        data: {
+          labels,
+          datasets: [
+            {
+              label: "CVD Change % (indexed)",
+              data: cvdIdx,
+              borderColor: "#ff4d7d",
+              backgroundColor: "transparent",
+              borderWidth: 2.2,
+              tension: 0.25,
+              pointRadius: 0,
+            },
+            {
+              label: "Price Change % (indexed)",
+              data: pxIdx,
+              borderColor: "#ffffff",
+              backgroundColor: "transparent",
+              borderWidth: 1.8,
+              tension: 0.2,
+              pointRadius: 0,
+              borderDash: [6, 3],
+            }
+          ]
+        },
+        options: {
+          ...commonChartOptions("percent"),
+          scales: {
+            ...commonChartOptions("percent").scales,
+            x: {
+              ...commonChartOptions("percent").scales.x,
+              ticks: {
+                ...commonChartOptions("percent").scales.x.ticks,
+                maxTicksLimit: 14,
+                callback: function(value, index, ticks) {
+                  const step = Math.max(1, Math.floor(ticks.length / 14));
+                  if (index % step !== 0) return "";
+                  return this.getLabelForValue(value) || "";
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
+    function renderCvdBreadthChart(assetData) {
+      destroyChart("cvdBreadth");
+      const rows = assetData.cvd_history || [];
+      if (rows.length < 2) return;
+
+      const lookback = Math.min(96, rows.length - 1);
+      const recent = rows.slice(-lookback);
+      const first = recent[0];
+      const last = recent[recent.length - 1];
+
+      const exchanges = [
+        { key: "binance", label: "Binance", color: "#00b4d8" },
+        { key: "coinbase", label: "Coinbase", color: "#ffb800" },
+        { key: "kraken", label: "Kraken", color: "#7b61ff" },
+        { key: "okx", label: "OKX", color: "#00e5a0" },
+        { key: "bybit", label: "Bybit", color: "#f5a623" },
+      ];
+
+      const deltas = exchanges.map(ex => {
+        const delta = (last[ex.key] || 0) - (first[ex.key] || 0);
+        return { ...ex, delta };
+      });
+
+      state.charts.cvdBreadth = new Chart(document.getElementById("cvdBreadthChart"), {
+        type: "bar",
+        data: {
+          labels: deltas.map(d => d.label),
+          datasets: [
+            {
+              label: "24h CVD Change",
+              data: deltas.map(d => d.delta),
+              backgroundColor: deltas.map(d => d.delta >= 0 ? "rgba(0,210,106,0.7)" : "rgba(255,92,122,0.7)"),
+              borderColor: deltas.map(d => d.delta >= 0 ? "#00d26a" : "#ff5c7a"),
+              borderWidth: 1,
+            }
+          ]
+        },
+        options: {
+          ...commonChartOptions(),
+          plugins: {
+            ...commonChartOptions().plugins,
+            tooltip: {
+              ...commonChartOptions().plugins.tooltip,
+              callbacks: {
+                label: function(context) {
+                  const v = context.parsed.y || 0;
+                  const direction = v >= 0 ? "net buyers" : "net sellers";
+                  return `${context.label}: $${fmtNumber(Math.abs(v))} (${direction})`;
+                }
+              }
+            }
+          },
+          scales: {
+            ...commonChartOptions().scales,
+            y: {
+              ...commonChartOptions().scales.y,
+              ticks: {
+                ...commonChartOptions().scales.y.ticks,
+                callback: (v) => `$${fmtNumber(Math.abs(Number(v)))}`
+              },
+              grid: {
+                color: function(context) {
+                  return context.tick && context.tick.value === 0 ? "#555560" : "#1a1a1e";
+                },
+                lineWidth: function(context) {
+                  return context.tick && context.tick.value === 0 ? 2 : 1;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+
     function updateThesis(assetData) {
        const sig = assetData.signals || {};
        const walls = assetData.wall_stats || {};
@@ -1153,6 +1315,30 @@
          cvdSlope = last - first;
          if (cvdSlope > 0) cvdTrend = "rising";
          else if (cvdSlope < 0) cvdTrend = "falling";
+       }
+
+       const cvdExchanges = ["binance", "coinbase", "kraken", "okx", "bybit"];
+       let cvdBreadth = { buyers: 0, sellers: 0, neutral: 0 };
+       let cvdDivergence = "none";
+       if (cvdHist.length >= 96) {
+         const first = cvdHist[cvdHist.length - 96];
+         const last = cvdHist[cvdHist.length - 1];
+         cvdExchanges.forEach(ex => {
+           const delta = (last[ex] || 0) - (first[ex] || 0);
+           if (delta > 0) cvdBreadth.buyers += 1;
+           else if (delta < 0) cvdBreadth.sellers += 1;
+           else cvdBreadth.neutral += 1;
+         });
+
+         const priceFirst = depthHist.length >= 96 ? (depthHist[depthHist.length - 96].mid_price || 0) : 0;
+         const priceLast = latest.mid_price || 0;
+         const priceChange = priceFirst > 0 ? (priceLast - priceFirst) / priceFirst : 0;
+         const cvdFirst = first.aggregate || 0;
+         const cvdLast = last.aggregate || 0;
+         const cvdChange = cvdFirst !== 0 ? (cvdLast - cvdFirst) / Math.abs(cvdFirst) : 0;
+
+         if (priceChange <= 0 && cvdChange > 0.03) cvdDivergence = "bullish absorption";
+         else if (priceChange >= 0 && cvdChange < -0.03) cvdDivergence = "bearish distribution";
        }
 
        // Derive depth balance
@@ -1227,6 +1413,10 @@
        reasons.push(`The current mid price is $${fmtPrice(midPrice)}. Across all 5 exchanges, the orderbook depth within 5% of price is ${depthBias} with a normalized imbalance of ${(d5norm * 100).toFixed(1)}%.`);
        reasons.push(`The 25% structural depth reads ${(d25norm * 100).toFixed(1)}%, indicating ${d25norm > 0.05 ? "broad bid dominance across the book" : d25norm < -0.05 ? "heavy ask-side pressure structurally" : "relatively balanced macro liquidity"}.`);
        reasons.push(`Spot CVD across all exchanges is ${cvdTrend} over the last 24 hours${cvdTrend !== "flat" ? `, suggesting ${cvdTrend === "rising" ? "net aggressive buying pressure is building" : "net aggressive selling is outpacing buying"}` : ""}.`);
+       reasons.push(`CVD breadth currently shows ${cvdBreadth.buyers}/5 exchanges net-buying versus ${cvdBreadth.sellers}/5 net-selling over 24h. ${cvdBreadth.buyers >= 4 ? "This is broad participation, which typically strengthens move reliability." : cvdBreadth.sellers >= 4 ? "This is broad selling pressure and increases breakdown risk." : "Breadth is mixed, suggesting rotational flow and lower conviction."}`);
+       if (cvdDivergence !== "none") {
+         reasons.push(`Detected ${cvdDivergence} in CVD-vs-price behavior. ${cvdDivergence === "bullish absorption" ? "This often appears before relief bounces if depth and wall structure confirm." : "This often warns of late-stage rallies and potential downside reversal if support fails."}`);
+       }
 
        if (supportLevels.length > 0) {
          const levels = supportLevels.map(x => `$${fmtPrice(x.price)}`).join(", ");
@@ -1275,12 +1465,14 @@
        const confirms = [];
        if (longReadiness >= 50) {
          confirms.push({ label: "CVD confirmation", value: `Aggregate CVD should continue ${cvdTrend === "rising" ? "rising" : "to flip positive"} on at least 3 of 5 exchanges` });
+         confirms.push({ label: "CVD breadth confirmation", value: `At least 4/5 exchanges should show positive 24h CVD change (currently ${cvdBreadth.buyers}/5)` });
          confirms.push({ label: "Depth confirmation", value: `5% depth delta should stay positive (currently ${(d5norm * 100).toFixed(1)}%)` });
          confirms.push({ label: "Wall confirmation", value: `Bid wall at ${strongestSupport} should persist across multiple refresh cycles` });
          confirms.push({ label: "Break trigger", value: `Clean break above ${strongestResistance} with volume confirms upside thesis` });
        } else {
          confirms.push({ label: "Reversal signal", value: "Wait for 5% depth to flip positive from current negative reading" });
          confirms.push({ label: "CVD divergence", value: "Watch for aggregate CVD to bottom and start rising while price stabilizes" });
+         confirms.push({ label: "Breadth reset", value: `Need buyers to regain majority across exchanges (currently ${cvdBreadth.buyers}/5 buyers)` });
          confirms.push({ label: "Wall shift", value: `Bid walls need to appear closer to price and persist (currently at ${strongestSupport})` });
          confirms.push({ label: "Commercial easing", value: "CFTC commercial net shorts should start declining before structural thesis improves" });
        }
@@ -1297,6 +1489,8 @@
        const cautions = [];
        if (d5norm < 0) cautions.push({ label: "Negative 5% depth delta", value: `Currently ${(d5norm * 100).toFixed(1)}% — sellers have more passive liquidity near price` });
        if (cvdTrend === "falling") cautions.push({ label: "Falling CVD", value: "Aggregate aggressive selling outpacing buying over last 24h" });
+       if (cvdBreadth.sellers >= 4) cautions.push({ label: "Negative CVD breadth", value: `${cvdBreadth.sellers}/5 exchanges are net-sellers — downside pressure is broad` });
+       if (cvdDivergence === "bearish distribution") cautions.push({ label: "Bearish CVD divergence", value: "Price up while CVD weakens — rally may be fragile" });
        if (cotBias.includes("short")) cautions.push({ label: "Commercial short buildup", value: `Short ratio at ${(cotShortRatio * 100).toFixed(1)}% — hedgers increasingly defensive` });
        if (srRatio < 0.8) cautions.push({ label: "Weak support:resistance ratio", value: `${srRatio.toFixed(2)}:1 — more ask liquidity overhead than bid liquidity below` });
        if ((walls.ask_wall_persistence || 0) > (walls.bid_wall_persistence || 0) + 3) cautions.push({ label: "Ask wall dominance near price", value: "Sellers are more aggressively defending near current price" });
@@ -1311,9 +1505,12 @@
        // Score breakdown
        const scoresGrid = document.getElementById("thesisScores");
        scoresGrid.innerHTML = "";
+       const breadthScore = Math.max(0, Math.min(100, (cvdBreadth.buyers / 5) * 100));
+
        const scores = [
          { label: "Depth Score (35% weight)", value: `${depthScore.toFixed(1)}/100`, cls: depthScore >= 55 ? "good" : depthScore <= 45 ? "bad" : "warn" },
          { label: "CVD Score (35% weight)", value: `${cvdScore.toFixed(1)}/100`, cls: cvdScore >= 55 ? "good" : cvdScore <= 45 ? "bad" : "warn" },
+         { label: "CVD Breadth (diagnostic)", value: `${breadthScore.toFixed(1)}/100 (${cvdBreadth.buyers}/5 buyers)`, cls: breadthScore >= 60 ? "good" : breadthScore <= 40 ? "bad" : "warn" },
          { label: "Wall Score (20% weight)", value: `${wallScore.toFixed(1)}/100`, cls: wallScore >= 55 ? "good" : wallScore <= 45 ? "bad" : "warn" },
          { label: "Commercial Caution (10% inverse weight)", value: `${cautionScore.toFixed(1)}/100`, cls: cautionScore <= 45 ? "good" : cautionScore >= 55 ? "bad" : "warn" },
          { label: "Composite Long Readiness", value: `${longReadiness.toFixed(1)}/100`, cls: biasClass },
@@ -1371,6 +1568,8 @@
       renderDepthTimeline(data);
       renderOverlayChart(data);
        renderHeatmapChart(data);
+       renderCvdDivergenceChart(data);
+       renderCvdBreadthChart(data);
        updateGuide(data);
        updateThesis(data);
      }
