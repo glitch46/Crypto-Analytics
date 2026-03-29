@@ -1,28 +1,28 @@
 {
   "BTC": {
-    "total_oi": 16060108877.500004,
-    "oi_change_7d": 0.522473168274192,
-    "put_call_ratio": 0.6893479288395765,
-    "call_oi": 9506691074.899994,
-    "put_oi": 6553417802.599998,
-    "atm_iv": null,
-    "iv_term": null,
-    "oi_concentration": 0.9560056619174061,
-    "nearest_expiry_share": 0.020980090301383453,
-    "spot_price": 66373.0,
-    "spot_source": "Binance"
+    "total_oi": 16072205194.578001,
+    "oi_change_7d": 0.5236198801879567,
+    "put_call_ratio": 0.6892013882343582,
+    "call_oi": 9514676761.766996,
+    "put_oi": 6557528432.811002,
+    "atm_iv": 0.5255,
+    "iv_term": "52.5% / 53.7%",
+    "oi_concentration": 0.9559624746123344,
+    "nearest_expiry_share": 0.02101648204037063,
+    "spot_price": 66428.29,
+    "spot_source": "Deribit"
   },
   "ETH": {
-    "total_oi": 2832246172.3399997,
-    "oi_change_7d": 0.7461862487947541,
-    "put_call_ratio": 0.579588282922393,
-    "call_oi": 1793028096.5999997,
-    "put_oi": 1039218075.7400002,
-    "atm_iv": null,
-    "iv_term": null,
-    "oi_concentration": 0.9506284841177945,
-    "nearest_expiry_share": 0.02724659988020849,
-    "spot_price": 1988.74,
-    "spot_source": "Binance"
+    "total_oi": 2836634907.600001,
+    "oi_change_7d": 0.7488920690851857,
+    "put_call_ratio": 0.5795481263613662,
+    "call_oi": 1795852155.5999992,
+    "put_oi": 1040782752.0000002,
+    "atm_iv": 0.7123,
+    "iv_term": "71.2% / 74.5%",
+    "oi_concentration": 0.9505774356353056,
+    "nearest_expiry_share": 0.027254765388687766,
+    "spot_price": 1991.7,
+    "spot_source": "Deribit"
   }
 }

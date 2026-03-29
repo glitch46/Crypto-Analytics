@@ -2,6 +2,7 @@
 import datetime
 import json
 import os
+import time
 import urllib.parse
 import urllib.request
 
@@ -10,6 +11,7 @@ BINANCE_API_BASE = "https://api.binance.com/api/v3"
 BINANCE_FUTURES_BASE = "https://fapi.binance.com/fapi/v1"
 DERIBIT_BASE = "https://www.deribit.com/api/v2/public"
 COINGECKO_BASE = "https://api.coingecko.com/api/v3"
+COINGECKO_IDS = {"BTC": "bitcoin", "ETH": "ethereum"}
 
 ASSETS = {
     "BTC": {
@@ -63,22 +65,25 @@ def fetch_deribit(path, params=None):
 
 
 def load_spot_price(symbol):
-    """Get current spot price from Binance Spot API (free)"""
+    """Get current spot price.  Deribit index first, then CoinGecko, then Binance."""
+    try:
+        currency = symbol.replace("USDT", "")
+        data = fetch_deribit("/get_index_price", {"index_name": f"{currency.lower()}_usd"})
+        if isinstance(data, dict) and "index_price" in data:
+            return float(data["index_price"])
+    except Exception:
+        pass
+    try:
+        coin_id = COINGECKO_IDS.get(symbol.replace("USDT", ""), "bitcoin")
+        data = fetch_coingecko("/simple/price", {"ids": coin_id, "vs_currencies": "usd"})
+        if isinstance(data, dict) and coin_id in data:
+            return float(data[coin_id]["usd"])
+    except Exception:
+        pass
     try:
         data = fetch_binance("/ticker/price", {"symbol": symbol})
         if isinstance(data, dict) and "price" in data:
             return float(data["price"])
-    except Exception:
-        pass
-    # Fallback to CoinGecko
-    try:
-        coin_id = "bitcoin" if "BTC" in symbol else "ethereum"
-        data = fetch_coingecko(f"/simple/price", {
-            "ids": coin_id,
-            "vs_currencies": "usd"
-        })
-        if isinstance(data, dict) and coin_id in data:
-            return float(data[coin_id]["usd"])
     except Exception:
         pass
     return None
@@ -99,14 +104,17 @@ def load_deribit_book_summary(currency):
 
 
 def load_deribit_funding(symbol):
-    """Get funding rate history from Deribit public API (free)"""
+    """Get funding rate history from Deribit public API (free).
+    Requires start_timestamp / end_timestamp."""
     try:
+        now = int(time.time() * 1000)
+        day_ms = 86400 * 1000
         data = fetch_deribit("/get_funding_rate_history", {
             "instrument_name": symbol,
-            "count": 3
+            "start_timestamp": now - 3 * day_ms,
+            "end_timestamp": now
         })
         if isinstance(data, list):
-            # Convert to CDD-like format for compatibility
             result = []
             for item in data:
                 result.append({
@@ -121,24 +129,24 @@ def load_deribit_funding(symbol):
 
 
 def load_deribit_volatility(symbol, limit=30):
-    """Get volatility index from Deribit public API (free)"""
+    """Get volatility index from Deribit public API (free).
+    Requires start_timestamp / end_timestamp."""
     try:
-        # Get historical volatility index data
+        now = int(time.time() * 1000)
+        day_ms = 86400 * 1000
         data = fetch_deribit("/get_volatility_index_data", {
             "currency": symbol,
             "resolution": "1D",
-            "count": limit
+            "start_timestamp": now - limit * day_ms,
+            "end_timestamp": now
         })
         if isinstance(data, dict) and "data" in data:
-            # Convert to CDD-like format
             result = []
             for item in data["data"]:
-                if len(item) >= 2:
-                    timestamp = item[0]
-                    volatility = item[1]
+                if len(item) >= 5:
                     result.append({
-                        "timestamp": timestamp,
-                        "close": volatility
+                        "timestamp": item[0],
+                        "close": item[4]
                     })
             return result
     except Exception:
@@ -147,22 +155,28 @@ def load_deribit_volatility(symbol, limit=30):
 
 
 def load_binance_basis(symbol, limit=2):
-    """Calculate basis from Binance Futures and Spot prices (free)"""
+    """Calculate perp-vs-spot basis using Deribit (primary) or Binance (fallback)."""
+    currency = symbol.replace("USDT", "")
     try:
-        # Get spot price
+        perp = f"{currency}-PERPETUAL"
+        ticker = fetch_deribit("/ticker", {"instrument_name": perp})
+        if isinstance(ticker, dict):
+            mark = ticker.get("mark_price")
+            index = ticker.get("index_price")
+            if mark and index:
+                basis = float(mark) - float(index)
+                return [{"basis": basis, "spot": float(index), "futures": float(mark)}]
+    except Exception:
+        pass
+    try:
         spot_data = fetch_binance("/ticker/price", {"symbol": symbol})
         spot_price = float(spot_data["price"]) if spot_data else None
-        
-        # Get futures price
-        futures_symbol = symbol.replace("USDT", "") + "USDT"  # Ensure proper format
-        futures_data = fetch_binance("/ticker/price", 
-                                     {"symbol": futures_symbol}, 
+        futures_data = fetch_binance("/ticker/price",
+                                     {"symbol": symbol},
                                      base_url=BINANCE_FUTURES_BASE)
         futures_price = float(futures_data["price"]) if futures_data else None
-        
         if spot_price and futures_price:
-            basis = futures_price - spot_price
-            return [{"basis": basis, "spot": spot_price, "futures": futures_price}]
+            return [{"basis": futures_price - spot_price, "spot": spot_price, "futures": futures_price}]
     except Exception:
         pass
     return []
@@ -584,7 +598,7 @@ def main():
             "oi_concentration": oi_concentration,
             "nearest_expiry_share": nearest_share,
             "spot_price": spot_price,
-            "spot_source": "Binance"
+            "spot_source": "Deribit"
         }
 
         trader[asset] = {

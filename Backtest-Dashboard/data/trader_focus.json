@@ -1,15 +1,15 @@
 {
   "BTC": {
-    "funding_rate": "\u2014",
-    "perp_basis": "\u2014",
-    "rv_iv": "\u2014",
+    "funding_rate": "0.0000%",
+    "perp_basis": "$16.22",
+    "rv_iv": "52.5% / 53.7%",
     "liquidations": "\u2014",
     "sources": "Deribit + Binance"
   },
   "ETH": {
-    "funding_rate": "\u2014",
-    "perp_basis": "\u2014",
-    "rv_iv": "\u2014",
+    "funding_rate": "0.0000%",
+    "perp_basis": "$-0.49",
+    "rv_iv": "71.2% / 74.5%",
     "liquidations": "\u2014",
     "sources": "Deribit + Binance"
   }
