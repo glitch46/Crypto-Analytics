@@ -30,16 +30,17 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
       - name: Fetch crypto options data
-        env:
-          CRYPTODATADOWNLOAD_API_KEY: ${{ secrets.CRYPTODATADOWNLOAD_API_KEY }}
         run: python3 Crypto-Dashboard/scripts/refresh_crypto.py
       - name: Fetch trading indicators data
         run: python3 Trading-Indicators/scripts/refresh_trading_indicators.py
+      - name: Fetch alt outperformance data
+        run: python3 Alt-Outperformance/scripts/refresh_alts.py
       - name: Commit data
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git add Crypto-Dashboard/data/*.json
           git add Trading-Indicators/data/*.json
+          git add Alt-Outperformance/data/*.json
           git commit -m "chore: refresh data" || echo "No changes"
           git push

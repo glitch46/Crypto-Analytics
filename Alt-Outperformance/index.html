@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BTC / Alt Outperformance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
+      --gradient-hover: linear-gradient(135deg, #ff5252 0%, #e91e7b 100%);
+      --accent-solid: #ff4d7d;
+      --black-deep: #000000;
+      --black-rich: #0a0a0b;
+      --black-elevated: #121214;
+      --gray-dark: #1a1a1e;
+      --gray-mid: #2a2a30;
+      --gray-muted: #6b6b76;
+      --gray-light: #9999a5;
+      --white-soft: #e8e8ed;
+      --white-pure: #ffffff;
+      --success: #00d26a;
+      --warning: #ffb800;
+      --danger: #ff4d6d;
+      --info: #00b4d8;
+      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
+      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 30px #ff4d7d30;
+      --glow-ring: 0 0 0 4px #ff4d7d20;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
+      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
+      color: var(--white-soft);
+    }
+
+    .layout { display: flex; min-height: 100vh; }
+
+    .sidebar {
+      width: 220px;
+      padding: 32px 20px;
+      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
+      border-right: 1px solid var(--gray-dark);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      align-self: flex-start;
+      height: 100vh;
+    }
+
+    .sidebar-title {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--gray-light);
+    }
+
+    .sidebar-nav { display: grid; gap: 10px; }
+
+    .sidebar-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      background: var(--black-rich);
+      color: var(--white-soft);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 200ms ease-out;
+    }
+
+    .sidebar-link:hover,
+    .sidebar-link.active {
+      border-color: #ff4d7d70;
+      box-shadow: var(--shadow-sm);
+      color: var(--white-pure);
+    }
+
+    .page {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 64px 24px 80px;
+      flex: 1;
+    }
+
+    .hero {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .hero h1 {
+      margin: 0;
+      font-size: 40px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--white-pure);
+    }
+
+    .hero p {
+      margin: 0;
+      max-width: 880px;
+      color: var(--gray-light);
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      margin: 24px 0 32px;
+    }
+
+    .toggle-group {
+      display: inline-flex;
+      gap: 8px;
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 999px;
+      padding: 6px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .toggle-btn {
+      border: none;
+      background: transparent;
+      color: var(--gray-light);
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: all 200ms ease-out;
+      letter-spacing: 0.02em;
+    }
+
+    .toggle-btn.active {
+      background: var(--gradient-primary);
+      color: var(--white-pure);
+      box-shadow: var(--shadow-glow);
+    }
+
+    .toggle-btn:focus-visible {
+      outline: none;
+      box-shadow: var(--glow-ring);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--gray-mid);
+      background: var(--black-rich);
+      color: var(--gray-light);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--success);
+      box-shadow: 0 0 10px #00d26a80;
+    }
+
+    .grid {
+      display: grid;
+      gap: 24px;
+    }
+
+    .kpis {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      margin-bottom: 24px;
+    }
+
+    .two-col {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      margin-top: 24px;
+    }
+
+    .panel {
+      background: var(--black-rich);
+      border: 1px solid var(--gray-dark);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow-md);
+    }
+
+    .panel.glow {
+      border: 1px solid transparent;
+      background: linear-gradient(var(--black-rich), var(--black-rich)) padding-box,
+                  var(--gradient-primary) border-box;
+    }
+
+    .kpi-label {
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--gray-muted);
+      font-weight: 700;
+    }
+
+    .kpi-value {
+      margin-top: 10px;
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--white-pure);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .kpi-sub {
+      margin-top: 8px;
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .kpi-accent {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .chart-panel {
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .chart-header {
+      padding: 24px 24px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .chart-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white-pure);
+    }
+
+    .chart-subtitle {
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--gray-light);
+    }
+
+    .chart-wrap { padding: 16px 24px 24px; }
+    canvas { max-height: 360px; }
+
+    .info-grid {
+      display: grid;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--black-elevated);
+      border: 1px solid var(--gray-dark);
+      font-size: 13px;
+    }
+
+    .info-label { color: var(--gray-light); }
+    .info-value { color: var(--white-pure); font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .positive { color: var(--success) !important; }
+    .negative { color: var(--danger) !important; }
+    .neutral { color: var(--warning) !important; }
+
+    .table-wrap {
+      margin-top: 24px;
+      overflow: auto;
+      border: 1px solid var(--gray-dark);
+      border-radius: 14px;
+      background: var(--black-rich);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 840px;
+    }
+
+    th, td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--gray-dark);
+      font-size: 13px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    th {
+      position: sticky;
+      top: 0;
+      background: #0f0f12;
+      color: var(--gray-light);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      z-index: 1;
+    }
+
+    tr:hover td {
+      background: #141419;
+    }
+
+    .footer {
+      margin-top: 28px;
+      color: var(--gray-muted);
+      font-size: 12px;
+      text-align: center;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 1100px) {
+      .layout { flex-direction: column; }
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: static;
+        border-right: none;
+        border-bottom: 1px solid var(--gray-dark);
+      }
+      .sidebar-nav {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+      .sidebar-link { justify-content: center; font-size: 13px; }
+      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .two-col { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 640px) {
+      .page { padding: 40px 18px 64px; }
+      .hero h1 { font-size: 30px; }
+      .controls { flex-direction: column; align-items: flex-start; }
+      .kpis { grid-template-columns: 1fr; }
+      .sidebar-nav { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="sidebar-title">Dashboards</div>
+      <nav class="sidebar-nav">
+        <a class="sidebar-link" href="../Trading-Indicators/index.html">Trading Indicators</a>
+        <a class="sidebar-link active" href="index.html">BTC / Alt Outperformance</a>
+        <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
+        <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
+        <a class="sidebar-link" href="../Strategy-Tester/index.html">Strategy Tester</a>
+      </nav>
+    </aside>
+
+    <div class="page">
+      <header class="hero">
+        <h1>BTC / Alt Outperformance</h1>
+        <p>
+          Map which liquid altcoins are outperforming or underperforming Bitcoin over 7, 14, and 30 day windows.
+          Universe uses top CoinGecko market cap names with stablecoins and wrapped assets removed.
+        </p>
+      </header>
+
+      <section class="controls">
+        <div class="toggle-group" role="tablist" aria-label="Time window selection">
+          <button class="toggle-btn active" data-period="7" role="tab" aria-selected="true">7 Days</button>
+          <button class="toggle-btn" data-period="14" role="tab" aria-selected="false">14 Days</button>
+          <button class="toggle-btn" data-period="30" role="tab" aria-selected="false">30 Days</button>
+        </div>
+        <span class="pill" id="dataStamp">Updated -</span>
+        <span class="pill"><span class="dot"></span>LIVE UNIVERSE</span>
+      </section>
+
+      <section class="grid kpis">
+        <div class="panel glow">
+          <div class="kpi-label">Best Outperformer</div>
+          <div class="kpi-value kpi-accent" id="bestCoin">-</div>
+          <div class="kpi-sub" id="bestPerf">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Worst vs BTC</div>
+          <div class="kpi-value" id="worstCoin">-</div>
+          <div class="kpi-sub" id="worstPerf">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Alts Beating BTC</div>
+          <div class="kpi-value" id="beatCount">-</div>
+          <div class="kpi-sub" id="beatRatio">-</div>
+        </div>
+        <div class="panel">
+          <div class="kpi-label">Median Relative Return</div>
+          <div class="kpi-value" id="medianValue">-</div>
+          <div class="kpi-sub" id="seasonState">-</div>
+        </div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="chart-header">
+          <div>
+            <h3 class="chart-title">Top Outperformers vs BTC</h3>
+            <div class="chart-subtitle" id="topChartSubtitle">Top 10 liquid alts by relative return.</div>
+          </div>
+          <span class="pill" id="topRange">Window 7D</span>
+        </div>
+        <div class="chart-wrap"><canvas id="topChart"></canvas></div>
+      </section>
+
+      <section class="panel chart-panel" style="margin-top: 24px;">
+        <div class="chart-header">
+          <div>
+            <h3 class="chart-title">Worst Underperformers vs BTC</h3>
+            <div class="chart-subtitle">Bottom 10 alts by relative return.</div>
+          </div>
+          <span class="pill" id="bottomRange">Window 7D</span>
+        </div>
+        <div class="chart-wrap"><canvas id="bottomChart"></canvas></div>
+      </section>
+
+      <section class="grid two-col">
+        <div class="panel chart-panel">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Sector Rotation Heatmap</h3>
+              <div class="chart-subtitle">Average relative return by hard-coded sectors.</div>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="sectorChart"></canvas></div>
+        </div>
+
+        <div class="panel chart-panel">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Market Cap vs Relative Return</h3>
+              <div class="chart-subtitle">Bubble size tracks market cap.</div>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="scatterChart"></canvas></div>
+        </div>
+      </section>
+
+      <section class="grid two-col">
+        <div class="panel chart-panel">
+          <div class="chart-header">
+            <div>
+              <h3 class="chart-title">Performance Distribution</h3>
+              <div class="chart-subtitle">Histogram of alt relative returns vs BTC.</div>
+            </div>
+          </div>
+          <div class="chart-wrap"><canvas id="distributionChart"></canvas></div>
+        </div>
+
+        <div class="panel">
+          <div class="kpi-label">Alt Season Diagnostic</div>
+          <div class="kpi-value" id="altSeasonValue">-</div>
+          <div class="kpi-sub" id="altSeasonSub">-</div>
+          <div class="info-grid" id="insightGrid"></div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-top: 24px;">
+        <div class="chart-header" style="padding-top: 0;">
+          <div>
+            <h3 class="chart-title">Full Relative Performance Table</h3>
+            <div class="chart-subtitle">Top liquid alts, sorted by selected window outperformance vs BTC.</div>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Coin</th>
+                <th>Sector</th>
+                <th>7D vs BTC</th>
+                <th>14D vs BTC</th>
+                <th>30D vs BTC</th>
+                <th>Market Cap</th>
+                <th>Spot</th>
+              </tr>
+            </thead>
+            <tbody id="performanceRows"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <footer class="footer" id="footerNote">
+        Data sources: CoinGecko. Universe filtered for liquid alts (no stablecoins or wrapped assets).
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      period: 7,
+      alts: [],
+      meta: null,
+      charts: {
+        top: null,
+        bottom: null,
+        sector: null,
+        scatter: null,
+        distribution: null
+      }
+    };
+
+    const topColors = [
+      '#ff6b6b', '#ff8e53', '#ffd166', '#06d6a0', '#00b4d8',
+      '#4cc9f0', '#4895ef', '#4361ee', '#b5179e', '#f72585'
+    ];
+    const bottomColors = [
+      '#ff4d6d', '#e63946', '#d62828', '#ba181b', '#a4161a',
+      '#9d0208', '#6a040f', '#5f0f40', '#7b2cbf', '#9d4edd'
+    ];
+
+    function fmtNumber(value, suffix = '') {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+      const abs = Math.abs(value);
+      if (abs >= 1e12) return (value / 1e12).toFixed(2) + 'T' + suffix;
+      if (abs >= 1e9) return (value / 1e9).toFixed(2) + 'B' + suffix;
+      if (abs >= 1e6) return (value / 1e6).toFixed(2) + 'M' + suffix;
+      if (abs >= 1e3) return (value / 1e3).toFixed(2) + 'K' + suffix;
+      return Number(value).toFixed(2) + suffix;
+    }
+
+    function fmtPercent(value) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+      const sign = value > 0 ? '+' : '';
+      return `${sign}${Number(value).toFixed(2)}%`;
+    }
+
+    function fmtCurrency(value) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
+      return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
+    }
+
+    function classForValue(value) {
+      if (value === null || value === undefined || Number.isNaN(Number(value))) return 'neutral';
+      if (value > 0) return 'positive';
+      if (value < 0) return 'negative';
+      return 'neutral';
+    }
+
+    function loadJSON(path) {
+      return fetch(path, { cache: 'no-cache' }).then((res) => {
+        if (!res.ok) throw new Error(`Failed to load ${path}`);
+        return res.json();
+      });
+    }
+
+    function getMetric(coin) {
+      if (state.period === 7) return coin.relative_7d;
+      if (state.period === 14) return coin.relative_14d;
+      return coin.relative_30d;
+    }
+
+    function getWindowedSeries(coin) {
+      const days = state.period;
+      const src = Array.isArray(coin.daily_relative) ? coin.daily_relative : [];
+      if (!src.length) return [];
+      return src.slice(Math.max(0, src.length - (days + 1)));
+    }
+
+    function buildSpaghettiChart(target, items, palette, title) {
+      const canvas = document.getElementById(target);
+      const key = target === 'topChart' ? 'top' : 'bottom';
+      if (state.charts[key]) state.charts[key].destroy();
+      if (!items.length) return;
+
+      const labels = getWindowedSeries(items[0]).map((x) => x.date);
+      const datasets = items.map((coin, idx) => {
+        const series = getWindowedSeries(coin).map((p) => p.relative_pct);
+        return {
+          label: `${coin.symbol} ${fmtPercent(getMetric(coin))}`,
+          data: series,
+          borderColor: palette[idx % palette.length],
+          backgroundColor: 'transparent',
+          borderWidth: 2,
+          tension: 0.3,
+          pointRadius: 0,
+          pointHoverRadius: 3
+        };
+      });
+
+      state.charts[key] = new Chart(canvas, {
+        type: 'line',
+        data: { labels, datasets },
+        options: {
+          responsive: true,
+          interaction: { mode: 'nearest', intersect: false },
+          plugins: {
+            legend: { labels: { color: '#e8e8ed', boxWidth: 14 } },
+            tooltip: {
+              callbacks: {
+                label: (ctx) => `${ctx.dataset.label} | ${fmtPercent(ctx.parsed.y)}`
+              }
+            },
+            title: { display: false, text: title }
+          },
+          scales: {
+            x: {
+              ticks: { color: '#9999a5', maxRotation: 0, autoSkip: true, maxTicksLimit: 8 },
+              grid: { color: '#1a1a1e' }
+            },
+            y: {
+              ticks: {
+                color: '#9999a5',
+                callback: (v) => `${v}%`
+              },
+              grid: { color: '#1a1a1e' }
+            }
+          }
+        }
+      });
+    }
+
+    function buildSectorChart(alts) {
+      const canvas = document.getElementById('sectorChart');
+      if (state.charts.sector) state.charts.sector.destroy();
+      const map = {};
+      alts.forEach((coin) => {
+        const sector = coin.sector || 'Other';
+        const v = getMetric(coin);
+        if (v === null || v === undefined || Number.isNaN(Number(v))) return;
+        if (!map[sector]) map[sector] = [];
+        map[sector].push(Number(v));
+      });
+      const labels = Object.keys(map);
+      const values = labels.map((s) => map[s].reduce((a, b) => a + b, 0) / map[s].length);
+      const colors = values.map((v) => v >= 0 ? 'rgba(0, 210, 106, 0.70)' : 'rgba(255, 77, 109, 0.70)');
+      state.charts.sector = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{ label: 'Avg Relative %', data: values, backgroundColor: colors, borderRadius: 8 }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#9999a5' }, grid: { color: '#1a1a1e' } },
+            y: { ticks: { color: '#9999a5', callback: (v) => `${v}%` }, grid: { color: '#1a1a1e' } }
+          }
+        }
+      });
+    }
+
+    function buildScatterChart(alts) {
+      const canvas = document.getElementById('scatterChart');
+      if (state.charts.scatter) state.charts.scatter.destroy();
+      const points = alts
+        .filter((c) => c.market_cap && getMetric(c) !== null && getMetric(c) !== undefined)
+        .map((c) => ({ x: Math.log10(c.market_cap), y: getMetric(c), r: Math.max(3, Math.min(14, Math.log10(c.market_cap) - 5)) }));
+      state.charts.scatter = new Chart(canvas, {
+        type: 'bubble',
+        data: {
+          datasets: [{
+            label: 'Alts',
+            data: points,
+            backgroundColor: points.map((p) => p.y >= 0 ? 'rgba(0, 210, 106, 0.50)' : 'rgba(255, 77, 109, 0.50)'),
+            borderColor: points.map((p) => p.y >= 0 ? '#00d26a' : '#ff4d6d')
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#9999a5', callback: (v) => `10^${Number(v).toFixed(1)}` }, grid: { color: '#1a1a1e' } },
+            y: { ticks: { color: '#9999a5', callback: (v) => `${v}%` }, grid: { color: '#1a1a1e' } }
+          }
+        }
+      });
+    }
+
+    function buildDistributionChart(alts) {
+      const canvas = document.getElementById('distributionChart');
+      if (state.charts.distribution) state.charts.distribution.destroy();
+      const values = alts.map(getMetric).filter((v) => v !== null && v !== undefined && !Number.isNaN(Number(v)));
+      const bins = [-40, -30, -20, -10, 0, 10, 20, 30, 40];
+      const counts = new Array(bins.length - 1).fill(0);
+      values.forEach((v) => {
+        for (let i = 0; i < bins.length - 1; i += 1) {
+          if (v >= bins[i] && v < bins[i + 1]) {
+            counts[i] += 1;
+            return;
+          }
+        }
+      });
+      const labels = bins.slice(0, -1).map((b, i) => `${b}% to ${bins[i + 1]}%`);
+      state.charts.distribution = new Chart(canvas, {
+        type: 'bar',
+        data: {
+          labels,
+          datasets: [{
+            label: 'Coins',
+            data: counts,
+            backgroundColor: counts.map((_, i) => (bins[i + 1] <= 0 ? 'rgba(255,77,109,0.65)' : 'rgba(0,210,106,0.65)')),
+            borderRadius: 8
+          }]
+        },
+        options: {
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#9999a5', maxRotation: 50, minRotation: 30 }, grid: { color: '#1a1a1e' } },
+            y: { ticks: { color: '#9999a5' }, grid: { color: '#1a1a1e' } }
+          }
+        }
+      });
+    }
+
+    function updateTable(sorted) {
+      const tbody = document.getElementById('performanceRows');
+      tbody.innerHTML = '';
+      sorted.forEach((coin, idx) => {
+        const tr = document.createElement('tr');
+        const p7 = coin.relative_7d;
+        const p14 = coin.relative_14d;
+        const p30 = coin.relative_30d;
+        tr.innerHTML = `
+          <td>${idx + 1}</td>
+          <td><strong>${coin.name}</strong> (${coin.symbol})</td>
+          <td>${coin.sector || 'Other'}</td>
+          <td class="${classForValue(p7)}">${fmtPercent(p7)}</td>
+          <td class="${classForValue(p14)}">${fmtPercent(p14)}</td>
+          <td class="${classForValue(p30)}">${fmtPercent(p30)}</td>
+          <td>${fmtNumber(coin.market_cap)}</td>
+          <td>${fmtCurrency(coin.current_price)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateInsights(sorted) {
+      const values = sorted.map(getMetric).filter((v) => v !== null && v !== undefined && !Number.isNaN(Number(v)));
+      const beating = values.filter((v) => v > 0).length;
+      const pct = values.length ? (beating / values.length) * 100 : 0;
+      let regime = 'BTC Dominance';
+      let regimeClass = 'negative';
+      if (pct >= 75) {
+        regime = 'Alt Season';
+        regimeClass = 'positive';
+      } else if (pct >= 50) {
+        regime = 'Neutral Rotation';
+        regimeClass = 'neutral';
+      }
+
+      const median = values.length
+        ? [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)]
+        : null;
+
+      const best = sorted[0];
+      const worst = sorted[sorted.length - 1];
+
+      document.getElementById('bestCoin').textContent = best ? best.symbol : '-';
+      document.getElementById('bestPerf').textContent = best ? `${best.name} ${fmtPercent(getMetric(best))}` : '-';
+      document.getElementById('bestPerf').className = `kpi-sub ${classForValue(best ? getMetric(best) : 0)}`;
+
+      document.getElementById('worstCoin').textContent = worst ? worst.symbol : '-';
+      document.getElementById('worstPerf').textContent = worst ? `${worst.name} ${fmtPercent(getMetric(worst))}` : '-';
+      document.getElementById('worstPerf').className = `kpi-sub ${classForValue(worst ? getMetric(worst) : 0)}`;
+
+      document.getElementById('beatCount').textContent = `${beating} / ${values.length}`;
+      document.getElementById('beatRatio').textContent = `${pct.toFixed(1)}% of alts outperforming BTC`;
+
+      document.getElementById('medianValue').textContent = fmtPercent(median);
+      document.getElementById('medianValue').className = `kpi-value ${classForValue(median)}`;
+      document.getElementById('seasonState').textContent = regime;
+      document.getElementById('seasonState').className = `kpi-sub ${regimeClass}`;
+
+      document.getElementById('altSeasonValue').textContent = `${pct.toFixed(1)}%`;
+      document.getElementById('altSeasonValue').className = `kpi-value ${regimeClass}`;
+      document.getElementById('altSeasonSub').textContent = `${regime} on ${state.period}D window`;
+
+      const insightGrid = document.getElementById('insightGrid');
+      const upside = values.filter((v) => v > 10).length;
+      const downside = values.filter((v) => v < -10).length;
+      const l1Values = sorted.filter((c) => c.sector === 'L1').map(getMetric).filter((v) => v !== null);
+      const l1Avg = l1Values.length ? l1Values.reduce((a, b) => a + b, 0) / l1Values.length : null;
+
+      const rows = [
+        { label: 'Top 10 Avg Return', value: fmtPercent(sorted.slice(0, 10).map(getMetric).reduce((a, b) => a + b, 0) / Math.max(1, Math.min(10, sorted.length))) },
+        { label: 'Bottom 10 Avg Return', value: fmtPercent(sorted.slice(-10).map(getMetric).reduce((a, b) => a + b, 0) / Math.max(1, Math.min(10, sorted.length))) },
+        { label: 'Coins > +10%', value: `${upside}` },
+        { label: 'Coins < -10%', value: `${downside}` },
+        { label: 'L1 Sector Avg', value: fmtPercent(l1Avg) }
+      ];
+
+      insightGrid.innerHTML = '';
+      rows.forEach((row) => {
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.innerHTML = `<span class="info-label">${row.label}</span><span class="info-value">${row.value}</span>`;
+        insightGrid.appendChild(div);
+      });
+    }
+
+    function render() {
+      const key = state.period === 7 ? 'relative_7d' : state.period === 14 ? 'relative_14d' : 'relative_30d';
+      const sorted = [...state.alts]
+        .filter((c) => c[key] !== null && c[key] !== undefined)
+        .sort((a, b) => (b[key] ?? -9999) - (a[key] ?? -9999));
+
+      const top = sorted.slice(0, 10);
+      const bottom = sorted.slice(-10).reverse();
+
+      updateInsights(sorted);
+      updateTable(sorted);
+      buildSpaghettiChart('topChart', top, topColors, 'Top outperformance');
+      buildSpaghettiChart('bottomChart', bottom, bottomColors, 'Worst underperformance');
+      buildSectorChart(sorted);
+      buildScatterChart(sorted);
+      buildDistributionChart(sorted);
+
+      document.getElementById('topRange').textContent = `Window ${state.period}D`;
+      document.getElementById('bottomRange').textContent = `Window ${state.period}D`;
+      document.getElementById('topChartSubtitle').textContent = `Top 10 liquid alts by ${state.period}D relative return vs BTC.`;
+    }
+
+    function wireToggles() {
+      document.querySelectorAll('.toggle-btn').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const period = Number(btn.dataset.period);
+          if (!period || period === state.period) return;
+          state.period = period;
+          document.querySelectorAll('.toggle-btn').forEach((b) => {
+            const active = Number(b.dataset.period) === period;
+            b.classList.toggle('active', active);
+            b.setAttribute('aria-selected', active ? 'true' : 'false');
+          });
+          render();
+        });
+      });
+    }
+
+    async function init() {
+      try {
+        const [payload, meta] = await Promise.all([
+          loadJSON('data/alt_performance.json'),
+          loadJSON('data/metadata.json')
+        ]);
+        state.alts = Array.isArray(payload.alts) ? payload.alts : [];
+        state.meta = meta || {};
+        document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated -';
+        wireToggles();
+        render();
+      } catch (err) {
+        console.error(err);
+        document.getElementById('footerNote').textContent = 'Failed to load alt performance data. Run refresh_alts.py to generate JSON.';
+      }
+    }
+
+    init();
+  </script>
+</body>
+</html>
