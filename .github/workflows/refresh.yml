@@ -28,13 +28,15 @@ jobs:
       - name: Install Python dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install requests
+          pip install requests yfinance curl_cffi beautifulsoup4
       - name: Fetch crypto options data
         run: python3 Crypto-Dashboard/scripts/refresh_crypto.py
       - name: Fetch trading indicators data
         run: python3 Trading-Indicators/scripts/refresh_trading_indicators.py
       - name: Fetch alt outperformance data
         run: python3 Alt-Outperformance/scripts/refresh_alts.py
+      - name: Fetch situation monitor data
+        run: python3 Situation-Monitor/scripts/refresh_situation.py
       - name: Commit data
         run: |
           git config user.name "github-actions"
@@ -42,5 +44,6 @@ jobs:
           git add Crypto-Dashboard/data/*.json
           git add Trading-Indicators/data/*.json
           git add Alt-Outperformance/data/*.json
+          git add Situation-Monitor/data/*.json
           git commit -m "chore: refresh data" || echo "No changes"
           git push
