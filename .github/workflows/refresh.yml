@@ -36,6 +36,8 @@ jobs:
       - name: Fetch alt outperformance data
         run: python3 Alt-Outperformance/scripts/refresh_alts.py
       - name: Fetch situation monitor data
+        env:
+          FRED_API_KEY: ${{ secrets.FRED_API_KEY }}
         run: python3 Situation-Monitor/scripts/refresh_situation.py
       - name: Commit data
         run: |

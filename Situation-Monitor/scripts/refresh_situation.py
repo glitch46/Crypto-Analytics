@@ -105,41 +105,54 @@ def compute_zscore(values: List[float], window: int = 90) -> Optional[float]:
     return round((valid[-1] - avg) / std, 2)
 
 
-# ── FRED: ICE BofA HY OAS ───────────────────────────────────────────────────
-FRED_HY_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+# ── FRED API ─────────────────────────────────────────────────────────────────
+FRED_API_KEY = os.environ.get("FRED_API_KEY", "")
+FRED_API_BASE = "https://api.stlouisfed.org/fred/series/observations"
+
+
+def fetch_fred_series(series_id: str, limit_days: int = 180) -> Tuple[List[str], List[float]]:
+    """Fetch a FRED series via the official API. Returns (dates, values)."""
+    import requests
+
+    start_date = (datetime.datetime.now() - datetime.timedelta(days=limit_days)).strftime("%Y-%m-%d")
+    params = {
+        "series_id": series_id,
+        "api_key": FRED_API_KEY,
+        "file_type": "json",
+        "observation_start": start_date,
+        "sort_order": "asc",
+    }
+    r = requests.get(FRED_API_BASE, params=params, timeout=20)
+    r.raise_for_status()
+    data = r.json()
+
+    dates = []
+    values = []
+    for obs in data.get("observations", []):
+        if obs["value"] == ".":
+            continue
+        try:
+            dates.append(obs["date"])
+            values.append(float(obs["value"]))
+        except (ValueError, KeyError):
+            continue
+
+    return dates, values
 
 
 def fetch_hy_spread() -> Dict[str, Any]:
-    """Fetch ICE BofA US High Yield Index Option-Adjusted Spread from FRED."""
+    """Fetch ICE BofA US High Yield Index Option-Adjusted Spread from FRED API."""
     try:
-        r = curl_requests.get(FRED_HY_CSV, impersonate="chrome", timeout=20)
-        r.raise_for_status()
+        dates, values = fetch_fred_series("BAMLH0A0HYM2", limit_days=180)
 
-        lines = r.text.strip().split("\n")
-        dates = []
-        values = []
-        # Keep only last ~6 months of daily data
-        cutoff = (datetime.datetime.now() - datetime.timedelta(days=180)).strftime("%Y-%m-%d")
-        for line in lines[1:]:  # skip header
-            parts = line.split(",")
-            if len(parts) < 2 or parts[1] == ".":
-                continue
-            date_str = parts[0]
-            if date_str < cutoff:
-                continue
-            try:
-                val = float(parts[1])
-            except ValueError:
-                continue
-            dates.append(date_str)
-            values.append(val)
+        if not values:
+            raise ValueError("No HY OAS data returned from FRED API")
 
-        current = values[-1] if values else None
+        current = values[-1]
         chg_1d = round(values[-1] - values[-2], 3) if len(values) >= 2 else None
         chg_7d = round(values[-1] - values[-6], 3) if len(values) >= 6 else None
         chg_30d = round(values[-1] - values[-23], 3) if len(values) >= 23 else None
 
-        # Compute SMA
         sma_val = sum(values) / len(values) if values else None
 
         print(f"  HY OAS: {current}% (7d chg: {chg_7d})")
