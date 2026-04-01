@@ -105,6 +105,62 @@ def compute_zscore(values: List[float], window: int = 90) -> Optional[float]:
     return round((valid[-1] - avg) / std, 2)
 
 
+# ── FRED: ICE BofA HY OAS ───────────────────────────────────────────────────
+FRED_HY_CSV = "https://fred.stlouisfed.org/graph/fredgraph.csv?id=BAMLH0A0HYM2"
+
+
+def fetch_hy_spread() -> Dict[str, Any]:
+    """Fetch ICE BofA US High Yield Index Option-Adjusted Spread from FRED."""
+    try:
+        r = curl_requests.get(FRED_HY_CSV, impersonate="chrome", timeout=20)
+        r.raise_for_status()
+
+        lines = r.text.strip().split("\n")
+        dates = []
+        values = []
+        # Keep only last ~6 months of daily data
+        cutoff = (datetime.datetime.now() - datetime.timedelta(days=180)).strftime("%Y-%m-%d")
+        for line in lines[1:]:  # skip header
+            parts = line.split(",")
+            if len(parts) < 2 or parts[1] == ".":
+                continue
+            date_str = parts[0]
+            if date_str < cutoff:
+                continue
+            try:
+                val = float(parts[1])
+            except ValueError:
+                continue
+            dates.append(date_str)
+            values.append(val)
+
+        current = values[-1] if values else None
+        chg_1d = round(values[-1] - values[-2], 3) if len(values) >= 2 else None
+        chg_7d = round(values[-1] - values[-6], 3) if len(values) >= 6 else None
+        chg_30d = round(values[-1] - values[-23], 3) if len(values) >= 23 else None
+
+        # Compute SMA
+        sma_val = sum(values) / len(values) if values else None
+
+        print(f"  HY OAS: {current}% (7d chg: {chg_7d})")
+
+        return {
+            "current": current,
+            "chg_1d": chg_1d,
+            "chg_7d": chg_7d,
+            "chg_30d": chg_30d,
+            "sma": round(sma_val, 3) if sma_val else None,
+            "dates": dates,
+            "values": values,
+        }
+    except Exception as e:
+        print(f"  Warning: HY OAS fetch failed: {e}")
+        return {
+            "current": None, "chg_1d": None, "chg_7d": None, "chg_30d": None,
+            "sma": None, "dates": [], "values": [],
+        }
+
+
 # ── AAII Sentiment Survey ────────────────────────────────────────────────────
 AAII_URL = "https://www.aaii.com/sentimentsurvey/sent_results"
 AAII_HISTORICAL_AVG = {"bullish": 37.5, "neutral": 31.5, "bearish": 31.0}
@@ -839,6 +895,7 @@ def main():
     # Fetch all data
     data = fetch_all_data()
     aaii = fetch_aaii_sentiment()
+    hy_spread = fetch_hy_spread()
 
     # Compute derived metrics
     kpis = compute_kpis(data)
@@ -861,6 +918,7 @@ def main():
             "tickers": TICKERS,
         },
         "aaii": aaii,
+        "hy_spread": hy_spread,
         "threat": threat,
         "narrative": narrative,
         "kpis": kpis,

@@ -657,8 +657,28 @@ async function init() {
   app.appendChild(bigBox);
 
   const hygBox = createChartBox('HYG vs TLT — Credit Stress Indicator', 'hygChart', true);
-  hygBox.style.marginBottom = '32px';
+  hygBox.style.marginBottom = '24px';
   app.appendChild(hygBox);
+
+  // HY OAS chart
+  if (data.hy_spread && data.hy_spread.dates && data.hy_spread.dates.length > 0) {
+    const hy = data.hy_spread;
+    const hyBox = createChartBox('ICE BofA US High Yield OAS — Option-Adjusted Spread', 'hyOasChart', true);
+    hyBox.style.marginBottom = '32px';
+
+    const hyInfo = document.createElement('div');
+    hyInfo.style.cssText = 'display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;';
+    hyInfo.innerHTML = `
+      <span class="corr-badge" style="font-size:12px;">Current: <strong>${fmt(hy.current, 2)}%</strong></span>
+      <span class="corr-badge" style="font-size:12px;">1d: <strong style="color:${(hy.chg_1d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_1d != null ? ((hy.chg_1d > 0 ? '+' : '') + fmt(hy.chg_1d, 2)) : '—'}</strong></span>
+      <span class="corr-badge" style="font-size:12px;">7d: <strong style="color:${(hy.chg_7d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_7d != null ? ((hy.chg_7d > 0 ? '+' : '') + fmt(hy.chg_7d, 2)) : '—'}</strong></span>
+      <span class="corr-badge" style="font-size:12px;">30d: <strong style="color:${(hy.chg_30d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_30d != null ? ((hy.chg_30d > 0 ? '+' : '') + fmt(hy.chg_30d, 2)) : '—'}</strong></span>
+      <span class="corr-badge" style="font-size:12px;">6M Avg: <strong>${fmt(hy.sma, 2)}%</strong></span>
+    `;
+    hyBox.querySelector('h3').after(hyInfo);
+    app.appendChild(hyBox);
+    renderHyOasChart(hy);
+  }
 
   // ─── Render all charts ───
   renderOilChart(charts.oil_history);
@@ -939,6 +959,41 @@ function renderHygTltChart(d) {
       scales: {
         ...chartDefaults.scales,
         y: { ...chartDefaults.scales.y, title: { display: true, text: 'Indexed (100 = start)', color: '#9999a5', font: { size: 11 } } },
+      },
+    },
+  });
+}
+
+function renderHyOasChart(d) {
+  // Color the area: green when below SMA, red when above
+  new Chart(document.getElementById('hyOasChart'), {
+    type: 'line',
+    data: {
+      labels: d.dates,
+      datasets: [
+        {
+          label: 'HY OAS (%)',
+          data: d.values,
+          borderColor: '#ff4d7d',
+          backgroundColor: 'rgba(255,77,125,0.12)',
+          borderWidth: 2, pointRadius: 0, tension: 0.3, fill: true,
+        },
+        {
+          label: '6M Average',
+          data: d.dates.map(() => d.sma),
+          borderColor: '#ffb80080',
+          borderWidth: 1.5, borderDash: [6,3], pointRadius: 0,
+        },
+      ],
+    },
+    options: {
+      ...chartDefaults,
+      scales: {
+        x: chartDefaults.scales.x,
+        y: {
+          ...chartDefaults.scales.y,
+          title: { display: true, text: 'Spread (%)', color: '#9999a5', font: { size: 11 } },
+        },
       },
     },
   });
