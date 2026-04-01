@@ -965,17 +965,24 @@ function renderHygTltChart(d) {
 }
 
 function renderHyOasChart(d) {
-  // Format dates as "MMM 'YY" for readability on dense daily data
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const formattedLabels = d.dates.map(ds => {
-    const parts = ds.split('-');
-    return months[parseInt(parts[1], 10) - 1] + ' ' + parts[2] + ', ' + parts[0].slice(2);
+
+  // Build monthly labels: show "May '25" on the first trading day of each month, empty string otherwise
+  let lastYM = '';
+  const tickLabels = d.dates.map(ds => {
+    const ym = ds.slice(0, 7);
+    if (ym !== lastYM) {
+      lastYM = ym;
+      const parts = ds.split('-');
+      return months[parseInt(parts[1], 10) - 1] + " '" + parts[0].slice(2);
+    }
+    return '';
   });
 
   new Chart(document.getElementById('hyOasChart'), {
     type: 'line',
     data: {
-      labels: formattedLabels,
+      labels: tickLabels,
       datasets: [
         {
           label: 'HY OAS (%)',
@@ -999,7 +1006,13 @@ function renderHyOasChart(d) {
         tooltip: {
           ...chartDefaults.plugins.tooltip,
           callbacks: {
-            title: ctx => formattedLabels[ctx[0].dataIndex],
+            title: function(ctx) {
+              const i = ctx[0].dataIndex;
+              const raw = d.dates[i];
+              if (!raw) return '';
+              const parts = raw.split('-');
+              return months[parseInt(parts[1], 10) - 1] + ' ' + parseInt(parts[2], 10) + ', ' + parts[0];
+            },
             label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%`,
           },
         },
@@ -1009,20 +1022,8 @@ function renderHyOasChart(d) {
           ticks: {
             color: '#6b6b76',
             font: { size: 10 },
-            callback: function(value, index) {
-              // Show label only on the first data point of each month
-              const raw = d.dates[index];
-              if (!raw) return null;
-              const ym = raw.slice(0, 7); // "YYYY-MM"
-              const prev = index > 0 ? d.dates[index - 1] : null;
-              const prevYm = prev ? prev.slice(0, 7) : null;
-              if (ym !== prevYm) {
-                const parts = raw.split('-');
-                return months[parseInt(parts[1], 10) - 1] + " '" + parts[0].slice(2);
-              }
-              return null;
-            },
-            autoSkip: false,
+            autoSkip: true,
+            maxTicksLimit: 12,
             maxRotation: 0,
           },
           grid: { color: '#1a1a1e' },
