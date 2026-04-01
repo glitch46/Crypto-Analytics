@@ -663,7 +663,7 @@ async function init() {
   // HY OAS chart
   if (data.hy_spread && data.hy_spread.dates && data.hy_spread.dates.length > 0) {
     const hy = data.hy_spread;
-    const hyBox = createChartBox('ICE BofA US High Yield OAS — Option-Adjusted Spread', 'hyOasChart', true);
+    const hyBox = createChartBox('ICE BofA US High Yield Index Option-Adjusted Spread', 'hyOasChart', true);
     hyBox.style.marginBottom = '32px';
 
     const hyInfo = document.createElement('div');
