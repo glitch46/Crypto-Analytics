@@ -113,6 +113,7 @@ FRED_API_BASE = "https://api.stlouisfed.org/fred/series/observations"
 def fetch_fred_series(series_id: str, limit_days: int = 180) -> Tuple[List[str], List[float]]:
     """Fetch a FRED series via the official API. Returns (dates, values)."""
     import requests
+    import time
 
     start_date = (datetime.datetime.now() - datetime.timedelta(days=limit_days)).strftime("%Y-%m-%d")
     params = {
@@ -122,9 +123,18 @@ def fetch_fred_series(series_id: str, limit_days: int = 180) -> Tuple[List[str],
         "observation_start": start_date,
         "sort_order": "asc",
     }
-    r = requests.get(FRED_API_BASE, params=params, timeout=20)
-    r.raise_for_status()
-    data = r.json()
+
+    # FRED API can occasionally 500; retry once
+    data = None
+    for attempt in range(2):
+        r = requests.get(FRED_API_BASE, params=params, timeout=30)
+        if r.status_code == 200:
+            data = r.json()
+            break
+        if attempt == 0:
+            time.sleep(2)
+    if data is None:
+        r.raise_for_status()
 
     dates = []
     values = []
@@ -143,7 +153,7 @@ def fetch_fred_series(series_id: str, limit_days: int = 180) -> Tuple[List[str],
 def fetch_hy_spread() -> Dict[str, Any]:
     """Fetch ICE BofA US High Yield Index Option-Adjusted Spread from FRED API."""
     try:
-        dates, values = fetch_fred_series("BAMLH0A0HYM2", limit_days=180)
+        dates, values = fetch_fred_series("BAMLH0A0HYM2", limit_days=360)
 
         if not values:
             raise ValueError("No HY OAS data returned from FRED API")

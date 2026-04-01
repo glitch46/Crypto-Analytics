@@ -673,7 +673,7 @@ async function init() {
       <span class="corr-badge" style="font-size:12px;">1d: <strong style="color:${(hy.chg_1d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_1d != null ? ((hy.chg_1d > 0 ? '+' : '') + fmt(hy.chg_1d, 2)) : '—'}</strong></span>
       <span class="corr-badge" style="font-size:12px;">7d: <strong style="color:${(hy.chg_7d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_7d != null ? ((hy.chg_7d > 0 ? '+' : '') + fmt(hy.chg_7d, 2)) : '—'}</strong></span>
       <span class="corr-badge" style="font-size:12px;">30d: <strong style="color:${(hy.chg_30d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_30d != null ? ((hy.chg_30d > 0 ? '+' : '') + fmt(hy.chg_30d, 2)) : '—'}</strong></span>
-      <span class="corr-badge" style="font-size:12px;">6M Avg: <strong>${fmt(hy.sma, 2)}%</strong></span>
+      <span class="corr-badge" style="font-size:12px;">1Y Avg: <strong>${fmt(hy.sma, 2)}%</strong></span>
     `;
     hyBox.querySelector('h3').after(hyInfo);
     app.appendChild(hyBox);
@@ -965,11 +965,17 @@ function renderHygTltChart(d) {
 }
 
 function renderHyOasChart(d) {
-  // Color the area: green when below SMA, red when above
+  // Format dates as "MMM 'YY" for readability on dense daily data
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const formattedLabels = d.dates.map(ds => {
+    const parts = ds.split('-');
+    return months[parseInt(parts[1], 10) - 1] + ' ' + parts[2] + ', ' + parts[0].slice(2);
+  });
+
   new Chart(document.getElementById('hyOasChart'), {
     type: 'line',
     data: {
-      labels: d.dates,
+      labels: formattedLabels,
       datasets: [
         {
           label: 'HY OAS (%)',
@@ -979,7 +985,7 @@ function renderHyOasChart(d) {
           borderWidth: 2, pointRadius: 0, tension: 0.3, fill: true,
         },
         {
-          label: '6M Average',
+          label: 'Period Average',
           data: d.dates.map(() => d.sma),
           borderColor: '#ffb80080',
           borderWidth: 1.5, borderDash: [6,3], pointRadius: 0,
@@ -988,8 +994,38 @@ function renderHyOasChart(d) {
     },
     options: {
       ...chartDefaults,
+      plugins: {
+        ...chartDefaults.plugins,
+        tooltip: {
+          ...chartDefaults.plugins.tooltip,
+          callbacks: {
+            title: ctx => formattedLabels[ctx[0].dataIndex],
+            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(2)}%`,
+          },
+        },
+      },
       scales: {
-        x: chartDefaults.scales.x,
+        x: {
+          ticks: {
+            color: '#6b6b76',
+            font: { size: 10 },
+            maxTicksLimit: 12,
+            callback: function(value, index) {
+              // Show only 1st of each month for clean labels
+              const raw = d.dates[index];
+              if (!raw) return null;
+              const day = parseInt(raw.split('-')[2], 10);
+              if (day <= 3) {
+                const parts = raw.split('-');
+                return months[parseInt(parts[1], 10) - 1] + " '" + parts[0].slice(2);
+              }
+              return null;
+            },
+            autoSkip: false,
+            maxRotation: 0,
+          },
+          grid: { color: '#1a1a1e' },
+        },
         y: {
           ...chartDefaults.scales.y,
           title: { display: true, text: 'Spread (%)', color: '#9999a5', font: { size: 11 } },
