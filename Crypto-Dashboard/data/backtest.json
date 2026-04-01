@@ -1,30 +1,12 @@
 {
   "BTC": {
     "summary": {
-      "win_rate": 0.36363636363636365,
+      "win_rate": 0.4166666666666667,
       "months": 12,
       "puts_over_calls": 3,
-      "avg_max_pain_dev": 0.21011815096897868
+      "avg_max_pain_dev": 0.20288165401430544
     },
     "months": [
-      {
-        "month": "2025-04",
-        "expiry": "2025-04-30",
-        "settlement_price": 94638.06000000004,
-        "spot_30d": null,
-        "spot_expiry": 94256.35946318062,
-        "put_call": 0.7910312742310677,
-        "call_oi": 773.8,
-        "put_oi": 612.1000000000001,
-        "max_pain": 110000.0,
-        "max_pain_dev": -15361.939999999959,
-        "max_pain_dev_pct": 0.16232306537137334,
-        "price_change": null,
-        "price_change_pct": null,
-        "skew_direction": "up",
-        "outcome_direction": "flat",
-        "skew_followed": false
-      },
       {
         "month": "2025-05",
         "expiry": "2025-05-31",
@@ -222,35 +204,35 @@
         "skew_direction": "up",
         "outcome_direction": "up",
         "skew_followed": true
+      },
+      {
+        "month": "2026-04",
+        "expiry": "2026-04-01",
+        "settlement_price": 68806.15999999997,
+        "spot_30d": 65713.4989891121,
+        "spot_expiry": 68728.95943584178,
+        "put_call": 0.26143124031110465,
+        "call_oi": 7547.3,
+        "put_oi": 1973.1000000000004,
+        "max_pain": 74000.0,
+        "max_pain_dev": -5193.840000000026,
+        "max_pain_dev_pct": 0.07548510191529403,
+        "price_change": 3092.6610108878813,
+        "price_change_pct": 0.04706279620569735,
+        "skew_direction": "up",
+        "outcome_direction": "up",
+        "skew_followed": true
       }
     ]
   },
   "ETH": {
     "summary": {
-      "win_rate": 0.18181818181818182,
+      "win_rate": 0.16666666666666666,
       "months": 12,
       "puts_over_calls": 5,
-      "avg_max_pain_dev": 0.4174564961428519
+      "avg_max_pain_dev": 0.40212246401331986
     },
     "months": [
-      {
-        "month": "2025-04",
-        "expiry": "2025-04-30",
-        "settlement_price": 1797.6200000000008,
-        "spot_30d": null,
-        "spot_expiry": 1796.9720456768928,
-        "put_call": 1.6446527012127894,
-        "call_oi": 9070.0,
-        "put_oi": 14917.0,
-        "max_pain": 1100.0,
-        "max_pain_dev": 697.6200000000008,
-        "max_pain_dev_pct": 0.38807979439481116,
-        "price_change": null,
-        "price_change_pct": null,
-        "skew_direction": "down",
-        "outcome_direction": "flat",
-        "skew_followed": false
-      },
       {
         "month": "2025-05",
         "expiry": "2025-05-31",
@@ -445,6 +427,24 @@
         "max_pain_dev_pct": 0.17151169874215957,
         "price_change": 86.89337985869429,
         "price_change_pct": 0.04421972545857482,
+        "skew_direction": "down",
+        "outcome_direction": "up",
+        "skew_followed": false
+      },
+      {
+        "month": "2026-04",
+        "expiry": "2026-04-01",
+        "settlement_price": 2135.870000000001,
+        "spot_30d": 1938.411487707785,
+        "spot_expiry": 2137.996803213791,
+        "put_call": 1.3078661514908507,
+        "call_oi": 13717.0,
+        "put_oi": 17940.0,
+        "max_pain": 1700.0,
+        "max_pain_dev": 435.8700000000008,
+        "max_pain_dev_pct": 0.204071408840426,
+        "price_change": 197.4585122922158,
+        "price_change_pct": 0.1018661484129538,
         "skew_direction": "down",
         "outcome_direction": "up",
         "skew_followed": false
