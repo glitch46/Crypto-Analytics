@@ -1009,13 +1009,14 @@ function renderHyOasChart(d) {
           ticks: {
             color: '#6b6b76',
             font: { size: 10 },
-            maxTicksLimit: 12,
             callback: function(value, index) {
-              // Show only 1st of each month for clean labels
+              // Show label only on the first data point of each month
               const raw = d.dates[index];
               if (!raw) return null;
-              const day = parseInt(raw.split('-')[2], 10);
-              if (day <= 3) {
+              const ym = raw.slice(0, 7); // "YYYY-MM"
+              const prev = index > 0 ? d.dates[index - 1] : null;
+              const prevYm = prev ? prev.slice(0, 7) : null;
+              if (ym !== prevYm) {
                 const parts = raw.split('-');
                 return months[parseInt(parts[1], 10) - 1] + " '" + parts[0].slice(2);
               }
