@@ -1,13 +1,13 @@
 {
   "BTC": {
-    "funding_rate": "0.0003%",
-    "perp_basis": "$19.15",
+    "funding_rate": "0.0004%",
+    "perp_basis": "$13.17",
     "rv_iv": "53.4% / 52.2%",
     "sources": "Deribit + CoinGecko"
   },
   "ETH": {
     "funding_rate": "-0.0028%",
-    "perp_basis": "$-0.33",
+    "perp_basis": "$-0.41",
     "rv_iv": "73.1% / 72.4%",
     "sources": "Deribit + CoinGecko"
   }
