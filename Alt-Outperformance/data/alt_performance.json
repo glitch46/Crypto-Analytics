@@ -122,7 +122,7 @@
     },
     {
       "date": "2026-04-02",
-      "price": 66839.90454104444
+      "price": 66945.13494887014
     }
   ],
   "alts": [
@@ -131,12 +131,12 @@
       "symbol": "DEXE",
       "name": "DeXe",
       "market_cap_rank": 111,
-      "market_cap": 371302602,
-      "current_price": 7.94,
+      "market_cap": 374589616,
+      "current_price": 8.02,
       "sector": "Other",
-      "relative_7d": 14.37,
-      "relative_14d": 49.67,
-      "relative_30d": 134.05,
+      "relative_7d": 15.06,
+      "relative_14d": 50.63,
+      "relative_30d": 135.69,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -256,7 +256,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 134.051
+          "relative_pct": 135.688
         }
       ]
     },
@@ -264,13 +264,13 @@
       "id": "memecore",
       "symbol": "M",
       "name": "MemeCore",
-      "market_cap_rank": 24,
-      "market_cap": 4434669647,
-      "current_price": 2.53,
+      "market_cap_rank": 23,
+      "market_cap": 4468244613,
+      "current_price": 2.55,
       "sector": "Other",
-      "relative_7d": 10.11,
-      "relative_14d": 40.67,
-      "relative_30d": 86.03,
+      "relative_7d": 10.51,
+      "relative_14d": 41.23,
+      "relative_30d": 86.85,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -390,7 +390,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 86.03
+          "relative_pct": 86.855
         }
       ]
     },
@@ -398,13 +398,13 @@
       "id": "bittensor",
       "symbol": "TAO",
       "name": "Bittensor",
-      "market_cap_rank": 36,
-      "market_cap": 2867633469,
-      "current_price": 299.06,
+      "market_cap_rank": 37,
+      "market_cap": 2873901747,
+      "current_price": 299.45,
       "sector": "AI",
-      "relative_7d": -7.0,
-      "relative_14d": 16.17,
-      "relative_30d": 65.21,
+      "relative_7d": -6.93,
+      "relative_14d": 16.3,
+      "relative_30d": 65.46,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -524,7 +524,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 65.209
+          "relative_pct": 65.461
         }
       ]
     },
@@ -533,12 +533,12 @@
       "symbol": "FET",
       "name": "Artificial Superintelligence Alliance",
       "market_cap_rank": 97,
-      "market_cap": 516612197,
-      "current_price": 0.228767,
+      "market_cap": 515674964,
+      "current_price": 0.228239,
       "sector": "AI",
-      "relative_7d": -5.31,
-      "relative_14d": 8.47,
-      "relative_30d": 56.47,
+      "relative_7d": -5.47,
+      "relative_14d": 8.32,
+      "relative_30d": 56.3,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -658,7 +658,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 56.469
+          "relative_pct": 56.297
         }
       ]
     },
@@ -667,12 +667,12 @@
       "symbol": "RENDER",
       "name": "Render",
       "market_cap_rank": 69,
-      "market_cap": 968825997,
-      "current_price": 1.87,
+      "market_cap": 966383970,
+      "current_price": 1.86,
       "sector": "AI",
-      "relative_7d": 6.87,
-      "relative_14d": 12.75,
-      "relative_30d": 41.16,
+      "relative_7d": 7.25,
+      "relative_14d": 13.17,
+      "relative_30d": 41.74,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -792,7 +792,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 41.156
+          "relative_pct": 41.739
         }
       ]
     },
@@ -801,12 +801,12 @@
       "symbol": "JST",
       "name": "JUST",
       "market_cap_rank": 93,
-      "market_cap": 567779416,
-      "current_price": 0.064411,
+      "market_cap": 568557435,
+      "current_price": 0.064488,
       "sector": "Other",
-      "relative_7d": 14.11,
-      "relative_14d": 17.21,
-      "relative_30d": 35.49,
+      "relative_7d": 14.3,
+      "relative_14d": 17.41,
+      "relative_30d": 35.75,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -926,7 +926,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 35.486
+          "relative_pct": 35.749
         }
       ]
     },
@@ -935,12 +935,12 @@
       "symbol": "ALGO",
       "name": "Algorand",
       "market_cap_rank": 71,
-      "market_cap": 941284246,
-      "current_price": 0.10586,
+      "market_cap": 943728051,
+      "current_price": 0.106154,
       "sector": "L1",
-      "relative_7d": 28.36,
-      "relative_14d": 24.72,
-      "relative_30d": 25.92,
+      "relative_7d": 28.75,
+      "relative_14d": 25.08,
+      "relative_30d": 26.31,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1060,7 +1060,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 25.925
+          "relative_pct": 26.309
         }
       ]
     },
@@ -1069,12 +1069,12 @@
       "symbol": "MON",
       "name": "Monad",
       "market_cap_rank": 134,
-      "market_cap": 270650134,
-      "current_price": 0.02502969,
+      "market_cap": 270649182,
+      "current_price": 0.02504323,
       "sector": "Other",
-      "relative_7d": 0.84,
-      "relative_14d": 14.26,
-      "relative_30d": 24.26,
+      "relative_7d": 2.27,
+      "relative_14d": 15.91,
+      "relative_30d": 26.13,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1194,7 +1194,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 24.256
+          "relative_pct": 26.134
         }
       ]
     },
@@ -1203,12 +1203,12 @@
       "symbol": "VVV",
       "name": "Venice Token",
       "market_cap_rank": 121,
-      "market_cap": 321523656,
-      "current_price": 7.12,
+      "market_cap": 326729747,
+      "current_price": 7.23,
       "sector": "Other",
-      "relative_7d": 15.52,
-      "relative_14d": 28.94,
-      "relative_30d": 22.26,
+      "relative_7d": 14.95,
+      "relative_14d": 28.33,
+      "relative_30d": 21.65,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1328,7 +1328,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 22.262
+          "relative_pct": 21.652
         }
       ]
     },
@@ -1337,12 +1337,12 @@
       "symbol": "QNT",
       "name": "Quant",
       "market_cap_rank": 66,
-      "market_cap": 1052451881,
-      "current_price": 72.36,
+      "market_cap": 1070780044,
+      "current_price": 73.58,
       "sector": "Interop",
-      "relative_7d": 1.14,
-      "relative_14d": 4.97,
-      "relative_30d": 18.07,
+      "relative_7d": 2.46,
+      "relative_14d": 6.35,
+      "relative_30d": 19.71,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1462,7 +1462,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 18.069
+          "relative_pct": 19.706
         }
       ]
     },
@@ -1470,13 +1470,13 @@
       "id": "edgex",
       "symbol": "EDGE",
       "name": "edgeX",
-      "market_cap_rank": 136,
-      "market_cap": 267265890,
-      "current_price": 0.763624,
+      "market_cap_rank": 135,
+      "market_cap": 268212234,
+      "current_price": 0.766944,
       "sector": "Other",
-      "relative_7d": 16.83,
-      "relative_14d": 16.83,
-      "relative_30d": 16.83,
+      "relative_7d": 18.12,
+      "relative_14d": 18.12,
+      "relative_30d": 18.12,
       "daily_relative": [
         {
           "date": "2026-03-31",
@@ -1488,7 +1488,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 16.827
+          "relative_pct": 18.117
         }
       ]
     },
@@ -1497,12 +1497,12 @@
       "symbol": "APEPE",
       "name": "Ape and Pepe",
       "market_cap_rank": 146,
-      "market_cap": 247269157,
+      "market_cap": 247233408,
       "current_price": 1.18e-06,
       "sector": "Other",
-      "relative_7d": -2.3,
-      "relative_14d": -2.89,
-      "relative_30d": 16.02,
+      "relative_7d": -2.36,
+      "relative_14d": -2.95,
+      "relative_30d": 15.97,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1622,7 +1622,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 16.021
+          "relative_pct": 15.975
         }
       ]
     },
@@ -1631,12 +1631,12 @@
       "symbol": "TRX",
       "name": "TRON",
       "market_cap_rank": 8,
-      "market_cap": 29880952472,
-      "current_price": 0.315349,
+      "market_cap": 29858778878,
+      "current_price": 0.315062,
       "sector": "L1",
-      "relative_7d": 6.36,
-      "relative_14d": 9.8,
-      "relative_30d": 14.6,
+      "relative_7d": 6.12,
+      "relative_14d": 9.55,
+      "relative_30d": 14.34,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1756,7 +1756,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 14.601
+          "relative_pct": 14.341
         }
       ]
     },
@@ -1764,13 +1764,13 @@
       "id": "hyperliquid",
       "symbol": "HYPE",
       "name": "Hyperliquid",
-      "market_cap_rank": 17,
-      "market_cap": 8354905548,
-      "current_price": 35.05,
+      "market_cap_rank": 16,
+      "market_cap": 8371401372,
+      "current_price": 35.14,
       "sector": "DeFi",
-      "relative_7d": -6.62,
-      "relative_14d": -10.6,
-      "relative_30d": 14.07,
+      "relative_7d": -6.6,
+      "relative_14d": -10.59,
+      "relative_30d": 14.13,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -1890,7 +1890,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 14.067
+          "relative_pct": 14.128
         }
       ]
     },
@@ -1899,12 +1899,12 @@
       "symbol": "OKB",
       "name": "OKB",
       "market_cap_rank": 46,
-      "market_cap": 1750992523,
-      "current_price": 83.38,
+      "market_cap": 1749527466,
+      "current_price": 83.31,
       "sector": "Exchange",
-      "relative_7d": 2.18,
-      "relative_14d": -3.36,
-      "relative_30d": 12.04,
+      "relative_7d": 1.86,
+      "relative_14d": -3.66,
+      "relative_30d": 11.7,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2024,7 +2024,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 12.043
+          "relative_pct": 11.696
         }
       ]
     },
@@ -2033,12 +2033,12 @@
       "symbol": "SUN",
       "name": "Sun Token",
       "market_cap_rank": 120,
-      "market_cap": 330545431,
-      "current_price": 0.01718508,
+      "market_cap": 330177320,
+      "current_price": 0.01717336,
       "sector": "Other",
-      "relative_7d": 3.14,
-      "relative_14d": 7.82,
-      "relative_30d": 10.53,
+      "relative_7d": 2.85,
+      "relative_14d": 7.52,
+      "relative_30d": 10.22,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2158,7 +2158,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 10.531
+          "relative_pct": 10.216
         }
       ]
     },
@@ -2167,12 +2167,12 @@
       "symbol": "XLM",
       "name": "Stellar",
       "market_cap_rank": 21,
-      "market_cap": 5420055125,
-      "current_price": 0.16394,
+      "market_cap": 5413789906,
+      "current_price": 0.163731,
       "sector": "L1",
-      "relative_7d": -1.28,
-      "relative_14d": 2.84,
-      "relative_30d": 10.48,
+      "relative_7d": -1.57,
+      "relative_14d": 2.55,
+      "relative_30d": 10.17,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2292,7 +2292,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 10.483
+          "relative_pct": 10.167
         }
       ]
     },
@@ -2301,12 +2301,12 @@
       "symbol": "HTX",
       "name": "HTX DAO",
       "market_cap_rank": 51,
-      "market_cap": 1570916318,
-      "current_price": 1.71e-06,
+      "market_cap": 1571676446,
+      "current_price": 1.72e-06,
       "sector": "Other",
-      "relative_7d": 6.03,
-      "relative_14d": 8.33,
-      "relative_30d": 10.25,
+      "relative_7d": 5.95,
+      "relative_14d": 8.25,
+      "relative_30d": 10.16,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2426,7 +2426,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 10.247
+          "relative_pct": 10.159
         }
       ]
     },
@@ -2435,12 +2435,12 @@
       "symbol": "SHIB",
       "name": "Shiba Inu",
       "market_cap_rank": 32,
-      "market_cap": 3446916496,
-      "current_price": 5.85e-06,
+      "market_cap": 3453892431,
+      "current_price": 5.86e-06,
       "sector": "Meme",
-      "relative_7d": 1.91,
-      "relative_14d": 6.9,
-      "relative_30d": 9.0,
+      "relative_7d": 1.94,
+      "relative_14d": 6.94,
+      "relative_30d": 9.05,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2560,7 +2560,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 8.997
+          "relative_pct": 9.049
         }
       ]
     },
@@ -2569,12 +2569,12 @@
       "symbol": "CFX",
       "name": "Conflux",
       "market_cap_rank": 137,
-      "market_cap": 266941089,
-      "current_price": 0.051435,
+      "market_cap": 266980251,
+      "current_price": 0.051418,
       "sector": "Other",
-      "relative_7d": -9.44,
-      "relative_14d": -10.21,
-      "relative_30d": 8.89,
+      "relative_7d": -9.75,
+      "relative_14d": -10.52,
+      "relative_30d": 8.53,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2694,7 +2694,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 8.891
+          "relative_pct": 8.532
         }
       ]
     },
@@ -2702,13 +2702,13 @@
       "id": "chiliz",
       "symbol": "CHZ",
       "name": "Chiliz",
-      "market_cap_rank": 106,
-      "market_cap": 396919752,
-      "current_price": 0.03858317,
+      "market_cap_rank": 105,
+      "market_cap": 397760323,
+      "current_price": 0.03868132,
       "sector": "Other",
-      "relative_7d": 13.95,
-      "relative_14d": 12.72,
-      "relative_30d": 7.52,
+      "relative_7d": 13.91,
+      "relative_14d": 12.67,
+      "relative_30d": 7.47,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2828,7 +2828,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 7.521
+          "relative_pct": 7.468
         }
       ]
     },
@@ -2837,12 +2837,12 @@
       "symbol": "SKY",
       "name": "Sky",
       "market_cap_rank": 48,
-      "market_cap": 1727593699,
-      "current_price": 0.07469,
+      "market_cap": 1732447966,
+      "current_price": 0.074921,
       "sector": "Other",
-      "relative_7d": 8.53,
-      "relative_14d": 9.76,
-      "relative_30d": 7.1,
+      "relative_7d": 8.75,
+      "relative_14d": 9.98,
+      "relative_30d": 7.32,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -2962,7 +2962,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 7.099
+          "relative_pct": 7.318
         }
       ]
     },
@@ -2971,12 +2971,12 @@
       "symbol": "2Z",
       "name": "DoubleZero",
       "market_cap_rank": 139,
-      "market_cap": 265187342,
-      "current_price": 0.076388,
+      "market_cap": 264439180,
+      "current_price": 0.076176,
       "sector": "Other",
-      "relative_7d": 6.19,
-      "relative_14d": 2.78,
-      "relative_30d": 6.93,
+      "relative_7d": 6.32,
+      "relative_14d": 2.89,
+      "relative_30d": 7.07,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3096,7 +3096,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 6.933
+          "relative_pct": 7.065
         }
       ]
     },
@@ -3105,12 +3105,12 @@
       "symbol": "ETH",
       "name": "Ethereum",
       "market_cap_rank": 2,
-      "market_cap": 248463615500,
-      "current_price": 2060.21,
+      "market_cap": 248516913148,
+      "current_price": 2059.14,
       "sector": "L1",
-      "relative_7d": 1.28,
-      "relative_14d": -0.31,
-      "relative_30d": 6.08,
+      "relative_7d": 1.09,
+      "relative_14d": -0.5,
+      "relative_30d": 5.88,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3230,7 +3230,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 6.082
+          "relative_pct": 5.884
         }
       ]
     },
@@ -3239,12 +3239,12 @@
       "symbol": "WBT",
       "name": "WhiteBIT Coin",
       "market_cap_rank": 12,
-      "market_cap": 10929697808,
-      "current_price": 51.24,
+      "market_cap": 10936733823,
+      "current_price": 51.25,
       "sector": "Other",
-      "relative_7d": -0.32,
-      "relative_14d": -3.81,
-      "relative_30d": 5.63,
+      "relative_7d": -0.46,
+      "relative_14d": -3.95,
+      "relative_30d": 5.48,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3364,7 +3364,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 5.632
+          "relative_pct": 5.483
         }
       ]
     },
@@ -3373,12 +3373,12 @@
       "symbol": "LDO",
       "name": "Lido DAO",
       "market_cap_rank": 138,
-      "market_cap": 265746602,
-      "current_price": 0.312914,
+      "market_cap": 266491949,
+      "current_price": 0.313799,
       "sector": "DeFi",
-      "relative_7d": 10.91,
-      "relative_14d": 9.71,
-      "relative_30d": 5.61,
+      "relative_7d": 10.49,
+      "relative_14d": 9.29,
+      "relative_30d": 5.19,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3498,7 +3498,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 5.612
+          "relative_pct": 5.186
         }
       ]
     },
@@ -3507,12 +3507,12 @@
       "symbol": "KAS",
       "name": "Kaspa",
       "market_cap_rank": 76,
-      "market_cap": 855396251,
-      "current_price": 0.03130998,
+      "market_cap": 858424644,
+      "current_price": 0.03141585,
       "sector": "L1",
-      "relative_7d": -12.23,
-      "relative_14d": -14.26,
-      "relative_30d": 5.12,
+      "relative_7d": -12.37,
+      "relative_14d": -14.4,
+      "relative_30d": 4.98,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3632,7 +3632,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 5.117
+          "relative_pct": 4.977
         }
       ]
     },
@@ -3640,13 +3640,13 @@
       "id": "plasma",
       "symbol": "XPL",
       "name": "Plasma",
-      "market_cap_rank": 129,
-      "market_cap": 286825172,
-      "current_price": 0.120071,
+      "market_cap_rank": 130,
+      "market_cap": 281843970,
+      "current_price": 0.118644,
       "sector": "Other",
-      "relative_7d": 24.72,
-      "relative_14d": 16.2,
-      "relative_30d": 4.11,
+      "relative_7d": 23.45,
+      "relative_14d": 15.01,
+      "relative_30d": 2.99,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3766,7 +3766,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 4.108
+          "relative_pct": 2.987
         }
       ]
     },
@@ -3775,12 +3775,12 @@
       "symbol": "PRIME",
       "name": "PRIME",
       "market_cap_rank": 112,
-      "market_cap": 371611918,
+      "market_cap": 370735921,
       "current_price": 1.028,
       "sector": "Other",
-      "relative_7d": 6.28,
-      "relative_14d": 6.48,
-      "relative_30d": 2.92,
+      "relative_7d": 6.18,
+      "relative_14d": 6.38,
+      "relative_30d": 2.81,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -3900,141 +3900,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.921
-        }
-      ]
-    },
-    {
-      "id": "beldex",
-      "symbol": "BDX",
-      "name": "Beldex",
-      "market_cap_rank": 87,
-      "market_cap": 618429392,
-      "current_price": 0.079928,
-      "sector": "Other",
-      "relative_7d": 3.13,
-      "relative_14d": 3.32,
-      "relative_30d": 2.71,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -5.555
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -3.607
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 0.295
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 1.52
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 3.247
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": 0.162
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -2.112
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": 0.185
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -1.007
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -2.339
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -1.909
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -4.284
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -9.939
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -7.261
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -0.783
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -0.836
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -2.034
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 0.143
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": 0.859
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -3.864
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": 1.918
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -0.582
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": 3.769
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": 7.136
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": 5.256
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": 4.018
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": 3.33
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": 0.756
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": 2.706
+          "relative_pct": 2.813
         }
       ]
     },
@@ -4043,12 +3909,12 @@
       "symbol": "ONDO",
       "name": "Ondo",
       "market_cap_rank": 59,
-      "market_cap": 1251093847,
-      "current_price": 0.257087,
+      "market_cap": 1255716045,
+      "current_price": 0.257882,
       "sector": "DeFi",
-      "relative_7d": 3.31,
-      "relative_14d": 2.68,
-      "relative_30d": 2.65,
+      "relative_7d": 3.43,
+      "relative_14d": 2.8,
+      "relative_30d": 2.77,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -4168,7 +4034,141 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.646
+          "relative_pct": 2.766
+        }
+      ]
+    },
+    {
+      "id": "beldex",
+      "symbol": "BDX",
+      "name": "Beldex",
+      "market_cap_rank": 87,
+      "market_cap": 619078132,
+      "current_price": 0.079995,
+      "sector": "Other",
+      "relative_7d": 3.1,
+      "relative_14d": 3.29,
+      "relative_30d": 2.67,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -5.555
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -3.607
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 0.295
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": 1.52
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 3.247
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 0.162
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -2.112
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": 0.185
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -1.007
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -2.339
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -1.909
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -4.284
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -9.939
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -7.261
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -0.783
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -0.836
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -2.034
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 0.143
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": 0.859
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -3.864
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": 1.918
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -0.582
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": 3.769
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": 7.136
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": 5.256
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": 4.018
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": 3.33
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": 0.756
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": 2.668
         }
       ]
     },
@@ -4177,12 +4177,12 @@
       "symbol": "DOGE",
       "name": "Dogecoin",
       "market_cap_rank": 10,
-      "market_cap": 13886305305,
-      "current_price": 0.090402,
+      "market_cap": 13887539490,
+      "current_price": 0.090383,
       "sector": "Meme",
-      "relative_7d": 0.46,
-      "relative_14d": 1.25,
-      "relative_30d": 2.56,
+      "relative_7d": 0.28,
+      "relative_14d": 1.07,
+      "relative_30d": 2.37,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -4302,7 +4302,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.559
+          "relative_pct": 2.372
         }
       ]
     },
@@ -4311,12 +4311,12 @@
       "symbol": "NEXO",
       "name": "NEXO",
       "market_cap_rank": 75,
-      "market_cap": 860903568,
-      "current_price": 0.860924,
+      "market_cap": 861208064,
+      "current_price": 0.861089,
       "sector": "Other",
-      "relative_7d": 0.06,
-      "relative_14d": 0.95,
-      "relative_30d": 2.28,
+      "relative_7d": -0.08,
+      "relative_14d": 0.8,
+      "relative_30d": 2.13,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -4436,141 +4436,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.283
-        }
-      ]
-    },
-    {
-      "id": "layerzero",
-      "symbol": "ZRO",
-      "name": "LayerZero",
-      "market_cap_rank": 101,
-      "market_cap": 468912621,
-      "current_price": 1.86,
-      "sector": "Other",
-      "relative_7d": -7.16,
-      "relative_14d": -6.71,
-      "relative_30d": 2.28,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -0.564
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -2.265
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 0.199
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 4.494
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 8.592
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": 6.963
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": 8.706
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": 11.645
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": 10.197
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": 1.018
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": 2.558
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": 10.084
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": 11.452
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": 16.885
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": 10.642
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": 8.833
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": 6.765
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 5.85
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": 4.548
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": 15.713
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": 19.198
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": 11.259
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": 15.188
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": 11.215
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": 10.571
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": 9.578
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": 3.832
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": 1.308
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": 2.276
+          "relative_pct": 2.128
         }
       ]
     },
@@ -4582,9 +4448,9 @@
       "market_cap": 16971457775,
       "current_price": 1.034,
       "sector": "Other",
-      "relative_7d": 7.23,
-      "relative_14d": 7.05,
-      "relative_30d": 2.25,
+      "relative_7d": 7.09,
+      "relative_14d": 6.91,
+      "relative_30d": 2.09,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -4704,7 +4570,141 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.247
+          "relative_pct": 2.093
+        }
+      ]
+    },
+    {
+      "id": "layerzero",
+      "symbol": "ZRO",
+      "name": "LayerZero",
+      "market_cap_rank": 101,
+      "market_cap": 468385184,
+      "current_price": 1.86,
+      "sector": "Other",
+      "relative_7d": -7.33,
+      "relative_14d": -6.88,
+      "relative_30d": 2.09,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -0.564
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -2.265
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 0.199
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": 4.494
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 8.592
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 6.963
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": 8.706
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": 11.645
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": 10.197
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": 1.018
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": 2.558
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": 10.084
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 11.452
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": 16.885
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": 10.642
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": 8.833
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": 6.765
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 5.85
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": 4.548
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": 15.713
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": 19.198
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": 11.259
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": 15.188
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": 11.215
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": 10.571
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": 9.578
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": 3.832
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": 1.308
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": 2.094
         }
       ]
     },
@@ -4713,12 +4713,12 @@
       "symbol": "YLDS",
       "name": "YLDS",
       "market_cap_rank": 89,
-      "market_cap": 603900080,
-      "current_price": 0.99998,
+      "market_cap": 603911787,
+      "current_price": 1.0,
       "sector": "Other",
-      "relative_7d": 6.27,
-      "relative_14d": 6.2,
-      "relative_30d": 2.17,
+      "relative_7d": 6.12,
+      "relative_14d": 6.05,
+      "relative_30d": 2.01,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -4838,7 +4838,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.167
+          "relative_pct": 2.013
         }
       ]
     },
@@ -4847,12 +4847,12 @@
       "symbol": "PI",
       "name": "Pi Network",
       "market_cap_rank": 49,
-      "market_cap": 1704257850,
-      "current_price": 0.16949,
+      "market_cap": 1707048322,
+      "current_price": 0.169713,
       "sector": "Other",
-      "relative_7d": -4.08,
-      "relative_14d": 3.53,
-      "relative_30d": 2.11,
+      "relative_7d": -4.18,
+      "relative_14d": 3.43,
+      "relative_30d": 2.0,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -4972,7 +4972,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 2.111
+          "relative_pct": 2.003
         }
       ]
     },
@@ -4981,12 +4981,12 @@
       "symbol": "EURC",
       "name": "EURC",
       "market_cap_rank": 104,
-      "market_cap": 414011533,
+      "market_cap": 414081692,
       "current_price": 1.15,
       "sector": "Other",
-      "relative_7d": 5.99,
-      "relative_14d": 6.8,
-      "relative_30d": 1.47,
+      "relative_7d": 5.91,
+      "relative_14d": 6.72,
+      "relative_30d": 1.38,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -5106,7 +5106,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 1.471
+          "relative_pct": 1.384
         }
       ]
     },
@@ -5115,12 +5115,12 @@
       "symbol": "CAKE",
       "name": "PancakeSwap",
       "market_cap_rank": 102,
-      "market_cap": 454652593,
+      "market_cap": 455114560,
       "current_price": 1.33,
       "sector": "DeFi",
-      "relative_7d": -1.39,
-      "relative_14d": -1.55,
-      "relative_30d": 1.25,
+      "relative_7d": -1.38,
+      "relative_14d": -1.54,
+      "relative_30d": 1.27,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -5240,7 +5240,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 1.252
+          "relative_pct": 1.266
         }
       ]
     },
@@ -5248,13 +5248,13 @@
       "id": "the-open-network",
       "symbol": "TON",
       "name": "Toncoin",
-      "market_cap_rank": 34,
-      "market_cap": 3042092115,
+      "market_cap_rank": 35,
+      "market_cap": 3049029061,
       "current_price": 1.23,
       "sector": "Other",
-      "relative_7d": -1.21,
-      "relative_14d": 0.81,
-      "relative_30d": 0.41,
+      "relative_7d": -1.12,
+      "relative_14d": 0.91,
+      "relative_30d": 0.51,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -5374,7 +5374,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 0.415
+          "relative_pct": 0.514
         }
       ]
     },
@@ -5383,12 +5383,12 @@
       "symbol": "STABLE",
       "name": "\u200b\u200bStable",
       "market_cap_rank": 88,
-      "market_cap": 612462125,
-      "current_price": 0.02855188,
+      "market_cap": 615885500,
+      "current_price": 0.02878131,
       "sector": "Other",
-      "relative_7d": 13.39,
-      "relative_14d": 11.99,
-      "relative_30d": 0.07,
+      "relative_7d": 13.86,
+      "relative_14d": 12.45,
+      "relative_30d": 0.48,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -5508,7 +5508,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 0.075
+          "relative_pct": 0.485
         }
       ]
     },
@@ -5516,13 +5516,13 @@
       "id": "chainlink",
       "symbol": "LINK",
       "name": "Chainlink",
-      "market_cap_rank": 18,
-      "market_cap": 6099203776,
-      "current_price": 8.62,
+      "market_cap_rank": 17,
+      "market_cap": 6107207358,
+      "current_price": 8.63,
       "sector": "DeFi",
-      "relative_7d": -1.65,
-      "relative_14d": -0.32,
-      "relative_30d": 0.0,
+      "relative_7d": -1.75,
+      "relative_14d": -0.42,
+      "relative_30d": -0.1,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -5642,7 +5642,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": 0.0
+          "relative_pct": -0.103
         }
       ]
     },
@@ -5651,12 +5651,12 @@
       "symbol": "MNT",
       "name": "Mantle",
       "market_cap_rank": 42,
-      "market_cap": 2203167575,
-      "current_price": 0.671999,
+      "market_cap": 2205043003,
+      "current_price": 0.672711,
       "sector": "L2",
-      "relative_7d": -2.64,
-      "relative_14d": -6.93,
-      "relative_30d": -0.32,
+      "relative_7d": -2.83,
+      "relative_14d": -7.13,
+      "relative_30d": -0.53,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -5776,141 +5776,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -0.32
-        }
-      ]
-    },
-    {
-      "id": "monero",
-      "symbol": "XMR",
-      "name": "Monero",
-      "market_cap_rank": 19,
-      "market_cap": 6067789615,
-      "current_price": 329.7,
-      "sector": "Privacy",
-      "relative_7d": 3.11,
-      "relative_14d": 1.42,
-      "relative_30d": -1.13,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -1.69
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": 2.553
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 3.429
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 2.936
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 1.618
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -0.212
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": 1.21
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": 0.593
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -0.549
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": 0.955
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -0.064
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -1.373
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -0.034
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -0.181
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -2.734
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -2.78
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -1.196
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 0.176
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": 7.048
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -0.816
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -3.461
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -4.512
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -4.57
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -1.728
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -0.251
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -0.746
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -3.406
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -2.049
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -1.127
+          "relative_pct": -0.527
         }
       ]
     },
@@ -5919,12 +5785,12 @@
       "symbol": "XRP",
       "name": "XRP",
       "market_cap_rank": 4,
-      "market_cap": 80719034659,
-      "current_price": 1.31,
+      "market_cap": 80770813126,
+      "current_price": 1.32,
       "sector": "Payments",
-      "relative_7d": -0.72,
-      "relative_14d": -3.98,
-      "relative_30d": -1.24,
+      "relative_7d": -0.82,
+      "relative_14d": -4.08,
+      "relative_30d": -1.34,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -6044,7 +5910,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -1.241
+          "relative_pct": -1.343
         }
       ]
     },
@@ -6053,12 +5919,12 @@
       "symbol": "PEPE",
       "name": "Pepe",
       "market_cap_rank": 54,
-      "market_cap": 1402088818,
-      "current_price": 3.33e-06,
+      "market_cap": 1406651429,
+      "current_price": 3.34e-06,
       "sector": "Meme",
-      "relative_7d": 1.01,
-      "relative_14d": 1.19,
-      "relative_30d": -1.28,
+      "relative_7d": 0.87,
+      "relative_14d": 1.05,
+      "relative_30d": -1.42,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -6178,21 +6044,21 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -1.279
+          "relative_pct": -1.424
         }
       ]
     },
     {
-      "id": "apenft",
-      "symbol": "NFT",
-      "name": "AINFT",
-      "market_cap_rank": 122,
-      "market_cap": 317689741,
-      "current_price": 3.20957e-07,
-      "sector": "Other",
-      "relative_7d": 2.49,
-      "relative_14d": 2.91,
-      "relative_30d": -1.58,
+      "id": "monero",
+      "symbol": "XMR",
+      "name": "Monero",
+      "market_cap_rank": 18,
+      "market_cap": 6056718836,
+      "current_price": 328.35,
+      "sector": "Privacy",
+      "relative_7d": 2.52,
+      "relative_14d": 0.84,
+      "relative_30d": -1.72,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -6200,253 +6066,119 @@
         },
         {
           "date": "2026-03-05",
-          "relative_pct": -5.979
+          "relative_pct": -1.69
         },
         {
           "date": "2026-03-06",
-          "relative_pct": -3.101
+          "relative_pct": 2.553
         },
         {
           "date": "2026-03-07",
-          "relative_pct": 1.067
+          "relative_pct": 3.429
         },
         {
           "date": "2026-03-08",
-          "relative_pct": 2.279
+          "relative_pct": 2.936
         },
         {
           "date": "2026-03-09",
-          "relative_pct": 3.457
+          "relative_pct": 1.618
         },
         {
           "date": "2026-03-10",
-          "relative_pct": 0.349
+          "relative_pct": -0.212
         },
         {
           "date": "2026-03-11",
-          "relative_pct": -1.463
+          "relative_pct": 1.21
         },
         {
           "date": "2026-03-12",
-          "relative_pct": -2.358
+          "relative_pct": 0.593
         },
         {
           "date": "2026-03-13",
-          "relative_pct": -2.784
+          "relative_pct": -0.549
         },
         {
           "date": "2026-03-14",
-          "relative_pct": -3.595
+          "relative_pct": 0.955
         },
         {
           "date": "2026-03-15",
-          "relative_pct": -3.786
+          "relative_pct": -0.064
         },
         {
           "date": "2026-03-16",
-          "relative_pct": -6.399
+          "relative_pct": -1.373
         },
         {
           "date": "2026-03-17",
-          "relative_pct": -8.731
+          "relative_pct": -0.034
         },
         {
           "date": "2026-03-18",
-          "relative_pct": -8.178
+          "relative_pct": -0.181
         },
         {
           "date": "2026-03-19",
-          "relative_pct": -4.778
+          "relative_pct": -2.734
         },
         {
           "date": "2026-03-20",
-          "relative_pct": -2.329
+          "relative_pct": -2.78
         },
         {
           "date": "2026-03-21",
-          "relative_pct": -3.396
+          "relative_pct": -1.196
         },
         {
           "date": "2026-03-22",
-          "relative_pct": -0.546
+          "relative_pct": 0.176
         },
         {
           "date": "2026-03-23",
-          "relative_pct": 0.518
+          "relative_pct": 7.048
         },
         {
           "date": "2026-03-24",
-          "relative_pct": -3.664
+          "relative_pct": -0.816
         },
         {
           "date": "2026-03-25",
-          "relative_pct": -3.275
+          "relative_pct": -3.461
         },
         {
           "date": "2026-03-26",
-          "relative_pct": -4.343
+          "relative_pct": -4.512
         },
         {
           "date": "2026-03-27",
-          "relative_pct": -0.932
+          "relative_pct": -4.57
         },
         {
           "date": "2026-03-28",
-          "relative_pct": 2.173
+          "relative_pct": -1.728
         },
         {
           "date": "2026-03-29",
-          "relative_pct": 1.221
+          "relative_pct": -0.251
         },
         {
           "date": "2026-03-30",
-          "relative_pct": 1.54
+          "relative_pct": -0.746
         },
         {
           "date": "2026-03-31",
-          "relative_pct": 0.205
+          "relative_pct": -3.406
         },
         {
           "date": "2026-04-01",
-          "relative_pct": -2.279
+          "relative_pct": -2.049
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -1.585
-        }
-      ]
-    },
-    {
-      "id": "aster-2",
-      "symbol": "ASTER",
-      "name": "Aster",
-      "market_cap_rank": 50,
-      "market_cap": 1636915084,
-      "current_price": 0.666657,
-      "sector": "Other",
-      "relative_7d": 6.84,
-      "relative_14d": 2.79,
-      "relative_30d": -2.02,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -2.695
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -2.482
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 0.934
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 0.98
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 1.845
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": 0.746
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -1.353
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -2.231
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -2.397
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -3.445
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -1.559
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -3.256
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -3.192
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": 0.49
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -5.099
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -3.872
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -4.275
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -3.765
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -3.587
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -8.425
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -7.439
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -9.101
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -4.736
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -2.104
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -2.914
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -1.819
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -0.976
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -3.547
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -2.015
+          "relative_pct": -1.719
         }
       ]
     },
@@ -6454,13 +6186,13 @@
       "id": "world-liberty-financial",
       "symbol": "WLFI",
       "name": "World Liberty Financial",
-      "market_cap_rank": 37,
-      "market_cap": 2865020208,
-      "current_price": 0.099684,
+      "market_cap_rank": 34,
+      "market_cap": 3068209171,
+      "current_price": 0.099774,
       "sector": "Other",
-      "relative_7d": 4.21,
-      "relative_14d": 8.35,
-      "relative_30d": -2.55,
+      "relative_7d": 4.08,
+      "relative_14d": 8.22,
+      "relative_30d": -2.69,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -6580,21 +6312,21 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -2.553
+          "relative_pct": -2.69
         }
       ]
     },
     {
-      "id": "jasmycoin",
-      "symbol": "JASMY",
-      "name": "JasmyCoin",
-      "market_cap_rank": 141,
-      "market_cap": 260578156,
-      "current_price": 0.00526863,
+      "id": "aster-2",
+      "symbol": "ASTER",
+      "name": "Aster",
+      "market_cap_rank": 50,
+      "market_cap": 1629949148,
+      "current_price": 0.663421,
       "sector": "Other",
-      "relative_7d": 1.41,
-      "relative_14d": -4.97,
-      "relative_30d": -2.67,
+      "relative_7d": 6.13,
+      "relative_14d": 2.11,
+      "relative_30d": -2.7,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -6602,253 +6334,119 @@
         },
         {
           "date": "2026-03-05",
-          "relative_pct": -1.552
+          "relative_pct": -2.695
         },
         {
           "date": "2026-03-06",
-          "relative_pct": -1.172
+          "relative_pct": -2.482
         },
         {
           "date": "2026-03-07",
-          "relative_pct": 1.229
+          "relative_pct": 0.934
         },
         {
           "date": "2026-03-08",
-          "relative_pct": -1.156
+          "relative_pct": 0.98
         },
         {
           "date": "2026-03-09",
-          "relative_pct": 2.465
+          "relative_pct": 1.845
         },
         {
           "date": "2026-03-10",
-          "relative_pct": 4.535
+          "relative_pct": 0.746
         },
         {
           "date": "2026-03-11",
-          "relative_pct": 0.505
+          "relative_pct": -1.353
         },
         {
           "date": "2026-03-12",
-          "relative_pct": 1.627
+          "relative_pct": -2.231
         },
         {
           "date": "2026-03-13",
-          "relative_pct": 1.896
+          "relative_pct": -2.397
         },
         {
           "date": "2026-03-14",
-          "relative_pct": -0.545
+          "relative_pct": -3.445
         },
         {
           "date": "2026-03-15",
-          "relative_pct": -0.571
+          "relative_pct": -1.559
         },
         {
           "date": "2026-03-16",
-          "relative_pct": -0.793
+          "relative_pct": -3.256
         },
         {
           "date": "2026-03-17",
-          "relative_pct": 0.913
+          "relative_pct": -3.192
         },
         {
           "date": "2026-03-18",
-          "relative_pct": 1.857
+          "relative_pct": 0.49
         },
         {
           "date": "2026-03-19",
-          "relative_pct": 2.825
+          "relative_pct": -5.099
         },
         {
           "date": "2026-03-20",
-          "relative_pct": -0.195
+          "relative_pct": -3.872
         },
         {
           "date": "2026-03-21",
-          "relative_pct": -1.495
+          "relative_pct": -4.275
         },
         {
           "date": "2026-03-22",
-          "relative_pct": -1.232
+          "relative_pct": -3.765
         },
         {
           "date": "2026-03-23",
-          "relative_pct": -3.077
+          "relative_pct": -3.587
         },
         {
           "date": "2026-03-24",
-          "relative_pct": -0.845
+          "relative_pct": -8.425
         },
         {
           "date": "2026-03-25",
-          "relative_pct": -2.505
+          "relative_pct": -7.439
         },
         {
           "date": "2026-03-26",
-          "relative_pct": -4.356
+          "relative_pct": -9.101
         },
         {
           "date": "2026-03-27",
-          "relative_pct": -4.23
+          "relative_pct": -4.736
         },
         {
           "date": "2026-03-28",
-          "relative_pct": 0.638
+          "relative_pct": -2.104
         },
         {
           "date": "2026-03-29",
-          "relative_pct": -1.748
+          "relative_pct": -2.914
         },
         {
           "date": "2026-03-30",
-          "relative_pct": -2.428
+          "relative_pct": -1.819
         },
         {
           "date": "2026-03-31",
-          "relative_pct": -2.001
+          "relative_pct": -0.976
         },
         {
           "date": "2026-04-01",
-          "relative_pct": -3.027
+          "relative_pct": -3.547
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -2.674
-        }
-      ]
-    },
-    {
-      "id": "litecoin",
-      "symbol": "LTC",
-      "name": "Litecoin",
-      "market_cap_rank": 27,
-      "market_cap": 4005862101,
-      "current_price": 52.02,
-      "sector": "Payments",
-      "relative_7d": -1.71,
-      "relative_14d": -0.91,
-      "relative_30d": -2.91,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -2.674
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -2.518
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -1.527
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -0.783
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -0.71
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -2.243
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -4.119
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -2.982
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -3.697
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -2.992
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -4.014
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -4.023
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -2.36
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -2.169
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -2.11
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -1.181
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -0.822
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 0.032
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -1.713
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -2.424
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -0.393
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -1.219
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -1.257
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": 0.739
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": 1.103
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": 0.486
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -0.672
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -1.581
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -2.911
+          "relative_pct": -2.7
         }
       ]
     },
@@ -6857,12 +6455,12 @@
       "symbol": "AVAX",
       "name": "Avalanche",
       "market_cap_rank": 31,
-      "market_cap": 3759444635,
-      "current_price": 8.71,
+      "market_cap": 3766528833,
+      "current_price": 8.72,
       "sector": "L1",
-      "relative_7d": -3.53,
-      "relative_14d": -3.68,
-      "relative_30d": -2.91,
+      "relative_7d": -3.51,
+      "relative_14d": -3.67,
+      "relative_30d": -2.89,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -6982,21 +6580,21 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -2.907
+          "relative_pct": -2.895
         }
       ]
     },
     {
-      "id": "sui",
-      "symbol": "SUI",
-      "name": "Sui",
-      "market_cap_rank": 33,
-      "market_cap": 3406741581,
-      "current_price": 0.861932,
-      "sector": "L1",
-      "relative_7d": -4.51,
-      "relative_14d": -6.38,
-      "relative_30d": -3.07,
+      "id": "litecoin",
+      "symbol": "LTC",
+      "name": "Litecoin",
+      "market_cap_rank": 28,
+      "market_cap": 4009375111,
+      "current_price": 52.07,
+      "sector": "Payments",
+      "relative_7d": -1.83,
+      "relative_14d": -1.03,
+      "relative_30d": -3.03,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7004,119 +6602,119 @@
         },
         {
           "date": "2026-03-05",
-          "relative_pct": -1.065
+          "relative_pct": -2.674
         },
         {
           "date": "2026-03-06",
-          "relative_pct": 1.01
+          "relative_pct": -2.518
         },
         {
           "date": "2026-03-07",
-          "relative_pct": -0.72
+          "relative_pct": -1.527
         },
         {
           "date": "2026-03-08",
-          "relative_pct": -0.151
+          "relative_pct": -0.783
         },
         {
           "date": "2026-03-09",
-          "relative_pct": 0.015
+          "relative_pct": -0.71
         },
         {
           "date": "2026-03-10",
-          "relative_pct": 3.071
+          "relative_pct": -2.243
         },
         {
           "date": "2026-03-11",
-          "relative_pct": 2.708
+          "relative_pct": -4.119
         },
         {
           "date": "2026-03-12",
-          "relative_pct": 4.784
+          "relative_pct": -2.982
         },
         {
           "date": "2026-03-13",
-          "relative_pct": 5.981
+          "relative_pct": -3.697
         },
         {
           "date": "2026-03-14",
-          "relative_pct": 5.42
+          "relative_pct": -2.992
         },
         {
           "date": "2026-03-15",
-          "relative_pct": 5.669
+          "relative_pct": -4.014
         },
         {
           "date": "2026-03-16",
-          "relative_pct": 5.684
+          "relative_pct": -4.023
         },
         {
           "date": "2026-03-17",
-          "relative_pct": 8.287
+          "relative_pct": -2.36
         },
         {
           "date": "2026-03-18",
-          "relative_pct": 4.85
+          "relative_pct": -2.169
         },
         {
           "date": "2026-03-19",
-          "relative_pct": 4.098
+          "relative_pct": -2.11
         },
         {
           "date": "2026-03-20",
-          "relative_pct": 2.865
+          "relative_pct": -1.181
         },
         {
           "date": "2026-03-21",
-          "relative_pct": 3.014
+          "relative_pct": -0.822
         },
         {
           "date": "2026-03-22",
-          "relative_pct": 2.947
+          "relative_pct": 0.032
         },
         {
           "date": "2026-03-23",
-          "relative_pct": 0.052
+          "relative_pct": -1.713
         },
         {
           "date": "2026-03-24",
-          "relative_pct": 0.778
+          "relative_pct": -2.424
         },
         {
           "date": "2026-03-25",
-          "relative_pct": 1.482
+          "relative_pct": -0.393
         },
         {
           "date": "2026-03-26",
-          "relative_pct": 1.832
+          "relative_pct": -1.219
         },
         {
           "date": "2026-03-27",
-          "relative_pct": 1.099
+          "relative_pct": -1.257
         },
         {
           "date": "2026-03-28",
-          "relative_pct": -0.559
+          "relative_pct": 0.739
         },
         {
           "date": "2026-03-29",
-          "relative_pct": -2.909
+          "relative_pct": 1.103
         },
         {
           "date": "2026-03-30",
-          "relative_pct": -3.707
+          "relative_pct": 0.486
         },
         {
           "date": "2026-03-31",
-          "relative_pct": -2.934
+          "relative_pct": -0.672
         },
         {
           "date": "2026-04-01",
-          "relative_pct": -3.49
+          "relative_pct": -1.581
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -3.07
+          "relative_pct": -3.034
         }
       ]
     },
@@ -7125,12 +6723,12 @@
       "symbol": "BONK",
       "name": "Bonk",
       "market_cap_rank": 98,
-      "market_cap": 497000785,
+      "market_cap": 497137229,
       "current_price": 5.65e-06,
       "sector": "Meme",
-      "relative_7d": -2.46,
-      "relative_14d": -1.97,
-      "relative_30d": -3.15,
+      "relative_7d": -2.47,
+      "relative_14d": -1.98,
+      "relative_30d": -3.17,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7250,21 +6848,21 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -3.154
+          "relative_pct": -3.173
         }
       ]
     },
     {
-      "id": "floki",
-      "symbol": "FLOKI",
-      "name": "FLOKI",
-      "market_cap_rank": 143,
-      "market_cap": 255780393,
-      "current_price": 2.65e-05,
-      "sector": "Meme",
-      "relative_7d": -6.02,
-      "relative_14d": -4.94,
-      "relative_30d": -3.47,
+      "id": "jasmycoin",
+      "symbol": "JASMY",
+      "name": "JasmyCoin",
+      "market_cap_rank": 141,
+      "market_cap": 260103853,
+      "current_price": 0.00525837,
+      "sector": "Other",
+      "relative_7d": 0.85,
+      "relative_14d": -5.5,
+      "relative_30d": -3.24,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7272,119 +6870,253 @@
         },
         {
           "date": "2026-03-05",
-          "relative_pct": -1.694
+          "relative_pct": -1.552
         },
         {
           "date": "2026-03-06",
-          "relative_pct": -0.359
+          "relative_pct": -1.172
         },
         {
           "date": "2026-03-07",
-          "relative_pct": 0.272
+          "relative_pct": 1.229
         },
         {
           "date": "2026-03-08",
-          "relative_pct": -0.072
+          "relative_pct": -1.156
         },
         {
           "date": "2026-03-09",
-          "relative_pct": 1.017
+          "relative_pct": 2.465
         },
         {
           "date": "2026-03-10",
-          "relative_pct": 0.24
+          "relative_pct": 4.535
         },
         {
           "date": "2026-03-11",
-          "relative_pct": 1.092
+          "relative_pct": 0.505
         },
         {
           "date": "2026-03-12",
-          "relative_pct": 1.588
+          "relative_pct": 1.627
         },
         {
           "date": "2026-03-13",
-          "relative_pct": 3.817
+          "relative_pct": 1.896
         },
         {
           "date": "2026-03-14",
-          "relative_pct": 2.68
+          "relative_pct": -0.545
         },
         {
           "date": "2026-03-15",
-          "relative_pct": 0.963
+          "relative_pct": -0.571
         },
         {
           "date": "2026-03-16",
-          "relative_pct": 0.267
+          "relative_pct": -0.793
         },
         {
           "date": "2026-03-17",
-          "relative_pct": 5.896
+          "relative_pct": 0.913
         },
         {
           "date": "2026-03-18",
-          "relative_pct": 2.254
+          "relative_pct": 1.857
         },
         {
           "date": "2026-03-19",
-          "relative_pct": 1.889
+          "relative_pct": 2.825
         },
         {
           "date": "2026-03-20",
-          "relative_pct": 3.281
+          "relative_pct": -0.195
         },
         {
           "date": "2026-03-21",
-          "relative_pct": 2.346
+          "relative_pct": -1.495
         },
         {
           "date": "2026-03-22",
-          "relative_pct": 3.551
+          "relative_pct": -1.232
         },
         {
           "date": "2026-03-23",
-          "relative_pct": 1.291
+          "relative_pct": -3.077
         },
         {
           "date": "2026-03-24",
-          "relative_pct": 0.844
+          "relative_pct": -0.845
         },
         {
           "date": "2026-03-25",
-          "relative_pct": 3.142
+          "relative_pct": -2.505
         },
         {
           "date": "2026-03-26",
-          "relative_pct": 3.204
+          "relative_pct": -4.356
         },
         {
           "date": "2026-03-27",
-          "relative_pct": 1.992
+          "relative_pct": -4.23
         },
         {
           "date": "2026-03-28",
-          "relative_pct": 1.21
+          "relative_pct": 0.638
         },
         {
           "date": "2026-03-29",
-          "relative_pct": 0.821
+          "relative_pct": -1.748
         },
         {
           "date": "2026-03-30",
-          "relative_pct": -0.16
+          "relative_pct": -2.428
         },
         {
           "date": "2026-03-31",
-          "relative_pct": -0.026
+          "relative_pct": -2.001
         },
         {
           "date": "2026-04-01",
-          "relative_pct": -1.351
+          "relative_pct": -3.027
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -3.475
+          "relative_pct": -3.239
+        }
+      ]
+    },
+    {
+      "id": "sui",
+      "symbol": "SUI",
+      "name": "Sui",
+      "market_cap_rank": 33,
+      "market_cap": 3407246671,
+      "current_price": 0.861922,
+      "sector": "L1",
+      "relative_7d": -4.73,
+      "relative_14d": -6.6,
+      "relative_30d": -3.3,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -1.065
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": 1.01
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -0.72
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -0.151
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 0.015
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 3.071
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": 2.708
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": 4.784
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": 5.981
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": 5.42
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": 5.669
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": 5.684
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 8.287
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": 4.85
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": 4.098
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": 2.865
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": 3.014
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 2.947
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": 0.052
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": 0.778
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": 1.482
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": 1.832
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": 1.099
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -0.559
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -2.909
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -3.707
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -2.934
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -3.49
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -3.304
         }
       ]
     },
@@ -7393,12 +7125,12 @@
       "symbol": "VET",
       "name": "VeChain",
       "market_cap_rank": 92,
-      "market_cap": 575199426,
-      "current_price": 0.00669557,
+      "market_cap": 578259522,
+      "current_price": 0.00672506,
       "sector": "Supply Chain",
-      "relative_7d": 0.85,
-      "relative_14d": -1.82,
-      "relative_30d": -3.76,
+      "relative_7d": 1.04,
+      "relative_14d": -1.64,
+      "relative_30d": -3.58,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7518,7 +7250,141 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -3.761
+          "relative_pct": -3.575
+        }
+      ]
+    },
+    {
+      "id": "floki",
+      "symbol": "FLOKI",
+      "name": "FLOKI",
+      "market_cap_rank": 144,
+      "market_cap": 256191747,
+      "current_price": 2.654e-05,
+      "sector": "Meme",
+      "relative_7d": -6.21,
+      "relative_14d": -5.13,
+      "relative_30d": -3.67,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -1.694
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -0.359
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 0.272
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -0.072
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 1.017
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 0.24
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": 1.092
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": 1.588
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": 3.817
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": 2.68
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": 0.963
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": 0.267
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 5.896
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": 2.254
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": 1.889
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": 3.281
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": 2.346
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 3.551
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": 1.291
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": 0.844
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": 3.142
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": 3.204
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": 1.992
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": 1.21
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": 0.821
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -0.16
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -0.026
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -1.351
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -3.672
         }
       ]
     },
@@ -7526,13 +7392,13 @@
       "id": "crypto-com-chain",
       "symbol": "CRO",
       "name": "Cronos",
-      "market_cap_rank": 35,
-      "market_cap": 2959120749,
-      "current_price": 0.069929,
+      "market_cap_rank": 36,
+      "market_cap": 2961110708,
+      "current_price": 0.069974,
       "sector": "Exchange",
-      "relative_7d": -0.28,
-      "relative_14d": -2.33,
-      "relative_30d": -5.07,
+      "relative_7d": -0.44,
+      "relative_14d": -2.49,
+      "relative_30d": -5.24,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7652,7 +7518,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -5.073
+          "relative_pct": -5.239
         }
       ]
     },
@@ -7661,12 +7527,12 @@
       "symbol": "ETC",
       "name": "Ethereum Classic",
       "market_cap_rank": 61,
-      "market_cap": 1226098053,
+      "market_cap": 1227782564,
       "current_price": 7.86,
       "sector": "Other",
-      "relative_7d": -2.98,
-      "relative_14d": -1.24,
-      "relative_30d": -5.35,
+      "relative_7d": -3.12,
+      "relative_14d": -1.38,
+      "relative_30d": -5.49,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7786,7 +7652,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -5.35
+          "relative_pct": -5.494
         }
       ]
     },
@@ -7795,12 +7661,12 @@
       "symbol": "BNB",
       "name": "BNB",
       "market_cap_rank": 5,
-      "market_cap": 79506778081,
-      "current_price": 583.55,
+      "market_cap": 79524533229,
+      "current_price": 583.0,
       "sector": "L1",
-      "relative_7d": -3.55,
-      "relative_14d": -4.25,
-      "relative_30d": -5.74,
+      "relative_7d": -3.86,
+      "relative_14d": -4.56,
+      "relative_30d": -6.06,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -7920,7 +7786,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -5.738
+          "relative_pct": -6.062
         }
       ]
     },
@@ -7929,12 +7795,12 @@
       "symbol": "ATOM",
       "name": "Cosmos Hub",
       "market_cap_rank": 77,
-      "market_cap": 835448635,
-      "current_price": 1.67,
+      "market_cap": 833694868,
+      "current_price": 1.66,
       "sector": "L1",
-      "relative_7d": 0.75,
-      "relative_14d": -6.34,
-      "relative_30d": -5.98,
+      "relative_7d": 0.4,
+      "relative_14d": -6.67,
+      "relative_30d": -6.33,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -8054,141 +7920,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -5.981
-        }
-      ]
-    },
-    {
-      "id": "tether-gold",
-      "symbol": "XAUT",
-      "name": "Tether Gold",
-      "market_cap_rank": 39,
-      "market_cap": 2603006176,
-      "current_price": 4650.77,
-      "sector": "Other",
-      "relative_7d": 9.8,
-      "relative_14d": 2.75,
-      "relative_30d": -6.68,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -5.857
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -4.35
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 0.98
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 2.377
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 2.081
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -0.081
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -1.22
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -2.719
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -3.678
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -5.864
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -6.388
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -9.301
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -12.093
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -10.796
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -9.889
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -11.184
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -15.14
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -12.554
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -11.7
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -16.895
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -14.351
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -16.329
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -14.409
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -9.035
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -9.131
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -9.415
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -9.313
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -8.504
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -6.68
+          "relative_pct": -6.332
         }
       ]
     },
@@ -8196,13 +7928,13 @@
       "id": "kaia",
       "symbol": "KAIA",
       "name": "Kaia",
-      "market_cap_rank": 130,
-      "market_cap": 286529525,
-      "current_price": 0.04890178,
+      "market_cap_rank": 129,
+      "market_cap": 287806361,
+      "current_price": 0.04920538,
       "sector": "Other",
-      "relative_7d": 3.22,
-      "relative_14d": -2.09,
-      "relative_30d": -6.73,
+      "relative_7d": 3.4,
+      "relative_14d": -1.93,
+      "relative_30d": -6.59,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -8322,21 +8054,21 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -6.734
+          "relative_pct": -6.586
         }
       ]
     },
     {
-      "id": "cardano",
-      "symbol": "ADA",
-      "name": "Cardano",
-      "market_cap_rank": 16,
-      "market_cap": 8823287257,
-      "current_price": 0.239538,
-      "sector": "L1",
-      "relative_7d": -4.94,
-      "relative_14d": -6.38,
-      "relative_30d": -6.74,
+      "id": "tether-gold",
+      "symbol": "XAUT",
+      "name": "Tether Gold",
+      "market_cap_rank": 39,
+      "market_cap": 2602510082,
+      "current_price": 4649.24,
+      "sector": "Other",
+      "relative_7d": 9.62,
+      "relative_14d": 2.58,
+      "relative_30d": -6.86,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -8344,119 +8076,119 @@
         },
         {
           "date": "2026-03-05",
-          "relative_pct": -1.374
+          "relative_pct": -5.857
         },
         {
           "date": "2026-03-06",
-          "relative_pct": -1.499
+          "relative_pct": -4.35
         },
         {
           "date": "2026-03-07",
-          "relative_pct": -1.237
+          "relative_pct": 0.98
         },
         {
           "date": "2026-03-08",
-          "relative_pct": -1.67
+          "relative_pct": 2.377
         },
         {
           "date": "2026-03-09",
-          "relative_pct": -1.924
+          "relative_pct": 2.081
         },
         {
           "date": "2026-03-10",
-          "relative_pct": -3.316
+          "relative_pct": -0.081
         },
         {
           "date": "2026-03-11",
-          "relative_pct": -2.742
+          "relative_pct": -1.22
         },
         {
           "date": "2026-03-12",
-          "relative_pct": -3.009
+          "relative_pct": -2.719
         },
         {
           "date": "2026-03-13",
-          "relative_pct": -3.181
+          "relative_pct": -3.678
         },
         {
           "date": "2026-03-14",
-          "relative_pct": -2.897
+          "relative_pct": -5.864
         },
         {
           "date": "2026-03-15",
-          "relative_pct": -4.281
+          "relative_pct": -6.388
         },
         {
           "date": "2026-03-16",
-          "relative_pct": -3.926
+          "relative_pct": -9.301
         },
         {
           "date": "2026-03-17",
-          "relative_pct": 0.851
+          "relative_pct": -12.093
         },
         {
           "date": "2026-03-18",
-          "relative_pct": 1.671
+          "relative_pct": -10.796
         },
         {
           "date": "2026-03-19",
-          "relative_pct": -0.096
+          "relative_pct": -9.889
         },
         {
           "date": "2026-03-20",
-          "relative_pct": -0.788
+          "relative_pct": -11.184
         },
         {
           "date": "2026-03-21",
-          "relative_pct": -2.123
+          "relative_pct": -15.14
         },
         {
           "date": "2026-03-22",
-          "relative_pct": -1.415
+          "relative_pct": -12.554
         },
         {
           "date": "2026-03-23",
-          "relative_pct": -4.021
+          "relative_pct": -11.7
         },
         {
           "date": "2026-03-24",
-          "relative_pct": -4.477
+          "relative_pct": -16.895
         },
         {
           "date": "2026-03-25",
-          "relative_pct": -2.11
+          "relative_pct": -14.351
         },
         {
           "date": "2026-03-26",
-          "relative_pct": -1.777
+          "relative_pct": -16.329
         },
         {
           "date": "2026-03-27",
-          "relative_pct": -3.873
+          "relative_pct": -14.409
         },
         {
           "date": "2026-03-28",
-          "relative_pct": -3.595
+          "relative_pct": -9.035
         },
         {
           "date": "2026-03-29",
-          "relative_pct": -3.758
+          "relative_pct": -9.131
         },
         {
           "date": "2026-03-30",
-          "relative_pct": -5.539
+          "relative_pct": -9.415
         },
         {
           "date": "2026-03-31",
-          "relative_pct": -5.262
+          "relative_pct": -9.313
         },
         {
           "date": "2026-04-01",
-          "relative_pct": -8.024
+          "relative_pct": -8.504
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -6.736
+          "relative_pct": -6.857
         }
       ]
     },
@@ -8465,12 +8197,12 @@
       "symbol": "ICP",
       "name": "Internet Computer",
       "market_cap_rank": 60,
-      "market_cap": 1229279242,
+      "market_cap": 1230045535,
       "current_price": 2.23,
       "sector": "L1",
-      "relative_7d": -1.0,
-      "relative_14d": -6.73,
-      "relative_30d": -6.98,
+      "relative_7d": -0.89,
+      "relative_14d": -6.63,
+      "relative_30d": -6.87,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -8590,7 +8322,141 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -6.979
+          "relative_pct": -6.874
+        }
+      ]
+    },
+    {
+      "id": "cardano",
+      "symbol": "ADA",
+      "name": "Cardano",
+      "market_cap_rank": 15,
+      "market_cap": 8842429888,
+      "current_price": 0.239735,
+      "sector": "L1",
+      "relative_7d": -5.1,
+      "relative_14d": -6.53,
+      "relative_30d": -6.9,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -1.374
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -1.499
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -1.237
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -1.67
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": -1.924
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -3.316
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -2.742
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -3.009
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -3.181
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -2.897
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -4.281
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -3.926
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 0.851
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": 1.671
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -0.096
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -0.788
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -2.123
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -1.415
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -4.021
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -4.477
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -2.11
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -1.777
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -3.873
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -3.595
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -3.758
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -5.539
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -5.262
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -8.024
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -6.896
         }
       ]
     },
@@ -8599,12 +8465,12 @@
       "symbol": "GRT",
       "name": "The Graph",
       "market_cap_rank": 145,
-      "market_cap": 254406187,
-      "current_price": 0.02361467,
+      "market_cap": 254599894,
+      "current_price": 0.02363978,
       "sector": "DeFi",
-      "relative_7d": -0.65,
-      "relative_14d": -4.96,
-      "relative_30d": -7.08,
+      "relative_7d": -0.72,
+      "relative_14d": -5.04,
+      "relative_30d": -7.16,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -8724,677 +8590,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -7.081
-        }
-      ]
-    },
-    {
-      "id": "pax-gold",
-      "symbol": "PAXG",
-      "name": "PAX Gold",
-      "market_cap_rank": 40,
-      "market_cap": 2400195412,
-      "current_price": 4668.49,
-      "sector": "Other",
-      "relative_7d": 10.04,
-      "relative_14d": 2.91,
-      "relative_30d": -7.11,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -5.811
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -4.47
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 0.91
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 2.097
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 2.017
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -0.206
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -1.362
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -2.784
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -3.952
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -6.12
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -6.653
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -9.698
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -12.401
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -11.141
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -10.494
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -11.84
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -15.625
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -13.039
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -12.245
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -17.404
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -14.956
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -16.951
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -15.042
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -9.635
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -9.636
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -10.031
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -9.924
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -8.951
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -7.113
-        }
-      ]
-    },
-    {
-      "id": "bitget-token",
-      "symbol": "BGB",
-      "name": "Bitget Token",
-      "market_cap_rank": 56,
-      "market_cap": 1339418765,
-      "current_price": 1.91,
-      "sector": "Exchange",
-      "relative_7d": 0.29,
-      "relative_14d": -4.9,
-      "relative_30d": -7.21,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -3.003
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": 0.849
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": 2.409
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": 3.924
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": 5.408
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": 2.446
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": 0.433
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -0.202
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -1.288
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -1.858
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -1.67
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -3.632
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -5.19
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -4.495
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -2.37
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -1.608
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -2.156
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 0.055
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -3.525
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -8.386
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -6.5
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -7.992
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -6.258
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -5.448
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -5.1
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -6.107
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -6.666
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -8.511
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -7.214
-        }
-      ]
-    },
-    {
-      "id": "aerodrome-finance",
-      "symbol": "AERO",
-      "name": "Aerodrome Finance",
-      "market_cap_rank": 128,
-      "market_cap": 290762088,
-      "current_price": 0.313204,
-      "sector": "Other",
-      "relative_7d": -0.14,
-      "relative_14d": 1.19,
-      "relative_30d": -7.4,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -1.05
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": 0.462
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -3.396
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -4.261
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -4.928
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -8.33
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -5.869
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -4.355
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -5.445
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -8.523
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -8.037
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -9.057
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -5.073
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -8.232
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -9.097
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -10.105
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -10.376
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -9.934
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -10.651
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -2.227
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -9.432
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -7.752
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -5.29
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -4.277
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -3.259
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -5.488
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -8.528
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -5.661
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -7.4
-        }
-      ]
-    },
-    {
-      "id": "solana",
-      "symbol": "SOL",
-      "name": "Solana",
-      "market_cap_rank": 7,
-      "market_cap": 45150757253,
-      "current_price": 78.84,
-      "sector": "L1",
-      "relative_7d": -7.69,
-      "relative_14d": -6.23,
-      "relative_30d": -7.42,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -1.968
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -1.967
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -2.634
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -3.088
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -3.002
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -2.767
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -3.967
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -3.458
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -3.526
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -2.833
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -3.309
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -0.706
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": 0.751
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": 0.413
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -1.058
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -0.397
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -0.184
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 0.088
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -0.43
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": 1.011
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": 0.978
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": 0.707
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -1.649
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -1.944
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -3.034
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -3.294
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -3.102
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -4.635
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -7.423
-        }
-      ]
-    },
-    {
-      "id": "polygon-ecosystem-token",
-      "symbol": "POL",
-      "name": "POL (ex-MATIC)",
-      "market_cap_rank": 68,
-      "market_cap": 968884358,
-      "current_price": 0.091279,
-      "sector": "L2",
-      "relative_7d": -0.44,
-      "relative_14d": 0.69,
-      "relative_30d": -7.42,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -3.687
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -3.781
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -2.34
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -4.585
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -2.362
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -5.689
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -7.127
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -6.031
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -5.369
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -9.572
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -8.239
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -10.196
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -8.767
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -10.005
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -8.617
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -7.895
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -5.791
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -6.051
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -8.076
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -8.585
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -8.295
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -7.463
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -7.04
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -7.425
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -6.393
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -6.714
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -7.205
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -9.999
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -7.423
+          "relative_pct": -7.163
         }
       ]
     },
@@ -9403,12 +8599,12 @@
       "symbol": "XTZ",
       "name": "Tezos",
       "market_cap_rank": 113,
-      "market_cap": 366994283,
-      "current_price": 0.3397,
+      "market_cap": 368337383,
+      "current_price": 0.340993,
       "sector": "Other",
-      "relative_7d": -6.12,
-      "relative_14d": -7.38,
-      "relative_30d": -7.46,
+      "relative_7d": -5.88,
+      "relative_14d": -7.15,
+      "relative_30d": -7.22,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -9528,7 +8724,275 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -7.465
+          "relative_pct": -7.22
+        }
+      ]
+    },
+    {
+      "id": "pax-gold",
+      "symbol": "PAXG",
+      "name": "PAX Gold",
+      "market_cap_rank": 40,
+      "market_cap": 2400002854,
+      "current_price": 4667.51,
+      "sector": "Other",
+      "relative_7d": 9.87,
+      "relative_14d": 2.74,
+      "relative_30d": -7.29,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -5.811
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -4.47
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 0.91
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": 2.097
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 2.017
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -0.206
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -1.362
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -2.784
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -3.952
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -6.12
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -6.653
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -9.698
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -12.401
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -11.141
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -10.494
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -11.84
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -15.625
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -13.039
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -12.245
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -17.404
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -14.956
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -16.951
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -15.042
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -9.635
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -9.636
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -10.031
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -9.924
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -8.951
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -7.289
+        }
+      ]
+    },
+    {
+      "id": "bitget-token",
+      "symbol": "BGB",
+      "name": "Bitget Token",
+      "market_cap_rank": 56,
+      "market_cap": 1341809034,
+      "current_price": 1.92,
+      "sector": "Exchange",
+      "relative_7d": 0.22,
+      "relative_14d": -4.97,
+      "relative_30d": -7.29,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -3.003
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": 0.849
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 2.409
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": 3.924
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 5.408
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 2.446
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": 0.433
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -0.202
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -1.288
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -1.858
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -1.67
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -3.632
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -5.19
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -4.495
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -2.37
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -1.608
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -2.156
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 0.055
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -3.525
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -8.386
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -6.5
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -7.992
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -6.258
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -5.448
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -5.1
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -6.107
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -6.666
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -8.511
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -7.295
         }
       ]
     },
@@ -9536,13 +9000,13 @@
       "id": "hedera-hashgraph",
       "symbol": "HBAR",
       "name": "Hedera",
-      "market_cap_rank": 30,
-      "market_cap": 3786209246,
-      "current_price": 0.087402,
+      "market_cap_rank": 29,
+      "market_cap": 3801619739,
+      "current_price": 0.087777,
       "sector": "L1",
-      "relative_7d": -1.27,
-      "relative_14d": -2.49,
-      "relative_30d": -7.66,
+      "relative_7d": -1.02,
+      "relative_14d": -2.25,
+      "relative_30d": -7.43,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -9662,7 +9126,409 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -7.66
+          "relative_pct": -7.432
+        }
+      ]
+    },
+    {
+      "id": "solana",
+      "symbol": "SOL",
+      "name": "Solana",
+      "market_cap_rank": 7,
+      "market_cap": 45209065676,
+      "current_price": 78.97,
+      "sector": "L1",
+      "relative_7d": -7.72,
+      "relative_14d": -6.25,
+      "relative_30d": -7.44,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -1.968
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -1.967
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -2.634
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -3.088
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": -3.002
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -2.767
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -3.967
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -3.458
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -3.526
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -2.833
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -3.309
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -0.706
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 0.751
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": 0.413
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -1.058
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -0.397
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -0.184
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 0.088
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -0.43
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": 1.011
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": 0.978
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": 0.707
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -1.649
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -1.944
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -3.034
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -3.294
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -3.102
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -4.635
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -7.443
+        }
+      ]
+    },
+    {
+      "id": "aerodrome-finance",
+      "symbol": "AERO",
+      "name": "Aerodrome Finance",
+      "market_cap_rank": 128,
+      "market_cap": 290474357,
+      "current_price": 0.312946,
+      "sector": "Other",
+      "relative_7d": -0.28,
+      "relative_14d": 1.05,
+      "relative_30d": -7.55,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -1.05
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": 0.462
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -3.396
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -4.261
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": -4.928
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -8.33
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -5.869
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -4.355
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -5.445
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -8.523
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -8.037
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -9.057
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -5.073
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -8.232
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -9.097
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -10.105
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -10.376
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -9.934
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -10.651
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -2.227
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -9.432
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -7.752
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -5.29
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -4.277
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -3.259
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -5.488
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -8.528
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -5.661
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -7.545
+        }
+      ]
+    },
+    {
+      "id": "polygon-ecosystem-token",
+      "symbol": "POL",
+      "name": "POL (ex-MATIC)",
+      "market_cap_rank": 68,
+      "market_cap": 966625533,
+      "current_price": 0.091042,
+      "sector": "L2",
+      "relative_7d": -0.82,
+      "relative_14d": 0.31,
+      "relative_30d": -7.8,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -3.687
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -3.781
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -2.34
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -4.585
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": -2.362
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -5.689
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -7.127
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -6.031
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -5.369
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -9.572
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -8.239
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -10.196
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -8.767
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -10.005
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -8.617
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -7.895
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -5.791
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -6.051
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -8.076
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -8.585
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -8.295
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -7.463
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -7.04
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -7.425
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -6.393
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -6.714
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -7.205
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -9.999
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -7.798
         }
       ]
     },
@@ -9670,13 +9536,13 @@
       "id": "injective-protocol",
       "symbol": "INJ",
       "name": "Injective",
-      "market_cap_rank": 133,
-      "market_cap": 273351520,
-      "current_price": 2.73,
+      "market_cap_rank": 132,
+      "market_cap": 273821159,
+      "current_price": 2.74,
       "sector": "Other",
-      "relative_7d": -4.74,
-      "relative_14d": -4.75,
-      "relative_30d": -7.69,
+      "relative_7d": -4.97,
+      "relative_14d": -4.98,
+      "relative_30d": -7.93,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -9796,7 +9662,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -7.693
+          "relative_pct": -7.931
         }
       ]
     },
@@ -9805,12 +9671,12 @@
       "symbol": "IOTA",
       "name": "IOTA",
       "market_cap_rank": 142,
-      "market_cap": 258213424,
-      "current_price": 0.059067,
+      "market_cap": 257662690,
+      "current_price": 0.058907,
       "sector": "Other",
-      "relative_7d": 5.25,
-      "relative_14d": -0.69,
-      "relative_30d": -8.44,
+      "relative_7d": 5.16,
+      "relative_14d": -0.79,
+      "relative_30d": -8.54,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -9930,7 +9796,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -8.436
+          "relative_pct": -8.539
         }
       ]
     },
@@ -9938,13 +9804,13 @@
       "id": "arbitrum",
       "symbol": "ARB",
       "name": "Arbitrum",
-      "market_cap_rank": 96,
-      "market_cap": 549644043,
-      "current_price": 0.091002,
+      "market_cap_rank": 95,
+      "market_cap": 550165936,
+      "current_price": 0.091079,
       "sector": "L2",
-      "relative_7d": -1.23,
-      "relative_14d": -5.29,
-      "relative_30d": -9.12,
+      "relative_7d": -1.43,
+      "relative_14d": -5.48,
+      "relative_30d": -9.33,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -10064,7 +9930,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -9.124
+          "relative_pct": -9.327
         }
       ]
     },
@@ -10072,13 +9938,13 @@
       "id": "pudgy-penguins",
       "symbol": "PENGU",
       "name": "Pudgy Penguins",
-      "market_cap_rank": 107,
-      "market_cap": 394382501,
-      "current_price": 0.00627622,
+      "market_cap_rank": 109,
+      "market_cap": 390825006,
+      "current_price": 0.00621955,
       "sector": "Other",
-      "relative_7d": -8.51,
-      "relative_14d": -10.49,
-      "relative_30d": -9.48,
+      "relative_7d": -8.55,
+      "relative_14d": -10.53,
+      "relative_30d": -9.53,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -10198,7 +10064,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -9.484
+          "relative_pct": -9.528
         }
       ]
     },
@@ -10207,12 +10073,12 @@
       "symbol": "DASH",
       "name": "Dash",
       "market_cap_rank": 110,
-      "market_cap": 381957566,
-      "current_price": 30.21,
+      "market_cap": 381203011,
+      "current_price": 30.13,
       "sector": "Other",
-      "relative_7d": -5.04,
-      "relative_14d": -1.25,
-      "relative_30d": -9.61,
+      "relative_7d": -5.3,
+      "relative_14d": -1.51,
+      "relative_30d": -9.86,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -10332,7 +10198,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -9.607
+          "relative_pct": -9.863
         }
       ]
     },
@@ -10340,13 +10206,13 @@
       "id": "celestia",
       "symbol": "TIA",
       "name": "Celestia",
-      "market_cap_rank": 144,
-      "market_cap": 255493724,
-      "current_price": 0.28431,
+      "market_cap_rank": 143,
+      "market_cap": 256199916,
+      "current_price": 0.284901,
       "sector": "Other",
-      "relative_7d": -7.52,
-      "relative_14d": -11.97,
-      "relative_30d": -11.63,
+      "relative_7d": -7.6,
+      "relative_14d": -12.06,
+      "relative_30d": -11.73,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -10466,141 +10332,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -11.635
-        }
-      ]
-    },
-    {
-      "id": "rain",
-      "symbol": "RAIN",
-      "name": "Rain",
-      "market_cap_rank": 29,
-      "market_cap": 3784219061,
-      "current_price": 0.00791163,
-      "sector": "Other",
-      "relative_7d": -5.88,
-      "relative_14d": -5.19,
-      "relative_30d": -11.81,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -5.835
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -2.114
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -0.588
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -0.454
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -0.024
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -2.265
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -4.172
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -5.513
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -4.264
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -7.049
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -5.893
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -7.004
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -12.928
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -10.629
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -7.223
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -5.899
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -7.996
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -8.827
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -3.162
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -8.786
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -6.564
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -6.46
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -9.68
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -6.657
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -9.192
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -6.278
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -13.814
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -11.205
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -11.814
+          "relative_pct": -11.728
         }
       ]
     },
@@ -10609,12 +10341,12 @@
       "symbol": "VIRTUAL",
       "name": "Virtuals Protocol",
       "market_cap_rank": 103,
-      "market_cap": 415464986,
-      "current_price": 0.63309,
+      "market_cap": 416939957,
+      "current_price": 0.635491,
       "sector": "Other",
-      "relative_7d": -5.75,
-      "relative_14d": -7.66,
-      "relative_30d": -11.99,
+      "relative_7d": -5.69,
+      "relative_14d": -7.61,
+      "relative_30d": -11.94,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -10734,21 +10466,21 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -11.989
+          "relative_pct": -11.943
         }
       ]
     },
     {
-      "id": "ether-fi",
-      "symbol": "ETHFI",
-      "name": "Ether.fi",
-      "market_cap_rank": 117,
-      "market_cap": 346714639,
-      "current_price": 0.440417,
+      "id": "rain",
+      "symbol": "RAIN",
+      "name": "Rain",
+      "market_cap_rank": 30,
+      "market_cap": 3772749500,
+      "current_price": 0.00790225,
       "sector": "Other",
-      "relative_7d": -14.71,
-      "relative_14d": -12.91,
-      "relative_30d": -12.35,
+      "relative_7d": -6.08,
+      "relative_14d": -5.39,
+      "relative_30d": -12.02,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -10756,253 +10488,119 @@
         },
         {
           "date": "2026-03-05",
-          "relative_pct": -1.49
+          "relative_pct": -5.835
         },
         {
           "date": "2026-03-06",
-          "relative_pct": 2.165
+          "relative_pct": -2.114
         },
         {
           "date": "2026-03-07",
-          "relative_pct": 3.109
+          "relative_pct": -0.588
         },
         {
           "date": "2026-03-08",
-          "relative_pct": 2.21
+          "relative_pct": -0.454
         },
         {
           "date": "2026-03-09",
-          "relative_pct": 3.512
+          "relative_pct": -0.024
         },
         {
           "date": "2026-03-10",
-          "relative_pct": 7.266
+          "relative_pct": -2.265
         },
         {
           "date": "2026-03-11",
-          "relative_pct": 11.035
+          "relative_pct": -4.172
         },
         {
           "date": "2026-03-12",
-          "relative_pct": 6.159
+          "relative_pct": -5.513
         },
         {
           "date": "2026-03-13",
-          "relative_pct": 6.759
+          "relative_pct": -4.264
         },
         {
           "date": "2026-03-14",
-          "relative_pct": 2.996
+          "relative_pct": -7.049
         },
         {
           "date": "2026-03-15",
-          "relative_pct": 0.879
+          "relative_pct": -5.893
         },
         {
           "date": "2026-03-16",
-          "relative_pct": 0.492
+          "relative_pct": -7.004
         },
         {
           "date": "2026-03-17",
-          "relative_pct": 3.865
+          "relative_pct": -12.928
         },
         {
           "date": "2026-03-18",
-          "relative_pct": 2.397
+          "relative_pct": -10.629
         },
         {
           "date": "2026-03-19",
-          "relative_pct": 1.385
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": 1.238
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": 6.62
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": 13.05
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": 5.307
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -1.426
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -0.058
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": 3.807
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -0.734
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -7.379
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -8.198
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -7.998
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -8.483
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -7.652
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -12.348
-        }
-      ]
-    },
-    {
-      "id": "near",
-      "symbol": "NEAR",
-      "name": "NEAR Protocol",
-      "market_cap_rank": 52,
-      "market_cap": 1494812543,
-      "current_price": 1.16,
-      "sector": "L1",
-      "relative_7d": -2.98,
-      "relative_14d": -10.06,
-      "relative_30d": -12.43,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -9.69
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -9.6
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -9.406
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -8.976
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -7.433
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -9.462
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -7.729
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -7.202
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -2.537
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -5.242
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -6.622
-        },
-        {
-          "date": "2026-03-16",
           "relative_pct": -7.223
         },
         {
-          "date": "2026-03-17",
-          "relative_pct": 0.336
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -1.062
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -2.32
-        },
-        {
           "date": "2026-03-20",
-          "relative_pct": -3.977
+          "relative_pct": -5.899
         },
         {
           "date": "2026-03-21",
-          "relative_pct": -6.289
+          "relative_pct": -7.996
         },
         {
           "date": "2026-03-22",
-          "relative_pct": -5.236
+          "relative_pct": -8.827
         },
         {
           "date": "2026-03-23",
-          "relative_pct": -5.349
+          "relative_pct": -3.162
         },
         {
           "date": "2026-03-24",
-          "relative_pct": -7.087
+          "relative_pct": -8.786
         },
         {
           "date": "2026-03-25",
-          "relative_pct": -8.09
+          "relative_pct": -6.564
         },
         {
           "date": "2026-03-26",
-          "relative_pct": -10.27
+          "relative_pct": -6.46
         },
         {
           "date": "2026-03-27",
-          "relative_pct": -10.65
+          "relative_pct": -9.68
         },
         {
           "date": "2026-03-28",
-          "relative_pct": -10.315
+          "relative_pct": -6.657
         },
         {
           "date": "2026-03-29",
-          "relative_pct": -10.981
+          "relative_pct": -9.192
         },
         {
           "date": "2026-03-30",
-          "relative_pct": -11.044
+          "relative_pct": -6.278
         },
         {
           "date": "2026-03-31",
-          "relative_pct": -12.123
+          "relative_pct": -13.814
         },
         {
           "date": "2026-04-01",
-          "relative_pct": -12.541
+          "relative_pct": -11.205
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -12.43
+          "relative_pct": -12.019
         }
       ]
     },
@@ -11010,13 +10608,13 @@
       "id": "jupiter-exchange-solana",
       "symbol": "JUP",
       "name": "Jupiter",
-      "market_cap_rank": 95,
-      "market_cap": 551048585,
-      "current_price": 0.155247,
+      "market_cap_rank": 96,
+      "market_cap": 548915163,
+      "current_price": 0.154659,
       "sector": "Other",
-      "relative_7d": 5.97,
-      "relative_14d": 0.75,
-      "relative_30d": -12.5,
+      "relative_7d": 6.38,
+      "relative_14d": 1.13,
+      "relative_30d": -12.18,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11136,7 +10734,275 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -12.504
+          "relative_pct": -12.178
+        }
+      ]
+    },
+    {
+      "id": "near",
+      "symbol": "NEAR",
+      "name": "NEAR Protocol",
+      "market_cap_rank": 52,
+      "market_cap": 1497080350,
+      "current_price": 1.16,
+      "sector": "L1",
+      "relative_7d": -3.05,
+      "relative_14d": -10.13,
+      "relative_30d": -12.51,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -9.69
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -9.6
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -9.406
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -8.976
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": -7.433
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -9.462
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -7.729
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -7.202
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -2.537
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -5.242
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -6.622
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -7.223
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 0.336
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -1.062
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -2.32
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -3.977
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -6.289
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -5.236
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -5.349
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -7.087
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -8.09
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -10.27
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -10.65
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -10.315
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -10.981
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -11.044
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -12.123
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -12.541
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -12.513
+        }
+      ]
+    },
+    {
+      "id": "ether-fi",
+      "symbol": "ETHFI",
+      "name": "Ether.fi",
+      "market_cap_rank": 117,
+      "market_cap": 347682491,
+      "current_price": 0.440966,
+      "sector": "Other",
+      "relative_7d": -14.99,
+      "relative_14d": -13.19,
+      "relative_30d": -12.64,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -1.49
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": 2.165
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 3.109
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": 2.21
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 3.512
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 7.266
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": 11.035
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": 6.159
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": 6.759
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": 2.996
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": 0.879
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": 0.492
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": 3.865
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": 2.397
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": 1.385
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": 1.238
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": 6.62
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": 13.05
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": 5.307
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -1.426
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -0.058
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": 3.807
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -0.734
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -7.379
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -8.198
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -7.998
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -8.483
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -7.652
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -12.641
         }
       ]
     },
@@ -11145,12 +11011,12 @@
       "symbol": "PUMP",
       "name": "Pump.fun",
       "market_cap_rank": 70,
-      "market_cap": 960274787,
-      "current_price": 0.00162775,
+      "market_cap": 963213885,
+      "current_price": 0.00163301,
       "sector": "Other",
-      "relative_7d": -8.05,
-      "relative_14d": -10.93,
-      "relative_30d": -13.11,
+      "relative_7d": -8.08,
+      "relative_14d": -10.97,
+      "relative_30d": -13.16,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11270,7 +11136,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -13.115
+          "relative_pct": -13.158
         }
       ]
     },
@@ -11279,12 +11145,12 @@
       "symbol": "AAVE",
       "name": "Aave",
       "market_cap_rank": 53,
-      "market_cap": 1427765597,
-      "current_price": 94.0,
+      "market_cap": 1427933637,
+      "current_price": 94.03,
       "sector": "DeFi",
-      "relative_7d": -10.14,
-      "relative_14d": -12.19,
-      "relative_30d": -13.36,
+      "relative_7d": -10.01,
+      "relative_14d": -12.07,
+      "relative_30d": -13.24,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11404,7 +11270,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -13.365
+          "relative_pct": -13.243
         }
       ]
     },
@@ -11413,12 +11279,12 @@
       "symbol": "APT",
       "name": "Aptos",
       "market_cap_rank": 81,
-      "market_cap": 676735051,
-      "current_price": 0.85232,
+      "market_cap": 678530057,
+      "current_price": 0.854291,
       "sector": "L1",
-      "relative_7d": -12.84,
-      "relative_14d": -7.39,
-      "relative_30d": -13.4,
+      "relative_7d": -12.78,
+      "relative_14d": -7.31,
+      "relative_30d": -13.34,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11538,7 +11404,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -13.405
+          "relative_pct": -13.337
         }
       ]
     },
@@ -11547,12 +11413,12 @@
       "symbol": "XDC",
       "name": "XDC Network",
       "market_cap_rank": 90,
-      "market_cap": 603306691,
-      "current_price": 0.03025256,
+      "market_cap": 598410332,
+      "current_price": 0.02998169,
       "sector": "Other",
-      "relative_7d": 1.37,
-      "relative_14d": 0.56,
-      "relative_30d": -13.42,
+      "relative_7d": 0.77,
+      "relative_14d": -0.03,
+      "relative_30d": -13.98,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11672,7 +11538,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -13.423
+          "relative_pct": -13.978
         }
       ]
     },
@@ -11680,13 +11546,13 @@
       "id": "blockstack",
       "symbol": "STX",
       "name": "Stacks",
-      "market_cap_rank": 109,
-      "market_cap": 391297504,
-      "current_price": 0.212823,
+      "market_cap_rank": 108,
+      "market_cap": 393145338,
+      "current_price": 0.213786,
       "sector": "Other",
-      "relative_7d": -5.35,
-      "relative_14d": -8.79,
-      "relative_30d": -14.59,
+      "relative_7d": -5.46,
+      "relative_14d": -8.91,
+      "relative_30d": -14.72,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11806,7 +11672,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -14.592
+          "relative_pct": -14.717
         }
       ]
     },
@@ -11814,13 +11680,13 @@
       "id": "official-trump",
       "symbol": "TRUMP",
       "name": "Official Trump",
-      "market_cap_rank": 82,
-      "market_cap": 655214446,
-      "current_price": 2.82,
+      "market_cap_rank": 83,
+      "market_cap": 654105155,
+      "current_price": 2.81,
       "sector": "Meme",
-      "relative_7d": -7.68,
-      "relative_14d": -13.03,
-      "relative_30d": -14.74,
+      "relative_7d": -7.98,
+      "relative_14d": -13.32,
+      "relative_30d": -15.04,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -11940,7 +11806,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -14.738
+          "relative_pct": -15.038
         }
       ]
     },
@@ -11949,10 +11815,10 @@
       "symbol": "CRV",
       "name": "Curve DAO",
       "market_cap_rank": 124,
-      "market_cap": 308540899,
-      "current_price": 0.206492,
+      "market_cap": 309827627,
+      "current_price": 0.207307,
       "sector": "DeFi",
-      "relative_7d": -5.28,
+      "relative_7d": -5.27,
       "relative_14d": -7.23,
       "relative_30d": -15.56,
       "daily_relative": [
@@ -12074,7 +11940,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -15.555
+          "relative_pct": -15.563
         }
       ]
     },
@@ -12082,13 +11948,13 @@
       "id": "filecoin",
       "symbol": "FIL",
       "name": "Filecoin",
-      "market_cap_rank": 86,
-      "market_cap": 628496306,
-      "current_price": 0.818692,
+      "market_cap_rank": 85,
+      "market_cap": 625953657,
+      "current_price": 0.81545,
       "sector": "Infra",
-      "relative_7d": -5.46,
-      "relative_14d": -5.09,
-      "relative_30d": -16.07,
+      "relative_7d": -5.94,
+      "relative_14d": -5.57,
+      "relative_30d": -16.53,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -12208,141 +12074,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -16.074
-        }
-      ]
-    },
-    {
-      "id": "polkadot",
-      "symbol": "DOT",
-      "name": "Polkadot",
-      "market_cap_rank": 43,
-      "market_cap": 2062535492,
-      "current_price": 1.23,
-      "sector": "L1",
-      "relative_7d": -3.13,
-      "relative_14d": -15.53,
-      "relative_30d": -17.49,
-      "daily_relative": [
-        {
-          "date": "2026-03-04",
-          "relative_pct": 0.0
-        },
-        {
-          "date": "2026-03-05",
-          "relative_pct": -5.661
-        },
-        {
-          "date": "2026-03-06",
-          "relative_pct": -3.76
-        },
-        {
-          "date": "2026-03-07",
-          "relative_pct": -2.627
-        },
-        {
-          "date": "2026-03-08",
-          "relative_pct": -4.021
-        },
-        {
-          "date": "2026-03-09",
-          "relative_pct": -1.906
-        },
-        {
-          "date": "2026-03-10",
-          "relative_pct": -2.839
-        },
-        {
-          "date": "2026-03-11",
-          "relative_pct": -5.315
-        },
-        {
-          "date": "2026-03-12",
-          "relative_pct": -3.47
-        },
-        {
-          "date": "2026-03-13",
-          "relative_pct": -4.215
-        },
-        {
-          "date": "2026-03-14",
-          "relative_pct": -8.288
-        },
-        {
-          "date": "2026-03-15",
-          "relative_pct": -11.913
-        },
-        {
-          "date": "2026-03-16",
-          "relative_pct": -12.686
-        },
-        {
-          "date": "2026-03-17",
-          "relative_pct": -2.362
-        },
-        {
-          "date": "2026-03-18",
-          "relative_pct": -2.509
-        },
-        {
-          "date": "2026-03-19",
-          "relative_pct": -1.657
-        },
-        {
-          "date": "2026-03-20",
-          "relative_pct": -2.95
-        },
-        {
-          "date": "2026-03-21",
-          "relative_pct": -5.329
-        },
-        {
-          "date": "2026-03-22",
-          "relative_pct": -3.942
-        },
-        {
-          "date": "2026-03-23",
-          "relative_pct": -7.191
-        },
-        {
-          "date": "2026-03-24",
-          "relative_pct": -11.227
-        },
-        {
-          "date": "2026-03-25",
-          "relative_pct": -11.759
-        },
-        {
-          "date": "2026-03-26",
-          "relative_pct": -15.697
-        },
-        {
-          "date": "2026-03-27",
-          "relative_pct": -14.319
-        },
-        {
-          "date": "2026-03-28",
-          "relative_pct": -13.065
-        },
-        {
-          "date": "2026-03-29",
-          "relative_pct": -15.157
-        },
-        {
-          "date": "2026-03-30",
-          "relative_pct": -14.657
-        },
-        {
-          "date": "2026-03-31",
-          "relative_pct": -16.564
-        },
-        {
-          "date": "2026-04-01",
-          "relative_pct": -18.225
-        },
-        {
-          "date": "2026-04-02",
-          "relative_pct": -17.492
+          "relative_pct": -16.534
         }
       ]
     },
@@ -12351,12 +12083,12 @@
       "symbol": "UNI",
       "name": "Uniswap",
       "market_cap_rank": 44,
-      "market_cap": 1981270311,
-      "current_price": 3.13,
+      "market_cap": 1992009823,
+      "current_price": 3.15,
       "sector": "DeFi",
-      "relative_7d": -9.1,
-      "relative_14d": -8.72,
-      "relative_30d": -17.86,
+      "relative_7d": -8.54,
+      "relative_14d": -8.15,
+      "relative_30d": -17.34,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -12476,7 +12208,141 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -17.859
+          "relative_pct": -17.338
+        }
+      ]
+    },
+    {
+      "id": "polkadot",
+      "symbol": "DOT",
+      "name": "Polkadot",
+      "market_cap_rank": 43,
+      "market_cap": 2062497873,
+      "current_price": 1.23,
+      "sector": "L1",
+      "relative_7d": -3.38,
+      "relative_14d": -15.76,
+      "relative_30d": -17.73,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -5.661
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": -3.76
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": -2.627
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": -4.021
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": -1.906
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": -2.839
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": -5.315
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": -3.47
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": -4.215
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -8.288
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -11.913
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -12.686
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -2.362
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -2.509
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -1.657
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -2.95
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -5.329
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -3.942
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -7.191
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -11.227
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": -11.759
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": -15.697
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -14.319
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -13.065
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -15.157
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -14.657
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -16.564
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -18.225
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -17.733
         }
       ]
     },
@@ -12485,12 +12351,12 @@
       "symbol": "NIGHT",
       "name": "Midnight",
       "market_cap_rank": 79,
-      "market_cap": 766037035,
-      "current_price": 0.0461989,
+      "market_cap": 760035426,
+      "current_price": 0.04577491,
       "sector": "Other",
-      "relative_7d": 9.01,
-      "relative_14d": 3.52,
-      "relative_30d": -20.96,
+      "relative_7d": 8.41,
+      "relative_14d": 2.95,
+      "relative_30d": -21.45,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -12610,7 +12476,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -20.959
+          "relative_pct": -21.451
         }
       ]
     },
@@ -12619,12 +12485,12 @@
       "symbol": "MORPHO",
       "name": "Morpho",
       "market_cap_rank": 78,
-      "market_cap": 819755556,
+      "market_cap": 822347027,
       "current_price": 1.49,
       "sector": "Other",
-      "relative_7d": -6.43,
-      "relative_14d": -8.29,
-      "relative_30d": -21.68,
+      "relative_7d": -6.32,
+      "relative_14d": -8.18,
+      "relative_30d": -21.61,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -12744,7 +12610,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -21.684
+          "relative_pct": -21.608
         }
       ]
     },
@@ -12753,12 +12619,12 @@
       "symbol": "SEI",
       "name": "Sei",
       "market_cap_rank": 119,
-      "market_cap": 342956722,
-      "current_price": 0.050941,
+      "market_cap": 343134640,
+      "current_price": 0.05096,
       "sector": "Other",
-      "relative_7d": -10.43,
+      "relative_7d": -10.42,
       "relative_14d": -15.22,
-      "relative_30d": -22.54,
+      "relative_30d": -22.56,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -12878,7 +12744,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -22.54
+          "relative_pct": -22.556
         }
       ]
     },
@@ -12887,12 +12753,12 @@
       "symbol": "LIT",
       "name": "Lighter",
       "market_cap_rank": 150,
-      "market_cap": 242316210,
-      "current_price": 0.969229,
+      "market_cap": 239736225,
+      "current_price": 0.958777,
       "sector": "Other",
-      "relative_7d": 3.41,
-      "relative_14d": -14.51,
-      "relative_30d": -23.63,
+      "relative_7d": 2.54,
+      "relative_14d": -15.25,
+      "relative_30d": -24.34,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -13012,7 +12878,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -23.633
+          "relative_pct": -24.339
         }
       ]
     },
@@ -13021,12 +12887,12 @@
       "symbol": "ENA",
       "name": "Ethena",
       "market_cap_rank": 80,
-      "market_cap": 686190314,
-      "current_price": 0.080798,
+      "market_cap": 687449887,
+      "current_price": 0.081009,
       "sector": "DeFi",
-      "relative_7d": -16.01,
-      "relative_14d": -18.87,
-      "relative_30d": -25.12,
+      "relative_7d": -15.94,
+      "relative_14d": -18.81,
+      "relative_30d": -25.08,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -13146,7 +13012,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -25.125
+          "relative_pct": -25.076
         }
       ]
     },
@@ -13155,12 +13021,12 @@
       "symbol": "WLD",
       "name": "Worldcoin",
       "market_cap_rank": 74,
-      "market_cap": 860261725,
-      "current_price": 0.265665,
+      "market_cap": 862601444,
+      "current_price": 0.266384,
       "sector": "Other",
-      "relative_7d": -11.37,
-      "relative_14d": -21.41,
-      "relative_30d": -29.99,
+      "relative_7d": -11.56,
+      "relative_14d": -21.59,
+      "relative_30d": -30.17,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -13280,7 +13146,7 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -29.991
+          "relative_pct": -30.175
         }
       ]
     },
@@ -13288,13 +13154,13 @@
       "id": "river",
       "symbol": "RIVER",
       "name": "River",
-      "market_cap_rank": 151,
-      "market_cap": 235375114,
-      "current_price": 11.99,
+      "market_cap_rank": 152,
+      "market_cap": 235168711,
+      "current_price": 12.02,
       "sector": "Other",
-      "relative_7d": -40.65,
-      "relative_14d": -47.95,
-      "relative_30d": -32.54,
+      "relative_7d": -40.66,
+      "relative_14d": -47.97,
+      "relative_30d": -32.52,
       "daily_relative": [
         {
           "date": "2026-03-04",
@@ -13414,7 +13280,141 @@
         },
         {
           "date": "2026-04-02",
-          "relative_pct": -32.543
+          "relative_pct": -32.522
+        }
+      ]
+    },
+    {
+      "id": "kite-2",
+      "symbol": "KITE",
+      "name": "Kite",
+      "market_cap_rank": 153,
+      "market_cap": 232316991,
+      "current_price": 0.128993,
+      "sector": "Other",
+      "relative_7d": -41.78,
+      "relative_14d": -27.52,
+      "relative_30d": -41.41,
+      "daily_relative": [
+        {
+          "date": "2026-03-04",
+          "relative_pct": 0.0
+        },
+        {
+          "date": "2026-03-05",
+          "relative_pct": -8.024
+        },
+        {
+          "date": "2026-03-06",
+          "relative_pct": 16.377
+        },
+        {
+          "date": "2026-03-07",
+          "relative_pct": 13.646
+        },
+        {
+          "date": "2026-03-08",
+          "relative_pct": 25.173
+        },
+        {
+          "date": "2026-03-09",
+          "relative_pct": 27.928
+        },
+        {
+          "date": "2026-03-10",
+          "relative_pct": 31.879
+        },
+        {
+          "date": "2026-03-11",
+          "relative_pct": 21.441
+        },
+        {
+          "date": "2026-03-12",
+          "relative_pct": 12.626
+        },
+        {
+          "date": "2026-03-13",
+          "relative_pct": 5.373
+        },
+        {
+          "date": "2026-03-14",
+          "relative_pct": -2.976
+        },
+        {
+          "date": "2026-03-15",
+          "relative_pct": -5.661
+        },
+        {
+          "date": "2026-03-16",
+          "relative_pct": -9.837
+        },
+        {
+          "date": "2026-03-17",
+          "relative_pct": -18.013
+        },
+        {
+          "date": "2026-03-18",
+          "relative_pct": -20.074
+        },
+        {
+          "date": "2026-03-19",
+          "relative_pct": -19.133
+        },
+        {
+          "date": "2026-03-20",
+          "relative_pct": -10.894
+        },
+        {
+          "date": "2026-03-21",
+          "relative_pct": -7.787
+        },
+        {
+          "date": "2026-03-22",
+          "relative_pct": -6.536
+        },
+        {
+          "date": "2026-03-23",
+          "relative_pct": -2.839
+        },
+        {
+          "date": "2026-03-24",
+          "relative_pct": -2.918
+        },
+        {
+          "date": "2026-03-25",
+          "relative_pct": 7.646
+        },
+        {
+          "date": "2026-03-26",
+          "relative_pct": 4.206
+        },
+        {
+          "date": "2026-03-27",
+          "relative_pct": -12.989
+        },
+        {
+          "date": "2026-03-28",
+          "relative_pct": -16.018
+        },
+        {
+          "date": "2026-03-29",
+          "relative_pct": -25.931
+        },
+        {
+          "date": "2026-03-30",
+          "relative_pct": -26.695
+        },
+        {
+          "date": "2026-03-31",
+          "relative_pct": -23.753
+        },
+        {
+          "date": "2026-04-01",
+          "relative_pct": -31.203
+        },
+        {
+          "date": "2026-04-02",
+          "relative_pct": -41.411
         }
       ]
     }
