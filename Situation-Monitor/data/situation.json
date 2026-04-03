@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-04-03 14:36 UTC",
+    "last_updated": "2026-04-03 15:34 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -743,7 +743,7 @@
     },
     "dxy": {
       "current": 100.14,
-      "chg_1d": 0.11,
+      "chg_1d": 0.1,
       "chg_7d": -0.01,
       "chg_30d": 1.38
     },
