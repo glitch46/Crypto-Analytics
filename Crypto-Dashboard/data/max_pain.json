@@ -1,34 +1,34 @@
 {
   "BTC": {
     "peak_expiry": "2026-04-24",
-    "peak_notional": 6156339748.830002,
+    "peak_notional": 6156086170.983003,
     "max_pain": 77000.0,
     "candidates": [
       {
         "strike": 77000.0,
-        "pain": 8588500.0
+        "pain": 8671700.0
       },
       {
         "strike": 76000.0,
-        "pain": 7465500.0
+        "pain": 7539100.0
       },
       {
         "strike": 75000.0,
-        "pain": 6360600.0
+        "pain": 6424600.0
       },
       {
         "strike": 74000.0,
-        "pain": 5292300.0
+        "pain": 5346700.0
       },
       {
         "strike": 60000.0,
-        "pain": 5097600.0
+        "pain": 5101150.0
       }
     ]
   },
   "ETH": {
     "peak_expiry": "2026-06-26",
-    "peak_notional": 1267569980.4,
+    "peak_notional": 1267687468.8,
     "max_pain": 2400.0,
     "candidates": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "strike": 1800.0,
-        "pain": 1432125.0
+        "pain": 1435925.0
       },
       {
         "strike": 2350.0,
