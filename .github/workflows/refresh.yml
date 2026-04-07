@@ -3,7 +3,7 @@ name: Refresh Crypto Data
 on:
   workflow_dispatch:
   schedule:
-    - cron: '*/15 * * * *'
+    - cron: '0 */4 * * *'
 
 permissions:
   contents: write
