@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-04-08 12:50 UTC",
+    "last_updated": "2026-04-08 16:58 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -158,10 +158,10 @@
     }
   },
   "hy_spread": {
-    "current": 3.05,
-    "chg_1d": -0.08,
-    "chg_7d": -0.41,
-    "chg_30d": 0.05,
+    "current": 3.12,
+    "chg_1d": 0.07,
+    "chg_7d": -0.16,
+    "chg_30d": -0.01,
     "sma": 3.029,
     "dates": [
       "2025-04-14",
@@ -421,7 +421,8 @@
       "2026-04-01",
       "2026-04-02",
       "2026-04-03",
-      "2026-04-06"
+      "2026-04-06",
+      "2026-04-07"
     ],
     "values": [
       4.14,
@@ -681,107 +682,108 @@
       3.16,
       3.17,
       3.13,
-      3.05
+      3.05,
+      3.12
     ]
   },
   "threat": {
-    "score": 49.0,
+    "score": 43.6,
     "level": "HIGH",
     "components": {
       "oil": 30,
       "volatility": 20,
-      "credit": 2.0,
-      "equity": 3.1,
+      "credit": 1.6,
+      "equity": 0,
       "chain": 2
     }
   },
   "narrative": {
-    "supply_demand": "Oil is trading above its 90-day moving average while equities weaken \u2014 consistent with a SUPPLY-DRIVEN move. This is the stagflationary scenario where energy costs rise independent of economic growth, pressuring both consumers and corporate margins.",
-    "fed_watch": "10Y yield at 4.24% \u2014 relatively stable. Current bond market conditions do not signal immediate stress. An oil shock would need to be sustained to meaningfully shift Fed calculus.",
-    "credit_signal": "Credit spreads are WIDENING while equities decline \u2014 the transmission chain is active. Investment-grade bonds are pricing in higher risk. This is the confirmation signal the thesis watches for.",
+    "supply_demand": "Oil price is near its 90-day average with no clear directional signal. Neither supply shock nor demand surge is dominant.",
+    "fed_watch": "10Y yield at 4.28% \u2014 relatively stable. Current bond market conditions do not signal immediate stress. An oil shock would need to be sustained to meaningfully shift Fed calculus.",
+    "credit_signal": "Credit spreads are tightening \u2014 the bond market is NOT confirming stress. This suggests risk appetite remains intact and the transmission chain is not fully engaged.",
     "historical_analog": "Conditions echo early 2018 (Iran sanctions reimposition): moderate oil premium with contained but rising volatility. Markets eventually repriced after the threat became sustained over multiple weeks.",
-    "risk_summary": "Composite threat score: 49.0/100 (HIGH). 2 of 5 transmission chain links are active. Key risk indicators elevated \u2014 active monitoring warranted.",
-    "status_line": "Threat level HIGH (score 49.0/100). Active chain links: Oil Spike, Equity Valuations."
+    "risk_summary": "Composite threat score: 43.6/100 (HIGH). 3 of 5 transmission chain links are active. Key risk indicators elevated \u2014 active monitoring warranted.",
+    "status_line": "Threat level HIGH (score 43.6/100). Active chain links: Oil Spike, Inflation Expectations, Equity Valuations."
   },
   "kpis": {
     "wti": {
-      "current": 93.19,
-      "chg_1d": -17.49,
-      "chg_7d": -8.08,
-      "chg_30d": 2.52
+      "current": 94.82,
+      "chg_1d": -16.05,
+      "chg_7d": -6.47,
+      "chg_30d": 4.31
     },
     "brent": {
-      "current": 91.73,
-      "chg_1d": -16.05,
-      "chg_7d": -22.49,
-      "chg_30d": -1.04
+      "current": 94.65,
+      "chg_1d": -13.38,
+      "chg_7d": -20.03,
+      "chg_30d": 2.11
     },
     "tnx": {
-      "current": 4.24,
-      "chg_1d": -2.46,
-      "chg_7d": -1.74,
-      "chg_30d": 2.49
+      "current": 4.28,
+      "chg_1d": -1.38,
+      "chg_7d": -0.65,
+      "chg_30d": 3.63
     },
     "vix": {
-      "current": 20.43,
-      "chg_1d": -20.75,
-      "chg_7d": -19.09,
-      "chg_30d": -30.72
+      "current": 20.78,
+      "chg_1d": -19.39,
+      "chg_7d": -17.7,
+      "chg_30d": -29.54
     },
     "gold": {
-      "current": 4822.4,
-      "chg_1d": 3.55,
-      "chg_7d": 3.76,
-      "chg_30d": -6.29
+      "current": 4786.9,
+      "chg_1d": 2.79,
+      "chg_7d": 3.0,
+      "chg_30d": -6.98
     },
     "dxy": {
-      "current": 98.63,
-      "chg_1d": -1.01,
-      "chg_7d": -1.33,
-      "chg_30d": -0.36
+      "current": 98.91,
+      "chg_1d": -0.74,
+      "chg_7d": -1.05,
+      "chg_30d": -0.08
     },
     "spx": {
-      "current": 6616.85,
-      "chg_1d": 0.08,
-      "chg_7d": 4.31,
-      "chg_30d": -3.13
+      "current": 6786.16,
+      "chg_1d": 2.56,
+      "chg_7d": 3.95,
+      "chg_30d": 0.68
     },
     "xle": {
-      "current": 60.16,
-      "chg_1d": 0.8,
-      "chg_7d": -2.91,
-      "chg_30d": 7.21
+      "current": 57.29,
+      "chg_1d": -4.77,
+      "chg_7d": -6.48,
+      "chg_30d": 1.93
     },
     "lqd": {
-      "current": 109.07,
-      "chg_1d": 0.11,
-      "chg_7d": 1.12,
-      "chg_30d": -0.92
+      "current": 109.56,
+      "chg_1d": 0.44,
+      "chg_7d": 0.93,
+      "chg_30d": -0.14
     },
     "hyg": {
-      "current": 79.72,
-      "chg_1d": 0.03,
-      "chg_7d": 1.65,
-      "chg_30d": 0.03
+      "current": 80.19,
+      "chg_1d": 0.6,
+      "chg_7d": 1.29,
+      "chg_30d": 1.12
     },
     "tlt": {
-      "current": 86.64,
-      "chg_1d": -0.01,
-      "chg_7d": 0.24,
-      "chg_30d": -2.03
+      "current": 86.93,
+      "chg_1d": 0.33,
+      "chg_7d": 0.67,
+      "chg_30d": -1.34
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 75.65,
-    "wti_sma90": 70.59,
-    "brent_premium": 16.08,
-    "wti_premium": 22.6,
-    "brent_premium_pct": 21.26
+    "brent_sma90": 75.68,
+    "wti_sma90": 70.61,
+    "brent_premium": 18.97,
+    "wti_premium": 24.21,
+    "brent_premium_pct": 25.07
   },
   "credit_spread": {
-    "spread_proxy": 0.245,
-    "spread_direction": "widening",
-    "lqd_current": 109.07,
+    "spread_proxy": -0.199,
+    "spread_direction": "tightening",
+    "lqd_current": 109.56,
     "lqd_sma90": 109.34,
     "hyg_tlt_ratio": [
       0.8974,
@@ -907,7 +909,8 @@
       0.9201,
       0.9167,
       0.9198,
-      0.9201
+      0.9201,
+      0.9226
     ],
     "spread_history": [
       0.9192,
@@ -1033,22 +1036,23 @@
       0.9203,
       0.9164,
       0.9179,
-      0.9168
+      0.9168,
+      0.9128
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.9041,
-    "oil_yield_60d": 0.5824,
-    "oil_yield_100d": 0.6286
+    "oil_yield_30d": 0.9014,
+    "oil_yield_60d": 0.585,
+    "oil_yield_100d": 0.6316
   },
   "yield_curve": {
     "current": {
-      "13w": 3.603,
-      "5y": 3.863,
-      "10y": 4.236,
-      "30y": 4.839
+      "13w": 3.6,
+      "5y": 3.91,
+      "10y": 4.283,
+      "30y": 4.882
     },
-    "spread_10y_short": 0.633,
+    "spread_10y_short": 0.683,
     "inverted": false,
     "history": {
       "dates": [
@@ -1303,7 +1307,7 @@
         3.6070001125335693,
         3.622999906539917,
         3.615000009536743,
-        3.6029999256134033
+        3.5999999046325684
       ],
       "fvx": [
         3.7200000286102295,
@@ -1430,7 +1434,7 @@
         3.947999954223633,
         3.9809999465942383,
         3.9760000705718994,
-        3.8630001544952393
+        3.9099998474121094
       ],
       "tnx": [
         4.129000186920166,
@@ -1557,7 +1561,7 @@
         4.313000202178955,
         4.335000038146973,
         4.3429999351501465,
-        4.236000061035156
+        4.2829999923706055
       ],
       "tyx": [
         4.723999977111816,
@@ -1684,7 +1688,7 @@
         4.889999866485596,
         4.890999794006348,
         4.921000003814697,
-        4.8389997482299805
+        4.881999969482422
       ]
     }
   },
@@ -1813,7 +1817,8 @@
       "2026-04-01",
       "2026-04-02",
       "2026-04-06",
-      "2026-04-07"
+      "2026-04-07",
+      "2026-04-08"
     ],
     "xle_indexed": [
       100.0,
@@ -1939,7 +1944,8 @@
       134.57,
       135.2,
       136.19,
-      137.28
+      137.28,
+      130.73
     ],
     "spx_indexed": [
       100.0,
@@ -2065,20 +2071,21 @@
       97.36,
       97.47,
       97.9,
-      97.97
+      97.97,
+      100.48
     ]
   },
   "transmission_chain": {
     "links": {
       "oil_spike": "red",
-      "inflation_expectations": "green",
+      "inflation_expectations": "yellow",
       "bond_yields": "green",
       "credit_spreads": "green",
       "equity_valuations": "yellow"
     },
     "red_count": 1,
-    "yellow_count": 1,
-    "active_count": 2
+    "yellow_count": 2,
+    "active_count": 3
   },
   "key_levels": {
     "oil_elevated": 90,
@@ -2344,7 +2351,7 @@
         109.02999877929688,
         109.7699966430664,
         109.2699966430664,
-        91.7300033569336
+        94.6500015258789
       ],
       "wti": [
         62.54999923706055,
@@ -2471,7 +2478,7 @@
         111.54000091552734,
         112.41000366210938,
         112.94999694824219,
-        93.19000244140625
+        94.81999969482422
       ],
       "brent_sma20": [
         66.25,
@@ -2598,7 +2605,7 @@
         103.77,
         104.63,
         105.14,
-        105.34
+        105.48
       ],
       "wti_sma20": [
         62.55,
@@ -2725,7 +2732,7 @@
         95.61,
         96.68,
         97.59,
-        98.08
+        98.16
       ],
       "brent_sma90": [
         null,
@@ -2852,7 +2859,7 @@
         74.29,
         74.81,
         75.32,
-        75.65
+        75.68
       ]
     },
     "oil_vs_yield": {
@@ -3108,7 +3115,7 @@
         109.02999877929688,
         109.7699966430664,
         109.2699966430664,
-        91.7300033569336
+        94.6500015258789
       ],
       "tnx": [
         4.129000186920166,
@@ -3235,7 +3242,7 @@
         4.313000202178955,
         4.335000038146973,
         4.3429999351501465,
-        4.236000061035156
+        4.2829999923706055
       ]
     },
     "yield_curve": {
@@ -3491,7 +3498,7 @@
         3.6070001125335693,
         3.622999906539917,
         3.615000009536743,
-        3.6029999256134033
+        3.5999999046325684
       ],
       "fvx": [
         3.7200000286102295,
@@ -3618,7 +3625,7 @@
         3.947999954223633,
         3.9809999465942383,
         3.9760000705718994,
-        3.8630001544952393
+        3.9099998474121094
       ],
       "tnx": [
         4.129000186920166,
@@ -3745,7 +3752,7 @@
         4.313000202178955,
         4.335000038146973,
         4.3429999351501465,
-        4.236000061035156
+        4.2829999923706055
       ],
       "tyx": [
         4.723999977111816,
@@ -3872,7 +3879,7 @@
         4.889999866485596,
         4.890999794006348,
         4.921000003814697,
-        4.8389997482299805
+        4.881999969482422
       ]
     },
     "credit_spread": {
@@ -4000,7 +4007,8 @@
         "2026-04-01",
         "2026-04-02",
         "2026-04-06",
-        "2026-04-07"
+        "2026-04-07",
+        "2026-04-08"
       ],
       "spread_proxy": [
         0.505,
@@ -4010,78 +4018,78 @@
         -0.246,
         -0.246,
         -0.532,
-        -0.335,
-        -0.639,
+        -0.336,
+        -0.64,
         -0.657,
         -0.756,
-        -0.63,
-        -0.8,
+        -0.631,
+        -0.801,
         -0.97,
         -0.979,
         -0.407,
-        0.13,
+        0.129,
         0.532,
-        0.8,
+        0.799,
         0.665,
         0.961,
-        0.441,
+        0.44,
         0.638,
         0.584,
         0.189,
         0.288,
-        0.782,
+        0.781,
         1.051,
         0.988,
         0.943,
         0.934,
-        0.8,
-        0.45,
-        0.055,
+        0.799,
+        0.449,
+        0.054,
         -0.224,
         -0.565,
         -0.394,
-        0.144,
-        0.081,
+        0.143,
+        0.08,
         -0.145,
-        0.036,
-        0.135,
+        0.035,
+        0.134,
         0.342,
         0.468,
-        0.009,
-        0.153,
+        0.008,
+        0.152,
         0.756,
         0.639,
         0.414,
         0.522,
-        0.144,
-        0.401,
-        0.419,
+        0.143,
+        0.4,
+        0.418,
         0.319,
         -0.07,
         -0.061,
-        -0.196,
+        -0.197,
         -0.079,
         0.346,
         0.373,
         0.093,
         0.093,
-        0.021,
+        0.02,
         0.301,
         -0.061,
         0.057,
         -0.16,
-        -0.413,
+        -0.414,
         -0.287,
-        0.003,
-        0.609,
-        0.012,
+        0.002,
+        0.608,
+        0.011,
         -0.178,
         -0.242,
         -0.323,
-        -0.214,
+        -0.215,
         -0.07,
         -0.097,
-        0.003,
+        0.002,
         0.095,
         0.05,
         0.177,
@@ -4092,31 +4100,31 @@
         -0.486,
         -0.958,
         -1.294,
-        -1.393,
+        -1.394,
         -1.294,
-        -1.375,
+        -1.376,
         -1.294,
-        -1.402,
-        -1.375,
+        -1.403,
+        -1.376,
         -1.348,
         -1.412,
-        -1.375,
+        -1.376,
         -1.032,
-        -0.986,
-        -1.077,
+        -0.987,
+        -1.078,
         -0.677,
         -0.34,
         -0.941,
         -0.249,
         0.571,
-        1.109,
+        1.108,
         1.473,
         0.999,
-        0.444,
+        0.443,
         0.981,
         0.544,
         1.764,
-        1.118,
+        1.117,
         1.318,
         0.963,
         1.737,
@@ -4125,8 +4133,9 @@
         0.726,
         0.62,
         0.199,
-        0.355,
-        0.245
+        0.354,
+        0.245,
+        -0.199
       ]
     },
     "vix_gold": {
@@ -4382,7 +4391,7 @@
         23.8700008392334,
         24.170000076293945,
         25.780000686645508,
-        20.43000030517578
+        20.780000686645508
       ],
       "gold": [
         4043.300048828125,
@@ -4509,7 +4518,7 @@
         4651.5,
         4656.7998046875,
         4657.10009765625,
-        4822.39990234375
+        4786.89990234375
       ]
     },
     "relative_perf": {
@@ -4637,7 +4646,8 @@
         "2026-04-01",
         "2026-04-02",
         "2026-04-06",
-        "2026-04-07"
+        "2026-04-07",
+        "2026-04-08"
       ],
       "xle": [
         100.0,
@@ -4763,7 +4773,8 @@
         134.57,
         135.2,
         136.19,
-        137.28
+        137.28,
+        130.73
       ],
       "spx": [
         100.0,
@@ -4889,7 +4900,8 @@
         97.36,
         97.47,
         97.9,
-        97.97
+        97.97,
+        100.48
       ]
     },
     "big_picture": {
@@ -5145,7 +5157,7 @@
         111.54000091552734,
         112.41000366210938,
         112.94999694824219,
-        93.19000244140625
+        94.81999969482422
       ],
       "tnx": [
         4.129000186920166,
@@ -5272,7 +5284,7 @@
         4.313000202178955,
         4.335000038146973,
         4.3429999351501465,
-        4.236000061035156
+        4.2829999923706055
       ],
       "spx": [
         6753.72021484375,
@@ -5398,7 +5410,8 @@
         6575.31982421875,
         6582.68994140625,
         6611.830078125,
-        6616.85009765625
+        6616.85009765625,
+        6786.16015625
       ]
     },
     "hyg_tlt": {
@@ -5526,7 +5539,8 @@
         "2026-04-01",
         "2026-04-02",
         "2026-04-06",
-        "2026-04-07"
+        "2026-04-07",
+        "2026-04-08"
       ],
       "hyg": [
         100.0,
@@ -5652,7 +5666,8 @@
         101.32,
         101.56,
         101.74,
-        101.77
+        101.77,
+        102.37
       ],
       "tlt": [
         100.0,
@@ -5778,7 +5793,8 @@
         98.82,
         99.42,
         99.26,
-        99.25
+        99.25,
+        99.58
       ]
     }
   }
