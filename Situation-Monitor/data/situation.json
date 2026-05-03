@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-05-03 16:46 UTC",
+    "last_updated": "2026-05-03 20:45 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -4020,7 +4020,7 @@
         0.584,
         0.206,
         0.462,
-        0.48,
+        0.481,
         0.381,
         -0.008,
         0.001,
