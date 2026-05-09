@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-05-08 21:26 UTC",
+    "last_updated": "2026-05-09 03:01 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -167,9 +167,8 @@
     "chg_1d": 0.04,
     "chg_7d": -0.04,
     "chg_30d": -0.33,
-    "sma": 2.956,
+    "sma": 2.955,
     "dates": [
-      "2025-05-13",
       "2025-05-14",
       "2025-05-15",
       "2025-05-16",
@@ -432,7 +431,6 @@
       "2026-05-07"
     ],
     "values": [
-      3.09,
       3.1,
       3.2,
       3.16,
