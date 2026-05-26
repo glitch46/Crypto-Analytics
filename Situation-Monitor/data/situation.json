@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-05-26 05:53 UTC",
+    "last_updated": "2026-05-26 09:41 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -683,36 +683,36 @@
     ]
   },
   "threat": {
-    "score": 18.7,
-    "level": "LOW",
+    "score": 21.1,
+    "level": "ELEVATED",
     "components": {
-      "oil": 9.7,
-      "volatility": 18.7,
+      "oil": 12.1,
+      "volatility": 20,
       "credit": 4.0,
       "equity": 0,
       "chain": 0
     }
   },
   "narrative": {
-    "supply_demand": "Oil price is near its 90-day average with no clear directional signal. Neither supply shock nor demand surge is dominant.",
+    "supply_demand": "Oil is elevated alongside rising equities \u2014 suggesting a DEMAND-DRIVEN rally. This is less threatening to the thesis transmission chain as it reflects economic strength rather than supply disruption.",
     "fed_watch": "10Y yield at 4.56% \u2014 elevated but not extreme. Further oil-driven inflation could push yields higher and complicate the Fed's rate path. Watch for hawkish rhetoric shifts.",
     "credit_signal": "Credit spreads are widening but equities remain resilient. This divergence often resolves with equities catching down to credit's warning. The bond market tends to lead \u2014 this bears watching.",
     "historical_analog": "No strong historical analog is active. Markets are in a relatively normal regime. Past episodes to watch if conditions deteriorate: 1990 Gulf War, 2022 Ukraine shock, 2018 Iran sanctions.",
-    "risk_summary": "Composite threat score: 18.7/100 (LOW). 1 of 5 transmission chain links are active. Baseline conditions \u2014 no immediate transmission chain activation.",
-    "status_line": "Threat level LOW (score 18.7/100). Active chain links: Bond Yields."
+    "risk_summary": "Composite threat score: 21.1/100 (ELEVATED). 2 of 5 transmission chain links are active. Some warning signals present but chain not fully engaged.",
+    "status_line": "Threat level ELEVATED (score 21.1/100). Active chain links: Oil Spike, Bond Yields."
   },
   "kpis": {
     "wti": {
-      "current": 91.98,
-      "chg_1d": -4.78,
-      "chg_7d": -15.35,
-      "chg_30d": -4.04
+      "current": 93.02,
+      "chg_1d": -3.71,
+      "chg_7d": -14.39,
+      "chg_30d": -2.95
     },
     "brent": {
-      "current": 95.41,
-      "chg_1d": -7.85,
-      "chg_7d": -14.89,
-      "chg_30d": -9.19
+      "current": 96.54,
+      "chg_1d": -6.76,
+      "chg_7d": -13.88,
+      "chg_30d": -8.12
     },
     "tnx": {
       "current": 4.56,
@@ -721,22 +721,22 @@
       "chg_30d": 6.15
     },
     "vix": {
-      "current": 16.59,
-      "chg_1d": -0.66,
-      "chg_7d": -6.9,
-      "chg_30d": -14.09
+      "current": 16.75,
+      "chg_1d": 0.96,
+      "chg_7d": -7.25,
+      "chg_30d": -10.48
     },
     "gold": {
-      "current": 4530.1,
-      "chg_1d": 0.2,
-      "chg_7d": -0.49,
-      "chg_30d": -3.72
+      "current": 4521.4,
+      "chg_1d": 0.01,
+      "chg_7d": -0.68,
+      "chg_30d": -3.9
     },
     "dxy": {
-      "current": 99.1,
-      "chg_1d": -0.23,
-      "chg_7d": 0.13,
-      "chg_30d": 0.3
+      "current": 99.05,
+      "chg_1d": -0.27,
+      "chg_7d": 0.08,
+      "chg_30d": 0.25
     },
     "spx": {
       "current": 7473.47,
@@ -770,11 +770,11 @@
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 91.0,
-    "wti_sma90": 85.19,
-    "brent_premium": 4.41,
-    "wti_premium": 6.79,
-    "brent_premium_pct": 4.85
+    "brent_sma90": 91.02,
+    "wti_sma90": 85.21,
+    "brent_premium": 5.52,
+    "wti_premium": 7.81,
+    "brent_premium_pct": 6.06
   },
   "credit_spread": {
     "spread_proxy": 0.494,
@@ -1034,9 +1034,9 @@
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.3203,
-    "oil_yield_60d": 0.6189,
-    "oil_yield_100d": 0.6692
+    "oil_yield_30d": 0.3303,
+    "oil_yield_60d": 0.6234,
+    "oil_yield_100d": 0.6702
   },
   "yield_curve": {
     "current": {
@@ -2057,15 +2057,15 @@
   },
   "transmission_chain": {
     "links": {
-      "oil_spike": "green",
+      "oil_spike": "yellow",
       "inflation_expectations": "green",
       "bond_yields": "yellow",
       "credit_spreads": "green",
       "equity_valuations": "green"
     },
     "red_count": 0,
-    "yellow_count": 1,
-    "active_count": 1
+    "yellow_count": 2,
+    "active_count": 2
   },
   "key_levels": {
     "oil_elevated": 90,
@@ -2327,7 +2327,7 @@
         105.0199966430664,
         102.58000183105469,
         103.54000091552734,
-        95.41000366210938
+        96.54000091552734
       ],
       "wti": [
         58.650001525878906,
@@ -2452,7 +2452,7 @@
         98.26000213623047,
         96.3499984741211,
         96.5999984741211,
-        91.9800033569336
+        93.0199966430664
       ],
       "brent_sma20": [
         63.13,
@@ -2577,7 +2577,7 @@
         107.9,
         107.78,
         107.69,
-        107.05
+        107.1
       ],
       "wti_sma20": [
         58.65,
@@ -2702,7 +2702,7 @@
         100.85,
         100.87,
         100.98,
-        100.76
+        100.82
       ],
       "brent_sma90": [
         null,
@@ -2827,7 +2827,7 @@
         89.83,
         90.26,
         90.68,
-        91.0
+        91.02
       ]
     },
     "oil_vs_yield": {
@@ -3079,7 +3079,7 @@
         105.0199966430664,
         102.58000183105469,
         103.54000091552734,
-        95.41000366210938
+        96.54000091552734
       ],
       "tnx": [
         4.001999855041504,
@@ -4090,7 +4090,6 @@
     },
     "vix_gold": {
       "dates": [
-        "2025-11-25",
         "2025-11-26",
         "2025-11-28",
         "2025-12-01",
@@ -4213,10 +4212,10 @@
         "2026-05-20",
         "2026-05-21",
         "2026-05-22",
-        "2026-05-25"
+        "2026-05-25",
+        "2026-05-26"
       ],
       "vix": [
-        18.559999465942383,
         17.190000534057617,
         16.350000381469727,
         17.239999771118164,
@@ -4339,7 +4338,8 @@
         17.440000534057617,
         16.760000228881836,
         16.700000762939453,
-        16.59000015258789
+        16.59000015258789,
+        16.75
       ],
       "gold": [
         4165.2001953125,
@@ -4464,7 +4464,7 @@
         4531.2998046875,
         4539.7998046875,
         4521.0,
-        4530.10009765625
+        4521.39990234375
       ]
     },
     "relative_perf": {
@@ -5096,7 +5096,7 @@
         98.26000213623047,
         96.3499984741211,
         96.5999984741211,
-        91.9800033569336
+        93.0199966430664
       ],
       "tnx": [
         4.001999855041504,
