@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-05-25 21:02 UTC",
+    "last_updated": "2026-05-26 01:11 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -162,9 +162,8 @@
     "chg_1d": -0.02,
     "chg_7d": 0.02,
     "chg_30d": -0.07,
-    "sma": 2.936,
+    "sma": 2.935,
     "dates": [
-      "2025-05-30",
       "2025-05-31",
       "2025-06-02",
       "2025-06-03",
@@ -424,7 +423,6 @@
       "2026-05-21"
     ],
     "values": [
-      3.31,
       3.32,
       3.27,
       3.19,
@@ -685,36 +683,36 @@
     ]
   },
   "threat": {
-    "score": 31.1,
-    "level": "ELEVATED",
+    "score": 17.9,
+    "level": "LOW",
     "components": {
-      "oil": 20.1,
-      "volatility": 20,
+      "oil": 9.0,
+      "volatility": 17.9,
       "credit": 4.0,
       "equity": 0,
-      "chain": 2
+      "chain": 0
     }
   },
   "narrative": {
-    "supply_demand": "Oil is elevated alongside rising equities \u2014 suggesting a DEMAND-DRIVEN rally. This is less threatening to the thesis transmission chain as it reflects economic strength rather than supply disruption.",
+    "supply_demand": "Oil price is near its 90-day average with no clear directional signal. Neither supply shock nor demand surge is dominant.",
     "fed_watch": "10Y yield at 4.56% \u2014 elevated but not extreme. Further oil-driven inflation could push yields higher and complicate the Fed's rate path. Watch for hawkish rhetoric shifts.",
     "credit_signal": "Credit spreads are widening but equities remain resilient. This divergence often resolves with equities catching down to credit's warning. The bond market tends to lead \u2014 this bears watching.",
     "historical_analog": "No strong historical analog is active. Markets are in a relatively normal regime. Past episodes to watch if conditions deteriorate: 1990 Gulf War, 2022 Ukraine shock, 2018 Iran sanctions.",
-    "risk_summary": "Composite threat score: 31.1/100 (ELEVATED). 2 of 5 transmission chain links are active. Some warning signals present but chain not fully engaged.",
-    "status_line": "Threat level ELEVATED (score 31.1/100). Active chain links: Oil Spike, Bond Yields."
+    "risk_summary": "Composite threat score: 17.9/100 (LOW). 1 of 5 transmission chain links are active. Baseline conditions \u2014 no immediate transmission chain activation.",
+    "status_line": "Threat level LOW (score 17.9/100). Active chain links: Bond Yields."
   },
   "kpis": {
     "wti": {
-      "current": 96.6,
-      "chg_1d": 0.0,
-      "chg_7d": -11.1,
-      "chg_30d": 0.78
+      "current": 91.55,
+      "chg_1d": -5.23,
+      "chg_7d": -15.75,
+      "chg_30d": -4.49
     },
     "brent": {
-      "current": 100.21,
-      "chg_1d": -3.22,
-      "chg_7d": -10.61,
-      "chg_30d": -4.63
+      "current": 95.09,
+      "chg_1d": -8.16,
+      "chg_7d": -15.17,
+      "chg_30d": -9.5
     },
     "tnx": {
       "current": 4.56,
@@ -729,10 +727,10 @@
       "chg_30d": -14.09
     },
     "gold": {
-      "current": 4523.2,
-      "chg_1d": 0.05,
-      "chg_7d": -0.64,
-      "chg_30d": -3.87
+      "current": 4545.3,
+      "chg_1d": 0.54,
+      "chg_7d": -0.16,
+      "chg_30d": -3.4
     },
     "dxy": {
       "current": 99.24,
@@ -772,11 +770,11 @@
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 91.06,
-    "wti_sma90": 85.25,
-    "brent_premium": 9.15,
-    "wti_premium": 11.35,
-    "brent_premium_pct": 10.05
+    "brent_sma90": 91.0,
+    "wti_sma90": 85.19,
+    "brent_premium": 4.09,
+    "wti_premium": 6.36,
+    "brent_premium_pct": 4.49
   },
   "credit_spread": {
     "spread_proxy": 0.494,
@@ -1036,9 +1034,9 @@
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.3618,
-    "oil_yield_60d": 0.637,
-    "oil_yield_100d": 0.6736
+    "oil_yield_30d": 0.3174,
+    "oil_yield_60d": 0.6176,
+    "oil_yield_100d": 0.6688
   },
   "yield_curve": {
     "current": {
@@ -2059,15 +2057,15 @@
   },
   "transmission_chain": {
     "links": {
-      "oil_spike": "red",
+      "oil_spike": "green",
       "inflation_expectations": "green",
       "bond_yields": "yellow",
       "credit_spreads": "green",
       "equity_valuations": "green"
     },
-    "red_count": 1,
+    "red_count": 0,
     "yellow_count": 1,
-    "active_count": 2
+    "active_count": 1
   },
   "key_levels": {
     "oil_elevated": 90,
@@ -2331,7 +2329,7 @@
         105.0199966430664,
         102.58000183105469,
         103.54000091552734,
-        100.20999908447266
+        95.08999633789062
       ],
       "wti": [
         57.95000076293945,
@@ -2457,7 +2455,7 @@
         98.26000213623047,
         96.3499984741211,
         96.5999984741211,
-        96.5999984741211
+        91.55000305175781
       ],
       "brent_sma20": [
         62.48,
@@ -2583,7 +2581,7 @@
         107.9,
         107.78,
         107.69,
-        107.29
+        107.03
       ],
       "wti_sma20": [
         57.95,
@@ -2709,7 +2707,7 @@
         100.85,
         100.87,
         100.98,
-        101.0
+        100.74
       ],
       "brent_sma90": [
         null,
@@ -2835,7 +2833,7 @@
         89.83,
         90.26,
         90.68,
-        91.06
+        91.0
       ]
     },
     "oil_vs_yield": {
@@ -4473,7 +4471,7 @@
         4531.2998046875,
         4539.7998046875,
         4521.0,
-        4523.2001953125
+        4545.2998046875
       ]
     },
     "relative_perf": {
@@ -5107,7 +5105,7 @@
         98.26000213623047,
         96.3499984741211,
         96.5999984741211,
-        96.5999984741211
+        91.55000305175781
       ],
       "tnx": [
         4.001999855041504,
