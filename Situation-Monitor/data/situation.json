@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-05-31 01:14 UTC",
+    "last_updated": "2026-05-31 06:03 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -41,7 +41,6 @@
     },
     "history": {
       "dates": [
-        "2025-12-31",
         "2026-01-07",
         "2026-01-14",
         "2026-01-21",
@@ -65,7 +64,6 @@
         "2026-05-27"
       ],
       "bullish": [
-        42.0,
         42.5,
         49.5,
         43.2,
@@ -89,7 +87,6 @@
         35.6
       ],
       "neutral": [
-        31.0,
         27.5,
         22.3,
         24.1,
@@ -113,7 +110,6 @@
         22.6
       ],
       "bearish": [
-        27.0,
         30.0,
         28.2,
         32.7,
@@ -137,7 +133,6 @@
         41.9
       ],
       "bull_bear_spread": [
-        15.0,
         12.5,
         21.3,
         10.5,
@@ -690,11 +685,11 @@
     ]
   },
   "threat": {
-    "score": 8.3,
+    "score": 10.2,
     "level": "LOW",
     "components": {
-      "oil": 0.1,
-      "volatility": 8.3,
+      "oil": 1.9,
+      "volatility": 10.2,
       "credit": 3.3,
       "equity": 0,
       "chain": 0
@@ -705,8 +700,8 @@
     "fed_watch": "10Y yield at 4.45% \u2014 relatively stable. Current bond market conditions do not signal immediate stress. An oil shock would need to be sustained to meaningfully shift Fed calculus.",
     "credit_signal": "Credit spreads are tightening \u2014 the bond market is NOT confirming stress. This suggests risk appetite remains intact and the transmission chain is not fully engaged.",
     "historical_analog": "No strong historical analog is active. Markets are in a relatively normal regime. Past episodes to watch if conditions deteriorate: 1990 Gulf War, 2022 Ukraine shock, 2018 Iran sanctions.",
-    "risk_summary": "Composite threat score: 8.3/100 (LOW). 0 of 5 transmission chain links are active. Baseline conditions \u2014 no immediate transmission chain activation.",
-    "status_line": "Threat level LOW (score 8.3/100). No transmission chain links currently active."
+    "risk_summary": "Composite threat score: 10.2/100 (LOW). 0 of 5 transmission chain links are active. Baseline conditions \u2014 no immediate transmission chain activation.",
+    "status_line": "Threat level LOW (score 10.2/100). No transmission chain links currently active."
   },
   "kpis": {
     "wti": {
@@ -716,10 +711,10 @@
       "chg_30d": -12.58
     },
     "brent": {
-      "current": 92.05,
-      "chg_1d": -1.77,
-      "chg_7d": -10.27,
-      "chg_30d": -17.27
+      "current": 91.12,
+      "chg_1d": -2.76,
+      "chg_7d": -11.17,
+      "chg_30d": -18.1
     },
     "tnx": {
       "current": 4.45,
@@ -734,10 +729,10 @@
       "chg_30d": -18.55
     },
     "gold": {
-      "current": 4560.5,
-      "chg_1d": 1.36,
-      "chg_7d": 0.46,
-      "chg_30d": -0.68
+      "current": 4593.0,
+      "chg_1d": 2.08,
+      "chg_7d": 1.17,
+      "chg_30d": 0.03
     },
     "dxy": {
       "current": 98.91,
@@ -777,11 +772,11 @@
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 92.02,
+    "brent_sma90": 92.01,
     "wti_sma90": 86.17,
-    "brent_premium": 0.03,
+    "brent_premium": -0.89,
     "wti_premium": 1.19,
-    "brent_premium_pct": 0.03
+    "brent_premium_pct": -0.97
   },
   "credit_spread": {
     "spread_proxy": -0.409,
@@ -1042,9 +1037,9 @@
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.3014,
-    "oil_yield_60d": 0.4644,
-    "oil_yield_100d": 0.6963
+    "oil_yield_30d": 0.2979,
+    "oil_yield_60d": 0.4612,
+    "oil_yield_100d": 0.6958
   },
   "yield_curve": {
     "current": {
@@ -2342,7 +2337,7 @@
         99.58000183105469,
         94.29000091552734,
         93.70999908447266,
-        92.05000305175781
+        91.12000274658203
       ],
       "wti": [
         59.31999969482422,
@@ -2594,7 +2589,7 @@
         107.25,
         106.41,
         105.19,
-        104.09
+        104.05
       ],
       "wti_sma20": [
         59.32,
@@ -2846,7 +2841,7 @@
         91.05,
         91.39,
         91.72,
-        92.02
+        92.01
       ]
     },
     "oil_vs_yield": {
@@ -3100,7 +3095,7 @@
         99.58000183105469,
         94.29000091552734,
         93.70999908447266,
-        92.05000305175781
+        91.12000274658203
       ],
       "tnx": [
         4.0960001945495605,
@@ -4494,7 +4489,7 @@
         4500.39990234375,
         4447.5,
         4499.2998046875,
-        4560.5
+        4593.0
       ]
     },
     "relative_perf": {
