@@ -4,7 +4,7 @@
       "win_rate": 0.36363636363636365,
       "months": 12,
       "puts_over_calls": 2,
-      "avg_max_pain_dev": 0.20390043752520082
+      "avg_max_pain_dev": 0.2034565467611336
     },
     "months": [
       {
@@ -207,18 +207,18 @@
       },
       {
         "month": "2026-05",
-        "expiry": "2026-05-30",
-        "settlement_price": 73434.31999999996,
-        "spot_30d": 75774.8855230121,
-        "spot_expiry": 73382.71831425565,
-        "put_call": 0.9890149468755626,
-        "call_oi": 2776.5000000000005,
-        "put_oi": 2746.0,
+        "expiry": "2026-05-31",
+        "settlement_price": 73773.81999999999,
+        "spot_30d": 76286.57710950871,
+        "spot_expiry": 73812.15100072902,
+        "put_call": 0.5938422606495151,
+        "call_oi": 1422.5999999999997,
+        "put_oi": 844.8,
         "max_pain": 85000.0,
-        "max_pain_dev": -11565.680000000037,
-        "max_pain_dev_pct": 0.15749693059049288,
-        "price_change": -2340.565523012134,
-        "price_change_pct": -0.03088840724544977,
+        "max_pain_dev": -11226.180000000008,
+        "max_pain_dev_pct": 0.15217024142168603,
+        "price_change": -2512.7571095087187,
+        "price_change_pct": -0.032938391060614476,
         "skew_direction": "up",
         "outcome_direction": "down",
         "skew_followed": false
@@ -230,7 +230,7 @@
       "win_rate": 0.2727272727272727,
       "months": 12,
       "puts_over_calls": 5,
-      "avg_max_pain_dev": 0.3870344269693929
+      "avg_max_pain_dev": 0.38424587254027004
     },
     "months": [
       {
@@ -433,18 +433,18 @@
       },
       {
         "month": "2026-05",
-        "expiry": "2026-05-30",
-        "settlement_price": 2012.699999999999,
-        "spot_30d": 2253.4583579638706,
-        "spot_expiry": 2012.230102947315,
-        "put_call": 1.2668694905998907,
-        "call_oi": 12819.0,
-        "put_oi": 16240.0,
-        "max_pain": 2400.0,
-        "max_pain_dev": -387.3000000000011,
-        "max_pain_dev_pct": 0.19242808168132425,
-        "price_change": -240.75835796387173,
-        "price_change_pct": -0.10683949721680713,
+        "expiry": "2026-05-31",
+        "settlement_price": 2021.32,
+        "spot_30d": 2255.980291785015,
+        "spot_expiry": 2023.9031688747423,
+        "put_call": 1.222879476074786,
+        "call_oi": 9467.0,
+        "put_oi": 11577.0,
+        "max_pain": 1700.0,
+        "max_pain_dev": 321.31999999999994,
+        "max_pain_dev_pct": 0.15896542853185044,
+        "price_change": -234.66029178501526,
+        "price_change_pct": -0.1040169954673422,
         "skew_direction": "down",
         "outcome_direction": "down",
         "skew_followed": true
