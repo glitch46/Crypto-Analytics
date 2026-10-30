@@ -81,14 +81,17 @@
   }
 
   function destroyChartsIn(root) {
-    if (!window.Chart || !Chart.registry) return;
-    Chart.registry.getAll().forEach(function (c) {
+    if (!window.Chart) return;
+    var charts = [];
+    if (Chart.instances) charts = Object.values(Chart.instances);          // Chart.js v4
+    else if (Chart.registry && typeof Chart.registry.getAll === "function") charts = Chart.registry.getAll();
+    charts.forEach(function (c) {
       try { if (c.canvas && root.contains(c.canvas)) c.destroy(); } catch (e) {}
     });
   }
 
   function runScripts(code) {
-    new Function("window", "document", "globalThis", code)();
+    new Function("window", "document", "globalThis", code).call(window, window, document, globalThis);
   }
 
   /* Parse the fetched page, inject its <main> into the tab, run its scripts. */

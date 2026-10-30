@@ -466,7 +466,7 @@
       state.charts.cvd = new Chart(document.getElementById("cvdChart"), {
         type: "line",
         data: { labels, datasets: sets.map(s => ({ label: s.label, data: rows.map(r => r[s.key] || 0), borderColor: s.color, backgroundColor: "transparent", borderWidth: s.dash ? 2 : 1.4, borderDash: s.dash, fill: false, tension: 0.2, pointRadius: 0 })) },
-        options: { ...commonChartOptions(false), scales: { ...commonChartOptions(false).scales, x: { ...commonChartOptions(false).scales.x, ticks: { color: "#85858c", maxTicksLimit: 10, callback: (v, i) => (i % 72 === 0) ? this.getLabelForValue(v) : "" } } } }
+        options: { ...commonChartOptions(false), scales: { ...commonChartOptions(false).scales, x: { ...commonChartOptions(false).scales.x, ticks: { color: "#85858c", maxTicksLimit: 10, autoSkip: true, maxRotation: 0 } } } }
       });
     }
 
