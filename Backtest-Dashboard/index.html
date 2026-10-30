@@ -3,429 +3,42 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Skew Backtest</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Skew Backtest — Crypto Analytics</title>
+  <meta name="description" content="12-month expiry snapshots comparing put/call skew with realized price outcomes and max pain deviation. From Binance options OI and Deribit settlements." />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
-      --gradient-hover: linear-gradient(135deg, #ff5252 0%, #e91e7b 100%);
-      --accent-solid: #ff4d7d;
-      --black-deep: #000000;
-      --black-rich: #0a0a0b;
-      --black-elevated: #121214;
-      --gray-dark: #1a1a1e;
-      --gray-mid: #2a2a30;
-      --gray-muted: #6b6b76;
-      --gray-light: #9999a5;
-      --white-soft: #e8e8ed;
-      --white-pure: #ffffff;
-      --success: #00d26a;
-      --warning: #ffb800;
-      --info: #00b4d8;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-      --shadow-glow: 0 0 30px #ff4d7d30;
-      --glow-ring: 0 0 0 4px #ff4d7d20;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
-      color: var(--white-soft);
-    }
-
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 220px;
-      padding: 32px 20px;
-      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
-      border-right: 1px solid var(--gray-dark);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      height: 100vh;
-    }
-
-    .sidebar-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gray-light);
-    }
-
-    .sidebar-nav {
-      display: grid;
-      gap: 10px;
-    }
-
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      background: var(--black-rich);
-      color: var(--white-soft);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 200ms ease-out;
-    }
-
-    .sidebar-link:hover,
-    .sidebar-link.active {
-      border-color: #ff4d7d70;
-      box-shadow: var(--shadow-sm);
-      color: var(--white-pure);
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 64px 24px 80px;
-      flex: 1;
-    }
-
-    .hero {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: 40px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--white-pure);
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 700px;
-      color: var(--gray-light);
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-      margin: 24px 0 32px;
-    }
-
-    .nav {
-      display: inline-flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .nav-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--gray-dark);
-      background: var(--black-rich);
-      color: var(--gray-light);
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: all 200ms ease-out;
-    }
-
-    .nav-link.active,
-    .nav-link:hover {
-      color: var(--white-pure);
-      border-color: transparent;
-      background: var(--gradient-primary);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .toggle-group {
-      display: inline-flex;
-      gap: 8px;
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 999px;
-      padding: 6px;
-      box-shadow: var(--shadow-sm);
-    }
-
-    .toggle-btn {
-      border: none;
-      background: transparent;
-      color: var(--gray-light);
-      font-weight: 700;
-      padding: 10px 18px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: all 200ms ease-out;
-      letter-spacing: 0.02em;
-    }
-
-    .toggle-btn.active {
-      background: var(--gradient-primary);
-      color: var(--white-pure);
-      box-shadow: var(--shadow-glow);
-    }
-
-    .toggle-btn:focus-visible {
-      outline: none;
-      box-shadow: var(--glow-ring);
-    }
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      border-radius: 999px;
-      border: 1px solid #ff4d7d40;
-      background: linear-gradient(135deg, #ff6b6b20 0%, #ff2d9220 100%);
-      color: var(--accent-solid);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .grid {
-      display: grid;
-      gap: 24px;
-    }
-
-    .kpis {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .panel {
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .panel.glow {
-      border: 1px solid transparent;
-      background: linear-gradient(var(--black-rich), var(--black-rich)) padding-box,
-        var(--gradient-primary) border-box;
-    }
-
-    .kpi-label {
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray-muted);
-      font-weight: 700;
-    }
-
-    .kpi-value {
-      margin-top: 10px;
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--white-pure);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .kpi-sub {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--gray-light);
-    }
-
-    .kpi-accent {
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .chart-panel {
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .chart-header {
-      padding: 24px 24px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .chart-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--white-pure);
-    }
-
-    .chart-subtitle {
-      font-size: 13px;
-      color: var(--gray-light);
-    }
-
-    .chart-wrap {
-      padding: 16px 24px 24px;
-    }
-
-    canvas { max-height: 320px; }
-
-    .two-col {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .list {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0 0;
-      display: grid;
-      gap: 12px;
-    }
-
-    .list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: var(--black-elevated);
-      border: 1px solid var(--gray-dark);
-    }
-
-    .list-item span {
-      font-variant-numeric: tabular-nums;
-    }
-
-    .pill {
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #1a1a1e;
-      color: var(--gray-light);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .info-grid {
-      display: grid;
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 16px;
-      background: var(--black-elevated);
-      border-radius: 12px;
-      border: 1px solid var(--gray-dark);
-    }
-
-    .info-label {
-      color: var(--gray-light);
-      font-size: 13px;
-    }
-
-    .info-value {
-      font-weight: 700;
-      color: var(--white-pure);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .footer {
-      margin-top: 32px;
-      color: var(--gray-muted);
-      font-size: 12px;
-    }
-
-    @media (max-width: 1024px) {
-      .layout { flex-direction: column; }
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .sidebar-nav {
-        grid-auto-flow: column;
-        grid-auto-columns: max-content;
-      }
-      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .two-col { grid-template-columns: 1fr; }
-      .controls { flex-direction: column; align-items: flex-start; }
-    }
-
-    @media (max-width: 640px) {
-      .page { padding: 40px 18px 64px; }
-      .hero h1 { font-size: 30px; }
-      .kpis { grid-template-columns: 1fr; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; animation: none !important; }
-    }
-  </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-title">Dashboards</div>
-      <nav class="sidebar-nav">
-        <a class="sidebar-link" href="../Trading-Indicators/index.html">Trading Indicators</a>
-        <a class="sidebar-link" href="../Alt-Outperformance/index.html">BTC / Alt Outperformance</a>
-        <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
-        <a class="sidebar-link active" href="index.html">Skew Backtest</a>
-        <a class="sidebar-link" href="../Strategy-Tester/index.html">Strategy Tester</a>
-        <a class="sidebar-link" href="../Situation-Monitor/index.html">The Situation</a>
-      </nav>
-    </aside>
-    <div class="page">
-    <header class="hero">
-      <h1>Skew Backtest</h1>
-      <p>Track 12-month expiry snapshots comparing put/call skew with realized price outcomes and max pain deviation. Built from Binance options OI and Deribit settlements.</p>
-    </header>
+  <main class="page">
+    <section class="hero">
+      <span class="hero-kicker">Verification · Binance + Deribit</span>
+      <h1>Does skew actually <b>predict price?</b></h1>
+      <p class="hero-sub">
+        12-month expiry snapshots comparing put/call skew with realized price outcomes and
+        max pain deviation. Built from Binance options OI and Deribit settlements.
+      </p>
+      <div class="orbits" style="top: -40px; right: -50px; width: 500px; height: 500px;">
+        <div class="orbit o1"></div>
+        <div class="orbit o2"></div>
+        <div class="orbit o3"></div>
+      </div>
+    </section>
 
     <section class="controls">
       <div class="toggle-group" role="tablist" aria-label="Asset selection">
         <button class="toggle-btn active" data-asset="BTC" role="tab" aria-selected="true">Bitcoin</button>
         <button class="toggle-btn" data-asset="ETH" role="tab" aria-selected="false">Ethereum</button>
       </div>
-      <span class="pill" id="dataStamp">Updated —</span>
-      <span class="pill" style="border-color: #2a2a30; color: #6b6b76;">Refreshes every 6 hours</span>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <span class="pill" id="dataStamp">Updated —</span>
+        <span class="pill">Refreshes 4h</span>
+      </div>
     </section>
 
-    <section class="grid kpis">
-      <div class="panel glow">
+    <section class="grid kpis" data-aos="fade-up">
+      <div class="panel">
         <div class="kpi-label">Skew Follow Win Rate</div>
-        <div class="kpi-value kpi-accent" id="skewWinRate">—</div>
+        <div class="kpi-value blue" id="skewWinRate">—</div>
         <div class="kpi-sub" id="skewWinNote">Directional hit rate</div>
       </div>
       <div class="panel">
@@ -445,49 +58,41 @@
       </div>
     </section>
 
-    <section class="panel chart-panel" style="margin-top: 24px;">
-      <div class="chart-header">
-        <div>
-          <div class="chart-title">Skew vs Price Change</div>
-          <div class="chart-subtitle">Put/call ratio and 30d price change into expiry</div>
-        </div>
-        <span class="pill" id="backtestRange">Last 12 months</span>
-      </div>
-      <div class="chart-wrap">
-        <canvas id="backtestChart"></canvas>
+    <section class="section" data-aos="fade-up">
+      <div class="panel">
+        <div class="panel-title">Skew vs Price Change</div>
+        <div class="panel-sub">Put/call ratio and 30d price change into expiry</div>
+        <div class="chart-wrap"><canvas id="backtestChart"></canvas></div>
       </div>
     </section>
 
-    <section class="grid two-col" style="margin-top: 24px;">
+    <section class="grid two-col" data-aos="fade-up">
       <div class="panel">
-        <div class="chart-title">Put/Call Skew Months</div>
-        <div class="chart-subtitle">Expiries where puts outweigh calls</div>
-        <ul class="list" id="putsDominanceList"></ul>
+        <div class="panel-title">Put/Call Skew Months</div>
+        <div class="panel-sub">Expiries where puts outweigh calls</div>
+        <div class="info-grid" id="putsDominanceList"></div>
       </div>
       <div class="panel">
-        <div class="chart-title">Max Pain Deviations</div>
-        <div class="chart-subtitle">Settlement distance from max pain</div>
-        <ul class="list" id="maxPainDeviationList"></ul>
+        <div class="panel-title">Max Pain Deviations</div>
+        <div class="panel-sub">Settlement distance from max pain</div>
+        <div class="info-grid" id="maxPainDeviationList"></div>
       </div>
     </section>
 
-    <footer class="footer" id="footerNote">
+    <footer class="site-footer" id="footerNote">
       Data sources: Binance, Deribit. Backtest uses 30d price change into expiry.
     </footer>
-    </div>
-  </div>
+  </main>
 
+  <script src="../assets/js/dashboard.js"></script>
+  <script src="../assets/js/particles.js"></script>
   <script>
-    const state = {
-      asset: 'BTC',
-      data: {}
-    };
+    const state = { asset: 'BTC', data: {}, chart: null };
 
     async function loadJSON(path) {
       const res = await fetch(path, { cache: 'no-cache' });
       return res.json();
     }
-
     function fmtNumber(value, suffix = '') {
       if (value === null || value === undefined || Number.isNaN(value)) return '—';
       const abs = Math.abs(value);
@@ -496,27 +101,15 @@
       if (abs >= 1e3) return (value / 1e3).toFixed(2) + 'K' + suffix;
       return Number(value).toFixed(2) + suffix;
     }
-
-    function fmtShort(value, suffix = '') {
-      if (value === null || value === undefined || Number.isNaN(value)) return '—';
-      const abs = Math.abs(value);
-      if (abs >= 1e9) return (value / 1e9).toFixed(1) + 'B' + suffix;
-      if (abs >= 1e6) return (value / 1e6).toFixed(1) + 'M' + suffix;
-      if (abs >= 1e3) return (value / 1e3).toFixed(1) + 'K' + suffix;
-      return Number(value).toFixed(1) + suffix;
-    }
-
     function fmtPercent(value) {
       if (value === null || value === undefined || Number.isNaN(value)) return '—';
       const sign = value >= 0 ? '+' : '';
       return sign + (value * 100).toFixed(1) + '%';
     }
-
     function fmtCurrency(value) {
       if (value === null || value === undefined || Number.isNaN(value)) return '—';
       return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
     }
-
     function updateToggle(asset) {
       document.querySelectorAll('.toggle-btn').forEach(btn => {
         const active = btn.dataset.asset === asset;
@@ -524,7 +117,6 @@
         btn.setAttribute('aria-selected', active ? 'true' : 'false');
       });
     }
-
     function updateKPIs(assetData) {
       const summary = assetData.backtest?.summary;
       const winRate = summary?.win_rate !== null && summary?.win_rate !== undefined ? (summary.win_rate * 100).toFixed(1) + '%' : '—';
@@ -534,54 +126,47 @@
       document.getElementById('putsDominance').textContent = summary?.puts_over_calls ?? '—';
       document.getElementById('avgMaxPain').textContent = avgPain;
     }
-
     function updateBacktestLists(assetData) {
       const rows = assetData.backtest?.months || [];
       const putsList = document.getElementById('putsDominanceList');
       const painList = document.getElementById('maxPainDeviationList');
       putsList.innerHTML = '';
       painList.innerHTML = '';
-
       const putsMonths = rows.filter(item => item.put_call && item.put_call > 1);
       if (!putsMonths.length) {
-        const li = document.createElement('li');
-        li.className = 'list-item';
-        li.textContent = 'No months with puts outweighing calls.';
-        putsList.appendChild(li);
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.textContent = 'No months with puts outweighing calls.';
+        putsList.appendChild(div);
       } else {
         putsMonths.forEach(item => {
-          const li = document.createElement('li');
-          li.className = 'list-item';
+          const div = document.createElement('div');
+          div.className = 'info-item';
           const change = item.price_change_pct !== null && item.price_change_pct !== undefined ? fmtPercent(item.price_change_pct) : '—';
-          li.innerHTML = `<span>${item.month} · Put/Call ${item.put_call.toFixed(2)}</span><span>Price change ${change}</span>`;
-          putsList.appendChild(li);
+          div.innerHTML = `<span>${item.month} · Put/Call ${item.put_call.toFixed(2)}</span><span style="color:var(--gray);">Price ${change}</span>`;
+          putsList.appendChild(div);
         });
       }
-
       if (!rows.length) {
-        const li = document.createElement('li');
-        li.className = 'list-item';
-        li.textContent = 'No max pain deviation data yet.';
-        painList.appendChild(li);
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        div.textContent = 'No max pain deviation data yet.';
+        painList.appendChild(div);
         return;
       }
       rows.forEach(item => {
-        const li = document.createElement('li');
-        li.className = 'list-item';
-        const deviation = item.max_pain_dev_pct !== null && item.max_pain_dev_pct !== undefined
-          ? (item.max_pain_dev_pct * 100).toFixed(2) + '%'
-          : '—';
+        const div = document.createElement('div');
+        div.className = 'info-item';
+        const deviation = item.max_pain_dev_pct !== null && item.max_pain_dev_pct !== undefined ? (item.max_pain_dev_pct * 100).toFixed(2) + '%' : '—';
         const maxPain = item.max_pain ? fmtCurrency(item.max_pain) : '—';
-        li.innerHTML = `<span>${item.month} · Max pain ${maxPain}</span><span>Deviation ${deviation}</span>`;
-        painList.appendChild(li);
+        div.innerHTML = `<span>${item.month} · Max pain ${maxPain}</span><span style="color:var(--gray);">Deviation ${deviation}</span>`;
+        painList.appendChild(div);
       });
     }
-
     function updateMetadata(meta) {
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
       document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Backtest uses 30d price change into expiry.` : 'Data sources: Binance, Deribit. Backtest uses 30d price change into expiry.';
     }
-
     function buildBacktestChart(rows) {
       const ctx = document.getElementById('backtestChart');
       if (state.chart) state.chart.destroy();
@@ -590,64 +175,21 @@
       const putCall = rows.map(item => item.put_call ?? null);
       state.chart = new Chart(ctx, {
         type: 'bar',
-        data: {
-          labels,
-          datasets: [
-            {
-              label: '30d Price Change %',
-              data: priceMoves,
-              backgroundColor: 'rgba(0, 180, 216, 0.35)',
-              borderColor: '#00b4d8',
-              borderWidth: 1,
-              yAxisID: 'y'
-            },
-            {
-              label: 'Put/Call Ratio',
-              data: putCall,
-              borderColor: '#ff4d7d',
-              backgroundColor: 'rgba(255, 77, 125, 0.2)',
-              type: 'line',
-              tension: 0.3,
-              yAxisID: 'y1'
-            }
-          ]
-        },
+        data: { labels, datasets: [
+          { label: '30d Price Change %', data: priceMoves, backgroundColor: 'rgba(0,81,255,0.35)', borderColor: '#0051FF', borderWidth: 1, yAxisID: 'y' },
+          { label: 'Put/Call Ratio', data: putCall, borderColor: '#f43737', backgroundColor: 'rgba(244,55,55,0.2)', type: 'line', tension: 0.3, yAxisID: 'y1' }
+        ] },
         options: {
-          plugins: {
-            legend: { labels: { color: '#e8e8ed' } }
-          },
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#e8e8ed' } }, tooltip: { backgroundColor: '#141416', borderColor: '#2e2e33', borderWidth: 1, titleColor: '#fff', bodyColor: '#e8e8ed', displayColors: false } },
           scales: {
-            x: {
-              ticks: { color: '#9999a5', maxRotation: 0 },
-              grid: { color: '#1a1a1e' }
-            },
-            y: {
-              ticks: {
-                color: '#9999a5',
-                callback: (value) => `${value}%`
-              },
-              grid: { color: '#1a1a1e' },
-              title: {
-                display: true,
-                text: 'Price Change %',
-                color: '#9999a5'
-              }
-            },
-            y1: {
-              position: 'right',
-              ticks: { color: '#9999a5' },
-              grid: { drawOnChartArea: false },
-              title: {
-                display: true,
-                text: 'Put/Call Ratio',
-                color: '#9999a5'
-              }
-            }
+            x: { ticks: { color: '#85858c', maxRotation: 0 }, grid: { color: '#232326' } },
+            y: { ticks: { color: '#85858c', callback: (value) => `${value}%` }, grid: { color: '#232326' }, title: { display: true, text: 'Price Change %', color: '#85858c' } },
+            y1: { position: 'right', ticks: { color: '#85858c' }, grid: { drawOnChartArea: false }, title: { display: true, text: 'Put/Call Ratio', color: '#85858c' } }
           }
         }
       });
     }
-
     function render(asset) {
       const assetData = state.data[asset];
       if (!assetData) return;
@@ -656,31 +198,18 @@
       updateBacktestLists(assetData);
       buildBacktestChart(assetData.backtest?.months || []);
     }
-
     async function init() {
       const [backtest, meta] = await Promise.all([
         loadJSON('../Crypto-Dashboard/data/backtest.json'),
         loadJSON('../Crypto-Dashboard/data/metadata.json')
       ]);
-      state.data = {
-        BTC: {
-          backtest: backtest.BTC || {}
-        },
-        ETH: {
-          backtest: backtest.ETH || {}
-        }
-      };
+      state.data = { BTC: { backtest: backtest.BTC || {} }, ETH: { backtest: backtest.ETH || {} } };
       updateMetadata(meta);
       render(state.asset);
     }
-
     document.querySelectorAll('.toggle-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        state.asset = btn.dataset.asset;
-        render(state.asset);
-      });
+      btn.addEventListener('click', () => { state.asset = btn.dataset.asset; render(state.asset); });
     });
-
     init();
   </script>
 </body>

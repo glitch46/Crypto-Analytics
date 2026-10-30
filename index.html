@@ -3,29 +3,69 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Crypto Analytics</title>
-  <meta http-equiv="refresh" content="0; url=Alt-Outperformance/index.html" />
-  <style>
-    body {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
-      background: #000000;
-      color: #e8e8ed;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-    }
-    a {
-      color: #ff4d7d;
-      text-decoration: none;
-      font-weight: 700;
-    }
-  </style>
+  <title>Crypto Analytics — Market Intelligence</title>
+  <meta name="description" content="Crypto market intelligence dashboards: options analytics, orderbook indicators, alt outperformance, backtests and more. Built on free public APIs, refreshed every 4 hours." />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
 </head>
 <body>
-  <div>
-    Loading BTC / Alt Outperformance... If you are not redirected, <a href="Alt-Outperformance/index.html">open the dashboard</a>.
-  </div>
+  <main class="page landing">
+    <section class="hero">
+      <span class="hero-kicker">Market Intelligence · Refresh 4h</span>
+      <h1>
+        Read the market the way<br />
+        <b>you actually trade.</b>
+      </h1>
+      <p class="hero-sub">
+        Options positioning, orderbook imbalance, alt momentum and signal accuracy —
+        seven self-contained dashboards built on free public data. No accounts,
+        no algorithms hiding the ball. Every signal carries its own track record.
+      </p>
+      <div class="orbits" style="top: -40px; right: -60px; width: 500px; height: 500px;">
+        <div class="orbit o1"></div>
+        <div class="orbit o2"></div>
+        <div class="orbit o3"></div>
+      </div>
+    </section>
+
+    <section class="landing-list" data-aos="fade-up">
+      <a class="dash-card" href="Alt-Outperformance/index.html">
+        <span class="dash-card-tag">Momentum</span>
+        <span class="dash-card-title">BTC / Alt Outperformance</span>
+        <span class="dash-card-desc">Which alts are actually beating Bitcoin — 7 / 14 / 30-day relative returns across the top liquid market cap.</span>
+      </a>
+      <a class="dash-card" href="Trading-Indicators/index.html">
+        <span class="dash-card-tag">Orderbook</span>
+        <span class="dash-card-title">Trading Indicators</span>
+        <span class="dash-card-desc">Depth imbalance, flow and positioning for BTC &amp; ETH — with a live, backtested signal-accuracy panel.</span>
+      </a>
+      <a class="dash-card" href="Crypto-Dashboard/index.html">
+        <span class="dash-card-tag">Options</span>
+        <span class="dash-card-title">Options Intelligence</span>
+        <span class="dash-card-desc">Max pain, open interest momentum, expiry pressure and put/call structure from Deribit.</span>
+      </a>
+      <a class="dash-card" href="Backtest-Dashboard/index.html">
+        <span class="dash-card-tag">Verification</span>
+        <span class="dash-card-title">Skew Backtest</span>
+        <span class="dash-card-desc">Does options skew actually lead price? Historical verification of the positioning signals.</span>
+      </a>
+      <a class="dash-card" href="Strategy-Tester/index.html">
+        <span class="dash-card-tag">Simulation</span>
+        <span class="dash-card-title">Strategy Tester</span>
+        <span class="dash-card-desc">Stress-test option strategies and market regimes against historical data.</span>
+      </a>
+      <a class="dash-card" href="Situation-Monitor/index.html">
+        <span class="dash-card-tag">Macro</span>
+        <span class="dash-card-title">The Situation</span>
+        <span class="dash-card-desc">A single screen tying macro, options and market stress together into one read on the tape.</span>
+      </a>
+    </section>
+
+    <footer class="site-footer">
+      Sources: Binance, Coinbase, Kraken, OKX, Bybit, Deribit, CoinGecko, CFTC. Visual signals only — not financial advice.
+    </footer>
+  </main>
+
+  <script src="assets/js/dashboard.js"></script>
+  <script src="assets/js/particles.js"></script>
 </body>
 </html>

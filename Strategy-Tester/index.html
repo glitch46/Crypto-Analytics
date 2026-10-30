@@ -6,492 +6,36 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Strategy Tester</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>Strategy Tester — Crypto Analytics</title>
+  <meta name="description" content="Simulate quirky, momentum, and seasonal strategies over the last 3 years with dynamic position sizing and single-position rules." />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
-      --gradient-hover: linear-gradient(135deg, #ff5252 0%, #e91e7b 100%);
-      --accent-solid: #ff4d7d;
-      --black-deep: #000000;
-      --black-rich: #0a0a0b;
-      --black-elevated: #121214;
-      --gray-dark: #1a1a1e;
-      --gray-mid: #2a2a30;
-      --gray-muted: #6b6b76;
-      --gray-light: #9999a5;
-      --white-soft: #e8e8ed;
-      --white-pure: #ffffff;
-      --success: #00d26a;
-      --warning: #ffb800;
-      --info: #00b4d8;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-      --shadow-glow: 0 0 30px #ff4d7d30;
-      --glow-ring: 0 0 0 4px #ff4d7d20;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
-      color: var(--white-soft);
-    }
-
-    .layout {
-      display: flex;
-      min-height: 100vh;
-    }
-
-    .sidebar {
-      width: 220px;
-      padding: 32px 20px;
-      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
-      border-right: 1px solid var(--gray-dark);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      height: 100vh;
-    }
-
-    .sidebar-title {
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--gray-light);
-    }
-
-    .sidebar-nav {
-      display: grid;
-      gap: 10px;
-    }
-
-    .sidebar-link {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 14px;
-      border-radius: 12px;
-      border: 1px solid transparent;
-      background: var(--black-rich);
-      color: var(--white-soft);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 200ms ease-out;
-    }
-
-    .sidebar-link:hover,
-    .sidebar-link.active {
-      border-color: #ff4d7d70;
-      box-shadow: var(--shadow-sm);
-      color: var(--white-pure);
-    }
-
-    .page {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 64px 24px 80px;
-      flex: 1;
-    }
-
-    .hero {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      margin-bottom: 32px;
-    }
-
-    .hero h1 {
-      margin: 0;
-      font-size: 40px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-      color: var(--white-pure);
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 700px;
-      color: var(--gray-light);
-      font-size: 16px;
-      line-height: 1.6;
-    }
-
-    .controls {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-      justify-content: space-between;
-      margin: 24px 0 32px;
-    }
-
-    .nav {
-      display: inline-flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-
-    .nav-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--gray-dark);
-      background: var(--black-rich);
-      color: var(--gray-light);
-      text-decoration: none;
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      transition: all 200ms ease-out;
-    }
-
-    .nav-link.active,
-    .nav-link:hover {
-      color: var(--white-pure);
-      border-color: transparent;
-      background: var(--gradient-primary);
-      box-shadow: var(--shadow-glow);
-    }
-
-
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 16px;
-      border-radius: 999px;
-      border: 1px solid #ff4d7d40;
-      background: linear-gradient(135deg, #ff6b6b20 0%, #ff2d9220 100%);
-      color: var(--accent-solid);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .grid {
-      display: grid;
-      gap: 24px;
-    }
-
-    .kpis {
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-    }
-
-    .panel {
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .panel.glow {
-      border: 1px solid transparent;
-      background: linear-gradient(var(--black-rich), var(--black-rich)) padding-box,
-        var(--gradient-primary) border-box;
-    }
-
-    .kpi-label {
-      font-size: 12px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--gray-muted);
-      font-weight: 700;
-    }
-
-    .kpi-value {
-      margin-top: 10px;
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--white-pure);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .kpi-sub {
-      margin-top: 8px;
-      font-size: 13px;
-      color: var(--gray-light);
-    }
-
-    .kpi-accent {
-      background: var(--gradient-primary);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .chart-panel {
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .chart-header {
-      padding: 24px 24px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .chart-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--white-pure);
-    }
-
-    .chart-subtitle {
-      font-size: 13px;
-      color: var(--gray-light);
-    }
-
-    .chart-wrap {
-      padding: 16px 24px 24px;
-    }
-
-    canvas { max-height: 320px; }
-
-    .two-col {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    .list {
-      list-style: none;
-      padding: 0;
-      margin: 16px 0 0;
-      display: grid;
-      gap: 12px;
-    }
-
-    .list-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      border-radius: 12px;
-      background: var(--black-elevated);
-      border: 1px solid var(--gray-dark);
-    }
-
-    .list-item span {
-      font-variant-numeric: tabular-nums;
-    }
-
-    .pill {
-      padding: 6px 12px;
-      border-radius: 999px;
-      background: #1a1a1e;
-      color: var(--gray-light);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
-
-    .info-grid {
-      display: grid;
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .info-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 14px 16px;
-      background: var(--black-elevated);
-      border-radius: 12px;
-      border: 1px solid var(--gray-dark);
-    }
-
-    .info-label {
-      color: var(--gray-light);
-      font-size: 13px;
-    }
-
-    .info-value {
-      font-weight: 700;
-      color: var(--white-pure);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .footer {
-      margin-top: 32px;
-      color: var(--gray-muted);
-      font-size: 12px;
-    }
-
-    .strategy-controls {
-      display: grid;
-      gap: 16px;
-      margin-top: 16px;
-    }
-
-    .strategy-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      align-items: end;
-    }
-
-    .strategy-row.two-col {
-      grid-template-columns: repeat(2, minmax(200px, 1fr));
-    }
-
-    .strategy-row.single {
-      grid-template-columns: minmax(200px, 1fr);
-    }
-
-    .strategy-field {
-      display: grid;
-      gap: 8px;
-    }
-
-    .strategy-field label {
-      font-size: 12px;
-      color: var(--gray-light);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-    }
-
-    .strategy-field input,
-    .strategy-field select {
-      border-radius: 12px;
-      border: 1px solid var(--gray-dark);
-      background: var(--black-rich);
-      color: var(--white-soft);
-      padding: 10px 12px;
-      font-size: 14px;
-    }
-
-    .strategy-note {
-      font-size: 13px;
-      color: var(--gray-light);
-    }
-
-    .strategy-btn {
-      border: none;
-      background: var(--gradient-primary);
-      color: var(--white-pure);
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      box-shadow: var(--shadow-glow);
-    }
-
-    .strategy-summary {
-      display: grid;
-      gap: 12px;
-      margin-top: 20px;
-      padding: 16px;
-      border-radius: 12px;
-      border: 1px solid var(--gray-dark);
-      background: var(--black-elevated);
-    }
-
-    .strategy-summary span {
-      color: var(--gray-light);
-    }
-
-    .strategy-table-wrap {
-      margin-top: 20px;
-      overflow-x: auto;
-    }
-
-    .strategy-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    .strategy-table th,
-    .strategy-table td {
-      padding: 10px 12px;
-      text-align: left;
-      border-bottom: 1px solid var(--gray-dark);
-    }
-
-    .strategy-table th {
-      color: var(--gray-light);
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      font-size: 11px;
-    }
-
-    @media (max-width: 1024px) {
-      .layout { flex-direction: column; }
-      .sidebar {
-        width: 100%;
-        height: auto;
-        position: static;
-        flex-direction: row;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .sidebar-nav {
-        grid-auto-flow: column;
-        grid-auto-columns: max-content;
-      }
-      .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .two-col { grid-template-columns: 1fr; }
-      .controls { flex-direction: column; align-items: flex-start; }
-    }
-
-    @media (max-width: 640px) {
-      .page { padding: 40px 18px 64px; }
-      .hero h1 { font-size: 30px; }
-      .kpis { grid-template-columns: 1fr; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      * { transition: none !important; animation: none !important; }
-    }
-  </style>
 </head>
 <body>
-  <div class="layout">
-    <aside class="sidebar">
-      <div class="sidebar-title">Dashboards</div>
-      <nav class="sidebar-nav">
-        <a class="sidebar-link" href="../Trading-Indicators/index.html">Trading Indicators</a>
-        <a class="sidebar-link" href="../Alt-Outperformance/index.html">BTC / Alt Outperformance</a>
-        <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
-        <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
-        <a class="sidebar-link active" href="index.html">Strategy Tester</a>
-        <a class="sidebar-link" href="../Situation-Monitor/index.html">The Situation</a>
-      </nav>
-    </aside>
-    <div class="page">
-    <header class="hero">
-      <h1>Strategy Tester</h1>
-      <p>Simulate quirky, momentum, and seasonal strategies over the last 3 years with dynamic position sizing and single-position rules.</p>
-    </header>
+  <main class="page">
+    <section class="hero">
+      <span class="hero-kicker">Simulation · 3-Year BTC History</span>
+      <h1>Test the <b>idea.</b><br />Before the <b>money.</b></h1>
+      <p class="hero-sub">
+        Simulate quirky, momentum and seasonal strategies over the last 3 years with dynamic
+        position sizing and single-position rules. Side-by-side against buy-and-hold.
+      </p>
+      <div class="orbits" style="top: -40px; right: -50px; width: 500px; height: 500px;">
+        <div class="orbit o1"></div>
+        <div class="orbit o2"></div>
+        <div class="orbit o3"></div>
+      </div>
+    </section>
 
     <section class="controls">
       <span class="pill" id="dataStamp">Updated —</span>
-      <span class="pill" style="border-color: #2a2a30; color: #6b6b76;">Refreshes every 6 hours</span>
+      <span class="pill">Refreshes 4h</span>
     </section>
 
-    <section class="grid kpis">
-      <div class="panel glow">
+    <section class="grid kpis" data-aos="fade-up">
+      <div class="panel">
         <div class="kpi-label">Final Value</div>
-        <div class="kpi-value kpi-accent" id="strategyFinal">—</div>
+        <div class="kpi-value blue" id="strategyFinal">—</div>
         <div class="kpi-sub">After 3 years</div>
       </div>
       <div class="panel">
@@ -511,7 +55,7 @@
       </div>
     </section>
 
-    <section class="grid kpis" style="margin-top: 16px;">
+    <section class="grid kpis" style="margin-top:18px;" data-aos="fade-up">
       <div class="panel">
         <div class="kpi-label">Hold BTC Value</div>
         <div class="kpi-value" id="holdValue">—</div>
@@ -534,86 +78,74 @@
       </div>
     </section>
 
-
-    <section class="panel" style="margin-top: 24px;">
-      <div class="chart-title">Strategy Tester</div>
-      <div class="chart-subtitle">Run custom strategy backtests over the last 3 years</div>
-      <div class="strategy-controls">
-        <div class="strategy-row">
-          <div class="strategy-field">
-            <label for="capitalInput">Initial Capital (USD)</label>
-            <input id="capitalInput" type="number" min="100" step="100" value="10000" />
+    <section class="section" data-aos="fade-up">
+      <div class="panel">
+        <div class="panel-title">Strategy Tester</div>
+        <div class="panel-sub">Run custom strategy backtests over the last 3 years</div>
+        <div class="strategy-controls">
+          <div class="strategy-row">
+            <div class="strategy-field">
+              <label for="capitalInput">Initial Capital (USD)</label>
+              <input id="capitalInput" type="number" min="100" step="100" value="10000" />
+            </div>
+            <div class="strategy-field">
+              <label for="strategySelect">Strategy</label>
+              <select id="strategySelect"></select>
+            </div>
           </div>
-          <div class="strategy-field">
-            <label for="strategySelect">Strategy</label>
-            <select id="strategySelect"></select>
+          <div class="strategy-row single">
+            <div class="strategy-field">
+              <label for="trancheSize">On each occurrence, buy or sell</label>
+              <select id="trancheSize">
+                <option value="0.25">25%</option>
+                <option value="0.5">50%</option>
+                <option value="0.75">75%</option>
+                <option value="1" selected>100%</option>
+              </select>
+            </div>
+          </div>
+          <div class="strategy-row single">
+            <div class="strategy-field">
+              <label>&nbsp;</label>
+              <button class="strategy-btn" id="runStrategy">Run backtest</button>
+            </div>
           </div>
         </div>
-        <div class="strategy-row single">
-          <div class="strategy-field">
-            <label for="trancheSize">On each occurrence, buy or sell</label>
-            <select id="trancheSize">
-              <option value="0.25">25%</option>
-              <option value="0.5">50%</option>
-              <option value="0.75">75%</option>
-              <option value="1" selected>100%</option>
-            </select>
-          </div>
+        <div class="strategy-note" style="margin-top: 12px;">
+          Sizing is % of total portfolio value per occurrence. Skips if insufficient cash or no BTC to sell.
         </div>
-        <div class="strategy-row single">
-          <div class="strategy-field">
-            <label>&nbsp;</label>
-            <button class="strategy-btn" id="runStrategy">Run backtest</button>
-          </div>
+        <div class="strategy-summary" id="strategySummary"></div>
+        <div class="strategy-table-wrap">
+          <table class="strategy-table" id="strategyTable">
+            <thead>
+              <tr><th>Quarter</th><th>Start Capital</th><th>End Capital</th><th>USD Gain</th><th>% Return</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
         </div>
-      </div>
-      <div class="strategy-note" style="margin-top: 12px;">
-        Sizing is % of total portfolio value per occurrence. Skips if insufficient cash or no BTC to sell.
-      </div>
-      <div class="strategy-summary" id="strategySummary"></div>
-      <div class="strategy-table-wrap">
-        <table class="strategy-table" id="strategyTable">
-          <thead>
-            <tr>
-              <th>Quarter</th>
-              <th>Start Capital</th>
-              <th>End Capital</th>
-              <th>USD Gain</th>
-              <th>% Return</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="chart-title" style="margin-top: 28px;">Strategy Events</div>
-      <div class="chart-subtitle">Each buy/sell occurrence in chronological order</div>
-      <div class="strategy-table-wrap" style="margin-top: 16px;">
-        <table class="strategy-table" id="strategyEvents">
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>BTC Price</th>
-              <th>Event</th>
-              <th>Investment Total</th>
-              <th>Cash / BTC %</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-      <div class="chart-title" style="margin-top: 28px;">90-Day Strategy Candlestick View</div>
-      <div class="chart-subtitle">Daily BTC candles with strategy buy and sell occurrences</div>
-      <div class="chart-wrap" style="margin-top: 8px;">
-        <canvas id="strategyCandleChart"></canvas>
+        <div class="panel-title" style="margin-top:28px;">Strategy Events</div>
+        <div class="panel-sub">Each buy/sell occurrence in chronological order</div>
+        <div class="strategy-table-wrap" style="margin-top:16px;">
+          <table class="strategy-table" id="strategyEvents">
+            <thead>
+              <tr><th>Date</th><th>BTC Price</th><th>Event</th><th>Investment Total</th><th>Cash / BTC %</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+        <div class="panel-title" style="margin-top:28px;">90-Day Strategy Candlestick View</div>
+        <div class="panel-sub">Daily BTC candles with strategy buy and sell occurrences</div>
+        <div class="chart-wrap" style="margin-top:8px; height:420px;"><canvas id="strategyCandleChart"></canvas></div>
       </div>
     </section>
 
-    <footer class="footer" id="footerNote">
+    <footer class="site-footer" id="footerNote">
       Data sources: Binance, Deribit. Strategy tester uses 3-year BTC history.
     </footer>
-    </div>
-  </div>
+  </main>
 
+  <script src="../assets/js/dashboard.js"></script>
+  <script src="../assets/js/particles.js"></script>
   <script>
     const state = {
       data: {},
@@ -737,8 +269,6 @@
       return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
     }
 
-
-
     function formatUSD(value) {
       if (value === null || value === undefined || Number.isNaN(value)) return '—';
       return '$' + Number(value).toLocaleString('en-US', { maximumFractionDigits: 2 });
@@ -823,7 +353,7 @@
           },
           sell: (row) => {
             const month = new Date(row.date + 'T00:00:00Z').getUTCMonth();
-return month <= 8;
+            return month <= 8;
           }
         },
         {
@@ -856,24 +386,6 @@ return month <= 8;
       var tradeCount = 0;
       var entryValue = null;
 
-      /* ── Tranche sizing (single dropdown) ──
-         trancheSize = fraction of total portfolio per occurrence (0.25–1.0).
-         maxSlots = 1 / trancheSize  (e.g. 4 at 25%, 2 at 50%, 1 at 100%).
-         buySlots = how many buy-tranches are currently invested in BTC.
-
-         BUY:  allocate  trancheSize * portfolioValue  from cash → BTC, +1 slot.
-               Skip if all slots full OR not enough cash.
-         SELL: unwind one slot → sell  btc / buySlots  BTC units.
-               This guarantees a buy + sell pair fully closes one tranche.
-               Skip if buySlots === 0 (no BTC to sell).
-
-         Examples with 25%, $10K start:
-           Buy  → cash 75%, BTC 25%  (1 slot)
-           Sell → cash 100%, BTC 0%  (0 slots, all BTC sold)
-           Buy  → cash 75%, BTC 25%  (1 slot)
-           Buy  → cash 50%, BTC 50%  (2 slots)
-           Sell → cash 75%, BTC 25%  (1 slot, sold half the BTC)
-      */
       var pct      = trancheSize;
       var maxSlots = Math.round(1 / pct);
       var buySlots = 0;
@@ -889,14 +401,12 @@ return month <= 8;
 
         if (buySignal) {
           if (buySlots >= maxSlots) {
-            /* All slots full → SKIP */
             events.push({ date: row.date, price: next.close, side: 'Skip (Buy)',
               totalValue: pv, cashPct: pv ? cash / pv : 0,
               btcPct: pv ? (btc * next.close) / pv : 0 });
           } else {
             var allocation = pv * pct;
             if (cash < allocation * 0.99) {
-              /* Not enough cash → SKIP */
               events.push({ date: row.date, price: next.close, side: 'Skip (Buy)',
                 totalValue: pv, cashPct: pv ? cash / pv : 0,
                 btcPct: pv ? (btc * next.close) / pv : 0 });
@@ -915,12 +425,10 @@ return month <= 8;
           }
         } else if (sellSignal) {
           if (buySlots <= 0 || btc <= 1e-12) {
-            /* No BTC to sell → SKIP */
             events.push({ date: row.date, price: next.close, side: 'Skip (Sell)',
               totalValue: pv, cashPct: pv ? cash / pv : 0,
               btcPct: pv ? (btc * next.close) / pv : 0 });
           } else {
-            /* Sell exactly one slot's worth of BTC units */
             var sellUnits = btc / buySlots;
             if (sellUnits > btc) sellUnits = btc;
             var proceeds = sellUnits * next.close;
@@ -1116,7 +624,7 @@ return month <= 8;
               borderRadius: 2,
               backgroundColor: (ctx) => {
                 const raw = ctx.raw || {};
-                return raw.close >= raw.open ? 'rgba(0, 210, 106, 0.9)' : 'rgba(255, 77, 125, 0.9)';
+                return raw.close >= raw.open ? 'rgba(0, 210, 106, 0.9)' : 'rgba(244, 55, 55, 0.9)';
               },
               order: 2
             },
@@ -1148,7 +656,7 @@ return month <= 8;
         },
         options: {
           responsive: true,
-          maintainAspectRatio: true,
+          maintainAspectRatio: false,
           interaction: { mode: 'index', intersect: false },
           plugins: {
             legend: {
@@ -1176,22 +684,14 @@ return month <= 8;
           },
           scales: {
             x: {
-              ticks: {
-                color: '#9999a5',
-                maxRotation: 0,
-                autoSkip: true,
-                maxTicksLimit: 12
-              },
-              grid: { color: '#1a1a1e' }
+              ticks: { color: '#85858c', maxRotation: 0, autoSkip: true, maxTicksLimit: 12 },
+              grid: { color: '#232326' }
             },
             y: {
               min: chartLow - axisPadding,
               max: chartHigh + axisPadding,
-              ticks: {
-                color: '#9999a5',
-                callback: (value) => fmtCurrency(value)
-              },
-              grid: { color: '#1a1a1e' }
+              ticks: { color: '#85858c', callback: (value) => fmtCurrency(value) },
+              grid: { color: '#232326' }
             }
           }
         }
@@ -1202,8 +702,6 @@ return month <= 8;
       document.getElementById('dataStamp').textContent = meta?.last_updated ? `Updated ${meta.last_updated}` : 'Updated —';
       document.getElementById('footerNote').textContent = meta?.sources ? `Data sources: ${meta.sources.join(', ')}. Strategy tester uses 3-year BTC history.` : 'Data sources: Binance, Deribit. Strategy tester uses 3-year BTC history.';
     }
-
-
 
     async function init() {
       const [meta, strategySignals] = await Promise.all([

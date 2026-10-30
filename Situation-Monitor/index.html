@@ -3,377 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>The Situation: Monitoring</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <title>The Situation — Crypto Analytics</title>
+  <meta name="description" content="Geopolitical oil-shock transmission tracker: crude, yields, credit, VIX and equity stress in one read on the tape." />
+  <link rel="stylesheet" href="../assets/css/dashboard.css" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-  <style>
-    :root {
-      --gradient-primary: linear-gradient(135deg, #ff6b6b 0%, #ff2d92 100%);
-      --gradient-hover: linear-gradient(135deg, #ff5252 0%, #e91e7b 100%);
-      --accent-solid: #ff4d7d;
-      --black-deep: #000000;
-      --black-rich: #0a0a0b;
-      --black-elevated: #121214;
-      --gray-dark: #1a1a1e;
-      --gray-mid: #2a2a30;
-      --gray-muted: #6b6b76;
-      --gray-light: #9999a5;
-      --white-soft: #e8e8ed;
-      --white-pure: #ffffff;
-      --success: #00d26a;
-      --warning: #ffb800;
-      --danger: #ff4444;
-      --info: #00b4d8;
-      --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.4);
-      --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.5);
-      --shadow-glow: 0 0 30px #ff4d7d30;
-      --glow-ring: 0 0 0 4px #ff4d7d20;
-    }
-
-    * { box-sizing: border-box; }
-
-    body {
-      margin: 0;
-      font-family: "Plus Jakarta Sans", "Inter", -apple-system, sans-serif;
-      background: radial-gradient(circle at top, #18181d 0%, #050506 45%, #000000 100%);
-      color: var(--white-soft);
-    }
-
-    .layout { display: flex; min-height: 100vh; }
-
-    .sidebar {
-      width: 220px;
-      padding: 32px 20px;
-      background: linear-gradient(180deg, #0b0b0f 0%, #050506 100%);
-      border-right: 1px solid var(--gray-dark);
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-      position: sticky;
-      top: 0;
-      align-self: flex-start;
-      height: 100vh;
-    }
-
-    .sidebar-title {
-      font-size: 12px; font-weight: 700;
-      letter-spacing: 0.16em; text-transform: uppercase;
-      color: var(--gray-light);
-    }
-
-    .sidebar-nav { display: grid; gap: 10px; }
-
-    .sidebar-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; border-radius: 12px;
-      border: 1px solid transparent;
-      background: var(--black-rich);
-      color: var(--white-soft);
-      text-decoration: none; font-weight: 600;
-      transition: all 200ms ease-out;
-    }
-
-    .sidebar-link:hover, .sidebar-link.active {
-      border-color: #ff4d7d70;
-      box-shadow: var(--shadow-sm);
-      color: var(--white-pure);
-    }
-
-    .page {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 48px 24px 80px;
-      flex: 1;
-    }
-
-    .panel {
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: var(--shadow-md);
-    }
-
-    .grid { display: grid; gap: 24px; }
-    .grid-2 { grid-template-columns: repeat(2, 1fr); }
-    .grid-3 { grid-template-columns: repeat(3, 1fr); }
-    .grid-6 { grid-template-columns: repeat(6, 1fr); }
-
-    /* Hero */
-    .hero { text-align: center; margin-bottom: 32px; }
-    .hero h1 {
-      font-size: 36px; font-weight: 800;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text; margin: 0 0 8px;
-    }
-    .hero .subtitle {
-      font-size: 14px; color: var(--gray-light);
-      letter-spacing: 0.05em;
-    }
-    .hero .updated {
-      font-size: 12px; color: var(--gray-muted);
-      margin-top: 8px;
-    }
-
-    /* Status Banner */
-    .status-banner {
-      border-radius: 16px;
-      padding: 20px 28px;
-      margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 20px;
-      border: 1px solid;
-    }
-    .status-banner.level-LOW {
-      background: linear-gradient(135deg, #0a1a0a 0%, #0a0a0b 100%);
-      border-color: #00d26a40;
-    }
-    .status-banner.level-ELEVATED {
-      background: linear-gradient(135deg, #1a1a0a 0%, #0a0a0b 100%);
-      border-color: #ffb80040;
-    }
-    .status-banner.level-HIGH {
-      background: linear-gradient(135deg, #1a0f0a 0%, #0a0a0b 100%);
-      border-color: #ff6b3540;
-    }
-    .status-banner.level-CRITICAL {
-      background: linear-gradient(135deg, #1a0a0a 0%, #0a0a0b 100%);
-      border-color: #ff444480;
-      animation: pulse-border 2s ease-in-out infinite;
-    }
-    @keyframes pulse-border {
-      0%, 100% { border-color: #ff444480; }
-      50% { border-color: #ff4444cc; }
-    }
-
-    .status-level {
-      font-size: 13px; font-weight: 800;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      padding: 6px 16px; border-radius: 8px;
-      white-space: nowrap;
-    }
-    .status-level.LOW { background: #00d26a30; color: #00d26a; }
-    .status-level.ELEVATED { background: #ffb80030; color: #ffb800; }
-    .status-level.HIGH { background: #ff6b3530; color: #ff6b35; }
-    .status-level.CRITICAL { background: #ff444430; color: #ff4444; }
-
-    .status-text {
-      font-size: 14px; color: var(--white-soft);
-      line-height: 1.5;
-    }
-
-    .status-score {
-      margin-left: auto;
-      text-align: center;
-      white-space: nowrap;
-    }
-    .status-score .number {
-      font-size: 32px; font-weight: 800;
-      background: var(--gradient-primary);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    .status-score .label {
-      font-size: 10px; color: var(--gray-muted);
-      text-transform: uppercase; letter-spacing: 0.1em;
-    }
-
-    /* KPI Cards */
-    .kpi-card {
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 14px;
-      padding: 18px;
-      text-align: center;
-    }
-    .kpi-label {
-      font-size: 11px; font-weight: 700;
-      color: var(--gray-light); text-transform: uppercase;
-      letter-spacing: 0.1em; margin-bottom: 8px;
-    }
-    .kpi-value {
-      font-size: 26px; font-weight: 800;
-      color: var(--white-pure); margin-bottom: 6px;
-    }
-    .kpi-changes {
-      display: flex; justify-content: center; gap: 10px;
-      font-size: 11px; font-weight: 600;
-    }
-    .kpi-changes .positive { color: var(--success); }
-    .kpi-changes .negative { color: var(--danger); }
-    .kpi-changes .neutral { color: var(--gray-muted); }
-    .kpi-detail {
-      font-size: 11px; color: var(--gray-muted); margin-top: 4px;
-    }
-
-    /* Transmission Chain */
-    .chain-container {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      flex-wrap: wrap;
-      padding: 24px;
-    }
-    .chain-node {
-      display: flex; flex-direction: column;
-      align-items: center; gap: 6px;
-      padding: 14px 18px; border-radius: 12px;
-      border: 2px solid; min-width: 130px;
-      text-align: center;
-    }
-    .chain-node.green { border-color: #00d26a60; background: #00d26a10; }
-    .chain-node.yellow { border-color: #ffb80060; background: #ffb80010; }
-    .chain-node.red { border-color: #ff444460; background: #ff444415; }
-    .chain-node .node-label {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: 0.08em;
-    }
-    .chain-node.green .node-label { color: #00d26a; }
-    .chain-node.yellow .node-label { color: #ffb800; }
-    .chain-node.red .node-label { color: #ff4444; }
-    .chain-node .node-status {
-      font-size: 10px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 0.1em;
-      color: var(--gray-muted);
-    }
-    .chain-arrow {
-      font-size: 20px; color: var(--gray-muted); font-weight: 700;
-    }
-
-    /* Section Headers */
-    .section-header {
-      font-size: 18px; font-weight: 700;
-      color: var(--white-pure);
-      margin: 40px 0 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--gray-dark);
-    }
-
-    /* Chart Containers */
-    .chart-box {
-      background: var(--black-rich);
-      border: 1px solid var(--gray-dark);
-      border-radius: 16px;
-      padding: 20px;
-    }
-    .chart-box h3 {
-      font-size: 14px; font-weight: 700;
-      color: var(--white-soft); margin: 0 0 16px;
-    }
-    .chart-wrapper {
-      position: relative;
-      height: 280px;
-    }
-    .chart-wrapper.tall { height: 340px; }
-
-    /* Narrative Panel */
-    .narrative-section {
-      margin-bottom: 20px;
-    }
-    .narrative-section h4 {
-      font-size: 13px; font-weight: 700;
-      color: var(--accent-solid);
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      margin: 0 0 8px;
-    }
-    .narrative-section p {
-      font-size: 14px; line-height: 1.7;
-      color: var(--white-soft); margin: 0;
-    }
-
-    /* Key Levels */
-    .levels-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 12px;
-    }
-    .level-card {
-      display: flex; justify-content: space-between;
-      align-items: center; padding: 12px 16px;
-      background: var(--black-elevated);
-      border-radius: 10px; border: 1px solid var(--gray-dark);
-    }
-    .level-card .level-name {
-      font-size: 12px; font-weight: 600; color: var(--gray-light);
-    }
-    .level-card .level-value {
-      font-size: 14px; font-weight: 700; color: var(--white-pure);
-    }
-    .level-card.breached {
-      border-color: #ff444460;
-      background: #ff444410;
-    }
-    .level-card.breached .level-value { color: #ff4444; }
-
-    /* Correlation Badge */
-    .corr-badges {
-      display: flex; gap: 12px; justify-content: center;
-      margin-top: 12px; flex-wrap: wrap;
-    }
-    .corr-badge {
-      font-size: 11px; font-weight: 700;
-      padding: 5px 12px; border-radius: 20px;
-      background: var(--black-elevated);
-      border: 1px solid var(--gray-dark);
-      color: var(--white-soft);
-    }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .layout { flex-direction: column; }
-      .sidebar {
-        width: 100%; height: auto; position: static;
-        flex-direction: row; flex-wrap: wrap;
-      }
-      .grid-6 { grid-template-columns: repeat(3, 1fr); }
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 640px) {
-      .page { padding: 32px 16px 64px; }
-      .grid-6 { grid-template-columns: repeat(2, 1fr); }
-      .hero h1 { font-size: 24px; }
-      .status-banner { flex-direction: column; text-align: center; }
-      .status-score { margin-left: 0; }
-      .chain-container { flex-direction: column; }
-      .chain-arrow { transform: rotate(90deg); }
-    }
-
-    .loading {
-      text-align: center; padding: 80px;
-      color: var(--gray-muted); font-size: 14px;
-    }
-  </style>
 </head>
 <body>
-<div class="layout">
-  <aside class="sidebar">
-    <div class="sidebar-title">Dashboards</div>
-    <nav class="sidebar-nav">
-      <a class="sidebar-link" href="../Trading-Indicators/index.html">Trading Indicators</a>
-      <a class="sidebar-link" href="../Crypto-Dashboard/index.html">Options Intelligence</a>
-      <a class="sidebar-link" href="../Backtest-Dashboard/index.html">Skew Backtest</a>
-      <a class="sidebar-link" href="../Alt-Outperformance/index.html">BTC / Alt Outperformance</a>
-      <a class="sidebar-link" href="../Strategy-Tester/index.html">Strategy Tester</a>
-      <a class="sidebar-link active" href="index.html">The Situation</a>
-    </nav>
-  </aside>
+  <main class="page">
+    <div id="app">
+      <div class="loading">Loading situation data...</div>
+    </div>
+  </main>
 
-  <div class="page" id="app">
-    <div class="loading">Loading situation data...</div>
-  </div>
-</div>
-
-<script>
+  <script src="../assets/js/dashboard.js"></script>
+  <script src="../assets/js/particles.js"></script>
+  <script>
 const DATA_URL = 'data/situation.json';
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
 function fmt(v, decimals = 2) {
   if (v == null) return '—';
   return Number(v).toFixed(decimals);
@@ -385,30 +31,30 @@ function fmtChg(v) {
   return `<span class="${cls}">${sign}${v.toFixed(2)}%</span>`;
 }
 function statusColor(status) {
-  return { green: '#00d26a', yellow: '#ffb800', red: '#ff4444' }[status] || '#6b6b76';
+  return { green: '#00d26a', yellow: '#ffb800', red: '#f43737' }[status] || '#6b6b76';
 }
 
 const chartDefaults = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
-    legend: { labels: { color: '#9999a5', font: { family: 'Plus Jakarta Sans', size: 11 } } },
+    legend: { labels: { color: '#9999a5', font: { family: 'Montserrat', size: 11 } } },
     tooltip: {
-      backgroundColor: '#1a1a1e',
+      backgroundColor: '#141416',
       titleColor: '#fff',
       bodyColor: '#e8e8ed',
-      borderColor: '#2a2a30',
+      borderColor: '#2e2e33',
       borderWidth: 1,
     },
   },
   scales: {
     x: {
       ticks: { color: '#6b6b76', font: { size: 10 }, maxTicksLimit: 12 },
-      grid: { color: '#1a1a1e' },
+      grid: { color: '#232326' },
     },
     y: {
       ticks: { color: '#6b6b76', font: { size: 10 } },
-      grid: { color: '#1a1a1e' },
+      grid: { color: '#232326' },
     },
   },
 };
@@ -419,12 +65,11 @@ function makeScale(id, position, label, color) {
       type: 'linear', position, display: true,
       title: { display: true, text: label, color, font: { size: 11 } },
       ticks: { color, font: { size: 10 } },
-      grid: { color: position === 'left' ? '#1a1a1e' : 'transparent' },
+      grid: { color: position === 'left' ? '#232326' : 'transparent' },
     }
   };
 }
 
-// ── Render ───────────────────────────────────────────────────────────────────
 async function init() {
   let data;
   try {
@@ -440,17 +85,15 @@ async function init() {
   const app = document.getElementById('app');
   app.innerHTML = '';
 
-  // ─── Hero ───
   const hero = document.createElement('div');
   hero.className = 'hero';
   hero.innerHTML = `
-    <h1>The Situation: Monitoring</h1>
+    <h1>The <b>Situation.</b></h1>
     <div class="subtitle">Geopolitical Oil Shock Transmission Tracker &mdash; Iran Conflict &amp; Strait of Hormuz</div>
     <div class="updated">Last updated: ${data.metadata.last_updated}</div>
   `;
   app.appendChild(hero);
 
-  // ─── Status Banner ───
   const threat = data.threat;
   const narrative = data.narrative;
   const banner = document.createElement('div');
@@ -465,7 +108,6 @@ async function init() {
   `;
   app.appendChild(banner);
 
-  // ─── KPI Row ───
   const kpis = data.kpis;
   const oilRisk = data.oil_risk_premium;
   const credit = data.credit_spread;
@@ -505,7 +147,6 @@ async function init() {
   }
   app.appendChild(kpiGrid);
 
-  // ─── Transmission Chain ───
   const chainSection = document.createElement('div');
   chainSection.className = 'panel';
   chainSection.style.marginBottom = '32px';
@@ -519,7 +160,7 @@ async function init() {
     { key: 'equity_valuations', label: 'Equity Vals' },
   ];
 
-  let chainHtml = '<h3 style="text-align:center;font-size:14px;font-weight:700;color:var(--white-soft);margin:0 0 16px;">Transmission Chain Status</h3><div class="chain-container">';
+  let chainHtml = '<div class="panel-label" style="text-align:center;">Transmission Chain Status</div><div class="chain-container">';
   chainNodes.forEach((node, i) => {
     const status = chain[node.key] || 'green';
     const statusLabel = status === 'red' ? 'ACTIVE' : status === 'yellow' ? 'WARNING' : 'INACTIVE';
@@ -533,7 +174,6 @@ async function init() {
   chainSection.innerHTML = chainHtml;
   app.appendChild(chainSection);
 
-  // ─── Correlation Badges ───
   const corr = data.correlations;
   const corrDiv = document.createElement('div');
   corrDiv.className = 'corr-badges';
@@ -545,13 +185,11 @@ async function init() {
   `;
   app.appendChild(corrDiv);
 
-  // ─── Charts Section Header ───
   const chartsHeader = document.createElement('div');
   chartsHeader.className = 'section-header';
-  chartsHeader.textContent = 'Market Charts';
+  chartsHeader.innerHTML = 'Market <b>Charts</b>';
   app.appendChild(chartsHeader);
 
-  // ─── Charts 2-Column Grid ───
   const chartGrid = document.createElement('div');
   chartGrid.className = 'grid grid-2';
   chartGrid.style.marginBottom = '32px';
@@ -559,39 +197,20 @@ async function init() {
 
   const charts = data.charts;
 
-  // 1. Oil Price History
-  const oilBox = createChartBox('Oil Price History (6M)', 'oilChart');
-  chartGrid.appendChild(oilBox);
+  chartGrid.appendChild(createChartBox('Oil Price History (6M)', 'oilChart'));
+  chartGrid.appendChild(createChartBox('Credit Spread Monitor (LQD vs SMA)', 'creditChart'));
+  chartGrid.appendChild(createChartBox('Oil vs 10Y Treasury Yield', 'oilYieldChart'));
+  chartGrid.appendChild(createChartBox('VIX + Gold (Safe Haven Gauge)', 'vixGoldChart'));
+  chartGrid.appendChild(createChartBox('Yield Curve History', 'ycChart'));
+  chartGrid.appendChild(createChartBox('Energy (XLE) vs S&P 500 Relative Performance', 'relChart'));
 
-  // 2. Credit Spread Monitor
-  const creditBox = createChartBox('Credit Spread Monitor (LQD vs SMA)', 'creditChart');
-  chartGrid.appendChild(creditBox);
-
-  // 3. Oil vs 10Y Yield
-  const oilYieldBox = createChartBox('Oil vs 10Y Treasury Yield', 'oilYieldChart');
-  chartGrid.appendChild(oilYieldBox);
-
-  // 4. VIX + Gold
-  const vixGoldBox = createChartBox('VIX + Gold (Safe Haven Gauge)', 'vixGoldChart');
-  chartGrid.appendChild(vixGoldBox);
-
-  // 5. Yield Curve
-  const ycBox = createChartBox('Yield Curve History', 'ycChart');
-  chartGrid.appendChild(ycBox);
-
-  // 6. Energy vs S&P 500
-  const relBox = createChartBox('Energy (XLE) vs S&P 500 Relative Performance', 'relChart');
-  chartGrid.appendChild(relBox);
-
-  // ─── AAII Sentiment Survey ───
   if (data.aaii && data.aaii.history && data.aaii.history.dates.length > 0) {
     const aaii = data.aaii;
     const sentHeader = document.createElement('div');
     sentHeader.className = 'section-header';
-    sentHeader.textContent = 'Investor Sentiment';
+    sentHeader.innerHTML = 'Investor <b>Sentiment</b>';
     app.appendChild(sentHeader);
 
-    // Sentiment KPI + Signal row
     const sentInfo = document.createElement('div');
     sentInfo.className = 'panel';
     sentInfo.style.marginBottom = '24px';
@@ -607,50 +226,45 @@ async function init() {
 
     sentInfo.innerHTML = `
       <div style="flex:1;min-width:200px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gray-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">AAII Sentiment Survey</div>
-        <div style="font-size:13px;color:var(--white-soft);line-height:1.6;">
+        <div class="panel-label" style="margin-bottom:6px;">AAII Sentiment Survey</div>
+        <div style="font-size:13px;color:var(--soft);line-height:1.6;">
           Week ending ${cur.date || '—'}<br>
           <span style="color:#00d26a;font-weight:700;">Bullish ${fmt(cur.bullish, 1)}%</span>
-          <span style="color:var(--gray-muted);margin:0 6px;">|</span>
-          <span style="color:var(--gray-light);font-weight:700;">Neutral ${fmt(cur.neutral, 1)}%</span>
-          <span style="color:var(--gray-muted);margin:0 6px;">|</span>
-          <span style="color:#ff4444;font-weight:700;">Bearish ${fmt(cur.bearish, 1)}%</span>
+          <span style="color:var(--gray-dim);margin:0 6px;">|</span>
+          <span style="color:var(--gray);font-weight:700;">Neutral ${fmt(cur.neutral, 1)}%</span>
+          <span style="color:var(--gray-dim);margin:0 6px;">|</span>
+          <span style="color:#f43737;font-weight:700;">Bearish ${fmt(cur.bearish, 1)}%</span>
         </div>
       </div>
       <div style="flex:1;min-width:200px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gray-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Bull-Bear Spread</div>
-        <div style="font-size:28px;font-weight:800;color:${(cur.bull_bear_spread||0) >= 0 ? '#00d26a' : '#ff4444'};">
+        <div class="panel-label" style="margin-bottom:6px;">Bull-Bear Spread</div>
+        <div style="font-size:28px;font-weight:800;color:${(cur.bull_bear_spread||0) >= 0 ? '#00d26a' : '#f43737'};">
           ${(cur.bull_bear_spread||0) >= 0 ? '+' : ''}${fmt(cur.bull_bear_spread, 1)}
         </div>
-        <div style="font-size:11px;color:var(--gray-muted);">vs avg: Bull ${bullDev > 0 ? '+' : ''}${bullDev} | Bear ${bearDev > 0 ? '+' : ''}${bearDev}</div>
+        <div style="font-size:11px;color:var(--gray-dim);">vs avg: Bull ${bullDev > 0 ? '+' : ''}${bullDev} | Bear ${bearDev > 0 ? '+' : ''}${bearDev}</div>
       </div>
       <div style="flex:1;min-width:200px;">
-        <div style="font-size:11px;font-weight:700;color:var(--gray-light);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px;">Contrarian Signal</div>
-        <div style="font-size:13px;color:var(--white-soft);font-weight:600;">${aaii.signal}</div>
+        <div class="panel-label" style="margin-bottom:6px;">Contrarian Signal</div>
+        <div style="font-size:13px;font-weight:600;color:var(--soft);">${aaii.signal}</div>
       </div>
     `;
     app.appendChild(sentInfo);
 
-    // AAII Charts — 2-column
     const aaiGrid = document.createElement('div');
     aaiGrid.className = 'grid grid-2';
     aaiGrid.style.marginBottom = '32px';
     app.appendChild(aaiGrid);
 
-    const aaiStackBox = createChartBox('AAII Sentiment Breakdown (Weekly)', 'aaiStackChart');
-    aaiGrid.appendChild(aaiStackBox);
-
-    const aaiSpreadBox = createChartBox('Bull-Bear Spread', 'aaiSpreadChart');
-    aaiGrid.appendChild(aaiSpreadBox);
+    aaiGrid.appendChild(createChartBox('AAII Sentiment Breakdown (Weekly)', 'aaiStackChart'));
+    aaiGrid.appendChild(createChartBox('Bull-Bear Spread', 'aaiSpreadChart'));
 
     renderAAIIStackedChart(aaii.history);
     renderAAIISpreadChart(aaii.history);
   }
 
-  // ─── Full-Width Charts ───
   const fwHeader = document.createElement('div');
   fwHeader.className = 'section-header';
-  fwHeader.textContent = 'The Big Picture';
+  fwHeader.innerHTML = 'The Big <b>Picture</b>';
   app.appendChild(fwHeader);
 
   const bigBox = createChartBox('Oil → Yields → Equities (6M)', 'bigChart', true);
@@ -661,7 +275,6 @@ async function init() {
   hygBox.style.marginBottom = '24px';
   app.appendChild(hygBox);
 
-  // HY OAS chart
   if (data.hy_spread && data.hy_spread.dates && data.hy_spread.dates.length > 0) {
     const hy = data.hy_spread;
     const hyBox = createChartBox('ICE BofA US High Yield Index Option-Adjusted Spread', 'hyOasChart', true);
@@ -670,18 +283,17 @@ async function init() {
     const hyInfo = document.createElement('div');
     hyInfo.style.cssText = 'display:flex;gap:16px;margin-bottom:14px;flex-wrap:wrap;';
     hyInfo.innerHTML = `
-      <span class="corr-badge" style="font-size:12px;">Current: <strong>${fmt(hy.current, 2)}%</strong></span>
-      <span class="corr-badge" style="font-size:12px;">1d: <strong style="color:${(hy.chg_1d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_1d != null ? ((hy.chg_1d > 0 ? '+' : '') + fmt(hy.chg_1d, 2)) : '—'}</strong></span>
-      <span class="corr-badge" style="font-size:12px;">7d: <strong style="color:${(hy.chg_7d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_7d != null ? ((hy.chg_7d > 0 ? '+' : '') + fmt(hy.chg_7d, 2)) : '—'}</strong></span>
-      <span class="corr-badge" style="font-size:12px;">30d: <strong style="color:${(hy.chg_30d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_30d != null ? ((hy.chg_30d > 0 ? '+' : '') + fmt(hy.chg_30d, 2)) : '—'}</strong></span>
-      <span class="corr-badge" style="font-size:12px;">1Y Avg: <strong>${fmt(hy.sma, 2)}%</strong></span>
+      <span class="corr-badge">Current: <strong>${fmt(hy.current, 2)}%</strong></span>
+      <span class="corr-badge">1d: <strong style="color:${(hy.chg_1d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_1d != null ? ((hy.chg_1d > 0 ? '+' : '') + fmt(hy.chg_1d, 2)) : '—'}</strong></span>
+      <span class="corr-badge">7d: <strong style="color:${(hy.chg_7d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_7d != null ? ((hy.chg_7d > 0 ? '+' : '') + fmt(hy.chg_7d, 2)) : '—'}</strong></span>
+      <span class="corr-badge">30d: <strong style="color:${(hy.chg_30d||0) > 0 ? 'var(--danger)' : 'var(--success)'}">${hy.chg_30d != null ? ((hy.chg_30d > 0 ? '+' : '') + fmt(hy.chg_30d, 2)) : '—'}</strong></span>
+      <span class="corr-badge">1Y Avg: <strong>${fmt(hy.sma, 2)}%</strong></span>
     `;
     hyBox.querySelector('h3').after(hyInfo);
     app.appendChild(hyBox);
     renderHyOasChart(hy);
   }
 
-  // ─── Render all charts ───
   renderOilChart(charts.oil_history);
   renderCreditChart(charts.credit_spread);
   renderOilYieldChart(charts.oil_vs_yield);
@@ -691,10 +303,9 @@ async function init() {
   renderBigPictureChart(charts.big_picture);
   renderHygTltChart(charts.hyg_tlt);
 
-  // ─── Thesis Assessment ───
   const assessHeader = document.createElement('div');
   assessHeader.className = 'section-header';
-  assessHeader.textContent = 'Thesis Assessment';
+  assessHeader.innerHTML = 'Thesis <b>Assessment</b>';
   app.appendChild(assessHeader);
 
   const assessPanel = document.createElement('div');
@@ -724,10 +335,9 @@ async function init() {
   `;
   app.appendChild(assessPanel);
 
-  // ─── Key Levels ───
   const levelsHeader = document.createElement('div');
   levelsHeader.className = 'section-header';
-  levelsHeader.textContent = 'Crisis Levels to Watch';
+  levelsHeader.innerHTML = 'Crisis Levels to <b>Watch</b>';
   app.appendChild(levelsHeader);
 
   const levels = data.key_levels;
@@ -760,7 +370,6 @@ async function init() {
   app.appendChild(levelsGrid);
 }
 
-// ── Chart Factory ────────────────────────────────────────────────────────────
 function createChartBox(title, canvasId, tall) {
   const box = document.createElement('div');
   box.className = 'chart-box';
@@ -774,9 +383,9 @@ function renderOilChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: 'Brent', data: d.brent, borderColor: '#ff6b6b', borderWidth: 2, pointRadius: 0, tension: 0.3 },
-        { label: 'WTI', data: d.wti, borderColor: '#00b4d8', borderWidth: 2, pointRadius: 0, tension: 0.3 },
-        { label: 'Brent SMA20', data: d.brent_sma20, borderColor: '#ff6b6b60', borderWidth: 1, borderDash: [4,4], pointRadius: 0, tension: 0.3 },
+        { label: 'Brent', data: d.brent, borderColor: '#f43737', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'WTI', data: d.wti, borderColor: '#0051FF', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'Brent SMA20', data: d.brent_sma20, borderColor: '#f4373760', borderWidth: 1, borderDash: [4,4], pointRadius: 0, tension: 0.3 },
         { label: 'Brent SMA90', data: d.brent_sma90, borderColor: '#ffb80060', borderWidth: 1, borderDash: [6,3], pointRadius: 0, tension: 0.3 },
       ],
     },
@@ -793,19 +402,13 @@ function renderCreditChart(d) {
         {
           label: 'Spread Proxy (%)',
           data: d.spread_proxy,
-          borderColor: '#ff4d7d',
-          backgroundColor: 'rgba(255,77,125,0.1)',
+          borderColor: '#f43737',
+          backgroundColor: 'rgba(244,55,55,0.1)',
           borderWidth: 2, pointRadius: 0, tension: 0.3, fill: true,
         },
       ],
     },
-    options: {
-      ...chartDefaults,
-      plugins: {
-        ...chartDefaults.plugins,
-        annotation: {},
-      },
-    },
+    options: { ...chartDefaults },
   });
 }
 
@@ -815,7 +418,7 @@ function renderOilYieldChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: 'Brent ($)', data: d.brent, borderColor: '#ff6b6b', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'y' },
+        { label: 'Brent ($)', data: d.brent, borderColor: '#f43737', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'y' },
         { label: '10Y Yield (%)', data: d.tnx, borderColor: '#00d26a', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'y1' },
       ],
     },
@@ -823,18 +426,8 @@ function renderOilYieldChart(d) {
       ...chartDefaults,
       scales: {
         x: chartDefaults.scales.x,
-        y: {
-          type: 'linear', position: 'left', display: true,
-          title: { display: true, text: 'Brent ($)', color: '#ff6b6b', font: { size: 11 } },
-          ticks: { color: '#ff6b6b', font: { size: 10 } },
-          grid: { color: '#1a1a1e' },
-        },
-        y1: {
-          type: 'linear', position: 'right', display: true,
-          title: { display: true, text: '10Y Yield (%)', color: '#00d26a', font: { size: 11 } },
-          ticks: { color: '#00d26a', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
-        },
+        y: { type: 'linear', position: 'left', display: true, title: { display: true, text: 'Brent ($)', color: '#f43737', font: { size: 11 } }, ticks: { color: '#f43737', font: { size: 10 } }, grid: { color: '#232326' } },
+        y1: { type: 'linear', position: 'right', display: true, title: { display: true, text: '10Y Yield (%)', color: '#00d26a', font: { size: 11 } }, ticks: { color: '#00d26a', font: { size: 10 } }, grid: { drawOnChartArea: false } },
       },
     },
   });
@@ -846,7 +439,7 @@ function renderVixGoldChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: 'VIX', data: d.vix, borderColor: '#ff4444', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'y' },
+        { label: 'VIX', data: d.vix, borderColor: '#f43737', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'y' },
         { label: 'Gold ($)', data: d.gold, borderColor: '#ffb800', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'y1' },
       ],
     },
@@ -854,18 +447,8 @@ function renderVixGoldChart(d) {
       ...chartDefaults,
       scales: {
         x: chartDefaults.scales.x,
-        y: {
-          type: 'linear', position: 'left', display: true,
-          title: { display: true, text: 'VIX', color: '#ff4444', font: { size: 11 } },
-          ticks: { color: '#ff4444', font: { size: 10 } },
-          grid: { color: '#1a1a1e' },
-        },
-        y1: {
-          type: 'linear', position: 'right', display: true,
-          title: { display: true, text: 'Gold ($)', color: '#ffb800', font: { size: 11 } },
-          ticks: { color: '#ffb800', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
-        },
+        y: { type: 'linear', position: 'left', display: true, title: { display: true, text: 'VIX', color: '#f43737', font: { size: 11 } }, ticks: { color: '#f43737', font: { size: 10 } }, grid: { color: '#232326' } },
+        y1: { type: 'linear', position: 'right', display: true, title: { display: true, text: 'Gold ($)', color: '#ffb800', font: { size: 11 } }, ticks: { color: '#ffb800', font: { size: 10 } }, grid: { drawOnChartArea: false } },
       },
     },
   });
@@ -877,10 +460,10 @@ function renderYieldCurveChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: '13W', data: d.irx, borderColor: '#00b4d8', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
+        { label: '13W', data: d.irx, borderColor: '#0051FF', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
         { label: '5Y', data: d.fvx, borderColor: '#00d26a', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
         { label: '10Y', data: d.tnx, borderColor: '#ffb800', borderWidth: 2, pointRadius: 0, tension: 0.3 },
-        { label: '30Y', data: d.tyx, borderColor: '#ff6b6b', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
+        { label: '30Y', data: d.tyx, borderColor: '#f43737', borderWidth: 1.5, pointRadius: 0, tension: 0.3 },
       ],
     },
     options: { ...chartDefaults },
@@ -893,8 +476,8 @@ function renderRelPerfChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: 'XLE (indexed)', data: d.xle, borderColor: '#ff6b6b', borderWidth: 2, pointRadius: 0, tension: 0.3 },
-        { label: 'S&P 500 (indexed)', data: d.spx, borderColor: '#00b4d8', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'XLE (indexed)', data: d.xle, borderColor: '#f43737', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'S&P 500 (indexed)', data: d.spx, borderColor: '#0051FF', borderWidth: 2, pointRadius: 0, tension: 0.3 },
       ],
     },
     options: {
@@ -913,33 +496,18 @@ function renderBigPictureChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: 'WTI ($)', data: d.wti, borderColor: '#ff6b6b', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'yOil' },
+        { label: 'WTI ($)', data: d.wti, borderColor: '#f43737', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'yOil' },
         { label: '10Y Yield (%)', data: d.tnx, borderColor: '#00d26a', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'yYield' },
-        { label: 'S&P 500', data: d.spx, borderColor: '#00b4d8', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'ySpx' },
+        { label: 'S&P 500', data: d.spx, borderColor: '#0051FF', borderWidth: 2, pointRadius: 0, tension: 0.3, yAxisID: 'ySpx' },
       ],
     },
     options: {
       ...chartDefaults,
       scales: {
         x: chartDefaults.scales.x,
-        yOil: {
-          type: 'linear', position: 'left', display: true,
-          title: { display: true, text: 'WTI ($)', color: '#ff6b6b', font: { size: 11 } },
-          ticks: { color: '#ff6b6b', font: { size: 10 } },
-          grid: { color: '#1a1a1e' },
-        },
-        yYield: {
-          type: 'linear', position: 'right', display: true,
-          title: { display: true, text: '10Y (%)', color: '#00d26a', font: { size: 11 } },
-          ticks: { color: '#00d26a', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
-        },
-        ySpx: {
-          type: 'linear', position: 'right', display: true,
-          title: { display: true, text: 'S&P 500', color: '#00b4d8', font: { size: 11 } },
-          ticks: { color: '#00b4d8', font: { size: 10 } },
-          grid: { drawOnChartArea: false },
-        },
+        yOil: { type: 'linear', position: 'left', display: true, title: { display: true, text: 'WTI ($)', color: '#f43737', font: { size: 11 } }, ticks: { color: '#f43737', font: { size: 10 } }, grid: { color: '#232326' } },
+        yYield: { type: 'linear', position: 'right', display: true, title: { display: true, text: '10Y (%)', color: '#00d26a', font: { size: 11 } }, ticks: { color: '#00d26a', font: { size: 10 } }, grid: { drawOnChartArea: false } },
+        ySpx: { type: 'linear', position: 'right', display: true, title: { display: true, text: 'S&P 500', color: '#0051FF', font: { size: 11 } }, ticks: { color: '#0051FF', font: { size: 10 } }, grid: { drawOnChartArea: false } },
       },
     },
   });
@@ -951,8 +519,8 @@ function renderHygTltChart(d) {
     data: {
       labels: d.dates,
       datasets: [
-        { label: 'HYG (indexed)', data: d.hyg, borderColor: '#ff4d7d', borderWidth: 2, pointRadius: 0, tension: 0.3 },
-        { label: 'TLT (indexed)', data: d.tlt, borderColor: '#00b4d8', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'HYG (indexed)', data: d.hyg, borderColor: '#f43737', borderWidth: 2, pointRadius: 0, tension: 0.3 },
+        { label: 'TLT (indexed)', data: d.tlt, borderColor: '#0051FF', borderWidth: 2, pointRadius: 0, tension: 0.3 },
       ],
     },
     options: {
@@ -968,7 +536,6 @@ function renderHygTltChart(d) {
 function renderHyOasChart(d) {
   const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  // Build monthly labels: show "May '25" on the first trading day of each month, empty string otherwise
   let lastYM = '';
   const tickLabels = d.dates.map(ds => {
     const ym = ds.slice(0, 7);
@@ -988,8 +555,8 @@ function renderHyOasChart(d) {
         {
           label: 'HY OAS (%)',
           data: d.values,
-          borderColor: '#ff4d7d',
-          backgroundColor: 'rgba(255,77,125,0.12)',
+          borderColor: '#f43737',
+          backgroundColor: 'rgba(244,55,55,0.12)',
           borderWidth: 2, pointRadius: 0, tension: 0.3, fill: true,
         },
         {
@@ -1020,14 +587,8 @@ function renderHyOasChart(d) {
       },
       scales: {
         x: {
-          ticks: {
-            color: '#6b6b76',
-            font: { size: 10 },
-            autoSkip: true,
-            maxTicksLimit: 12,
-            maxRotation: 0,
-          },
-          grid: { color: '#1a1a1e' },
+          ticks: { color: '#6b6b76', font: { size: 10 }, autoSkip: true, maxTicksLimit: 12, maxRotation: 0 },
+          grid: { color: '#232326' },
         },
         y: {
           ...chartDefaults.scales.y,
@@ -1046,35 +607,26 @@ function renderAAIIStackedChart(d) {
       datasets: [
         { label: 'Bullish %', data: d.bullish, backgroundColor: '#00d26a', borderRadius: 2 },
         { label: 'Neutral %', data: d.neutral, backgroundColor: '#6b6b76', borderRadius: 2 },
-        { label: 'Bearish %', data: d.bearish, backgroundColor: '#ff4444', borderRadius: 2 },
+        { label: 'Bearish %', data: d.bearish, backgroundColor: '#f43737', borderRadius: 2 },
       ],
     },
     options: {
       ...chartDefaults,
       plugins: {
         ...chartDefaults.plugins,
-        tooltip: {
-          ...chartDefaults.plugins.tooltip,
-          callbacks: {
-            label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%`,
-          },
-        },
+        tooltip: { ...chartDefaults.plugins.tooltip, callbacks: { label: ctx => `${ctx.dataset.label}: ${ctx.parsed.y.toFixed(1)}%` } },
       },
       scales: {
         x: { ...chartDefaults.scales.x, stacked: true },
-        y: {
-          ...chartDefaults.scales.y, stacked: true,
-          max: 100,
-          title: { display: true, text: '% of Respondents', color: '#9999a5', font: { size: 11 } },
-        },
+        y: { ...chartDefaults.scales.y, stacked: true, max: 100, title: { display: true, text: '% of Respondents', color: '#9999a5', font: { size: 11 } } },
       },
     },
   });
 }
 
 function renderAAIISpreadChart(d) {
-  const colors = d.bull_bear_spread.map(v => v >= 0 ? '#00d26a' : '#ff4444');
-  const bgColors = d.bull_bear_spread.map(v => v >= 0 ? 'rgba(0,210,106,0.7)' : 'rgba(255,68,68,0.7)');
+  const colors = d.bull_bear_spread.map(v => v >= 0 ? '#00d26a' : '#f43737');
+  const bgColors = d.bull_bear_spread.map(v => v >= 0 ? 'rgba(0,210,106,0.7)' : 'rgba(244,55,55,0.7)');
   new Chart(document.getElementById('aaiSpreadChart'), {
     type: 'bar',
     data: {
@@ -1094,25 +646,17 @@ function renderAAIISpreadChart(d) {
       ...chartDefaults,
       plugins: {
         ...chartDefaults.plugins,
-        tooltip: {
-          ...chartDefaults.plugins.tooltip,
-          callbacks: {
-            label: ctx => `Spread: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%`,
-          },
-        },
+        tooltip: { ...chartDefaults.plugins.tooltip, callbacks: { label: ctx => `Spread: ${ctx.parsed.y >= 0 ? '+' : ''}${ctx.parsed.y.toFixed(1)}%` } },
       },
       scales: {
         x: chartDefaults.scales.x,
-        y: {
-          ...chartDefaults.scales.y,
-          title: { display: true, text: 'Bullish - Bearish (%)', color: '#9999a5', font: { size: 11 } },
-        },
+        y: { ...chartDefaults.scales.y, title: { display: true, text: 'Bullish - Bearish (%)', color: '#9999a5', font: { size: 11 } } },
       },
     },
   });
 }
 
 init();
-</script>
+  </script>
 </body>
 </html>

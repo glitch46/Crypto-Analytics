@@ -42,7 +42,9 @@ ASSETS = {
 DEPTH_WINDOWS = [0.025, 0.05, 0.10, 0.25]
 SNAPSHOT_RETENTION = 30 * 24 * 4
 HEATMAP_POINTS_PER_SIDE = 6
-HEATMAP_RETENTION = SNAPSHOT_RETENTION * 24
+# Cap heatmap history: it is the bulk of indicators.json (was ~23MB). ~3.5 days
+# is plenty for the liquidity overlay + wall stats; trimming keeps repo + CI lean.
+HEATMAP_RETENTION = 20000
 CVD_GRANULARITY_SECONDS = 900
 
 
@@ -571,6 +573,31 @@ def confluence_signal(asset_payload: dict) -> dict:
     elif long_readiness <= 40:
         interpretation = "Caution / defensive"
 
+    # Simplified, falsifiable signal: depth imbalance is the only validated
+    # predictor (backtested). CVD/composite are retained for diagnostics only.
+    d5 = 0.0
+    d25 = 0.0
+    if depth_hist:
+        latest_d = depth_hist[-1].get("combined", {})
+        d5 = latest_d.get("5.0%", {}).get("normalized_delta", 0.0)
+        d25 = latest_d.get("25.0%", {}).get("normalized_delta", 0.0)
+    threshold = 0.02
+    if d5 >= 0.04 and d25 > 0:
+        verdict = "Strong Bullish"
+    elif d5 >= threshold:
+        verdict = "Bullish"
+    elif d5 <= -0.04 and d25 < 0:
+        verdict = "Strong Bearish"
+    elif d5 <= -threshold:
+        verdict = "Bearish"
+    else:
+        verdict = "Neutral"
+    cvd_slope_sign = 0
+    if len(cvd_hist) >= 8:
+        recent = [x.get("aggregate", 0.0) for x in cvd_hist[-8:]]
+        slope = recent[-1] - recent[0]
+        cvd_slope_sign = 1 if slope > 0 else (-1 if slope < 0 else 0)
+
     return {
         "depth_score": round(depth_score, 2),
         "cvd_score": round(cvd_score, 2),
@@ -578,6 +605,14 @@ def confluence_signal(asset_payload: dict) -> dict:
         "commercial_caution": round(commercial_caution, 2),
         "long_readiness": round(long_readiness, 2),
         "label": interpretation,
+        "signal": {
+            "verdict": verdict,
+            "depth_5_norm": round(d5, 4),
+            "depth_25_norm": round(d25, 4),
+            "cvd_slope_sign": cvd_slope_sign,
+            "rule": "Depth 5% >= +2% bull / <= -2% bear, 25% confirms. CVD is diagnostic only.",
+        },
+        "legacy": True,
     }
 
 
