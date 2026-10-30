@@ -26,11 +26,9 @@
   };
   var P = KNOWN_DIRS.some(function (d) { return location.pathname.indexOf("/" + d + "/") !== -1; }) ? "../" : "";
 
-  var MARK = '<svg viewBox="0 0 34 34" fill="none" aria-hidden="true">'
-    + '<circle cx="17" cy="17" r="15.5" stroke="#0051FF" stroke-width="2"/>'
-    + '<circle cx="17" cy="17" r="15.5" stroke="#f43737" stroke-width="1.5" stroke-dasharray="4 5"/>'
-    + '<path d="M9 21.5L14 15.5L18 19.5L25 11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
-    + '<circle cx="25" cy="11" r="2.4" fill="#0051FF"/>'
+  var MARK = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true">'
+    + '<circle cx="16" cy="16" r="14.5" stroke="#0051FF" stroke-width="2.5"/>'
+    + '<path d="M9 21.5 L14.5 15.5 L18.5 19 L24 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
     + "</svg>";
 
   /* ---------------- Preloader ---------------- */

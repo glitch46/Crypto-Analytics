@@ -20,10 +20,10 @@
     { id: "situation", label: "Situation", src: "Situation-Monitor/index.html", dir: "Situation-Monitor" }
   ];
 
-  var MARK = '<svg viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="15.5" stroke="#0051FF" stroke-width="2"/>'
-    + '<circle cx="17" cy="17" r="15.5" stroke="#f43737" stroke-width="1.5" stroke-dasharray="4 5"/>'
-    + '<path d="M9 21.5L14 15.5L18 19.5L25 11" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'
-    + '<circle cx="25" cy="11" r="2.4" fill="#0051FF"/></svg>';
+  var MARK = '<svg viewBox="0 0 32 32" fill="none">'
+    + '<circle cx="16" cy="16" r="14.5" stroke="#0051FF" stroke-width="2.5"/>'
+    + '<path d="M9 21.5 L14.5 15.5 L18.5 19 L24 12" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>'
+    + "</svg>";
 
   var body = document.body;
   var tabs = [];
@@ -31,12 +31,13 @@
   var fsTab = null;
 
   /* ---------------- fixed chrome ---------------- */
-  var brand = document.createElement("a");
-  brand.className = "brand-fixed";
-  brand.href = "#home";
-  brand.innerHTML = MARK + '<span>Crypto Analytics<span class="sub">Market Intelligence</span></span>';
-  brand.addEventListener("click", function (e) { e.preventDefault(); goto(0); });
-  body.appendChild(brand);
+  var nav = document.createElement("nav");
+  nav.className = "top-nav";
+  nav.innerHTML = '<a class="brand" href="#home">' + MARK + "<span>Crypto Analytics</span></a>"
+    + '<div class="top-nav-links">'
+    + TABS.map(function (t) { return '<a data-tab="' + t.id + '" href="#' + t.id + '">' + t.label + "</a>"; }).join("")
+    + "</div>";
+  body.appendChild(nav);
 
   var up = document.createElement("button");
   up.className = "nav-arrow top"; up.title = "Previous tab"; up.innerHTML = "&#8593;";
@@ -53,7 +54,7 @@
 
   var hint = document.createElement("div");
   hint.className = "tab-hint";
-  hint.textContent = "Scroll to move · double-click a tab to expand";
+  hint.textContent = "Scroll to move · click a tab above to jump & expand";
   body.appendChild(hint);
   setTimeout(function () { hint.style.opacity = "0"; }, 9000);
 
@@ -167,6 +168,9 @@
       if (i !== active) {
         active = i;
         tabs.forEach(function (t, idx) { t.el.classList.toggle("active", idx === i); });
+        document.querySelectorAll(".top-nav-links a").forEach(function (a) {
+          a.classList.toggle("active", a.dataset.tab === tabs[i].id);
+        });
         activate(i);
       }
       up.disabled = active <= 0;
@@ -189,13 +193,22 @@
     if (e.key === "Escape") exitFullscreen();
   });
 
-  /* in-tab anchor links (home cards, brand) jump to the matching tab */
+  /* in-tab anchor links (home cards, brand) jump to the matching tab.
+     Top-nav links also auto-expand (zoom in) the target after the scroll. */
   document.addEventListener("click", function (e) {
     var a = e.target && e.target.closest ? e.target.closest('a[href^="#"]') : null;
     if (!a || e.defaultPrevented) return;
     var id = a.getAttribute("href").slice(1);
     var idx = tabs.findIndex(function (t) { return t.id === id; });
-    if (idx >= 0) { e.preventDefault(); goto(idx); }
+    if (idx < 0) return;
+    e.preventDefault();
+    var fromNav = !!a.closest(".top-nav");
+    goto(idx);
+    if (fromNav) {
+      var dist = Math.abs(idx - active);
+      var wait = Math.min(1200, 350 + dist * 160);   // let the smooth scroll land
+      setTimeout(function () { if (tabs[idx]) setFullscreen(tabs[idx]); }, wait);
+    }
   });
 
   /* initial state: home is active, prefetch the first dashboard */

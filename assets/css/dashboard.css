@@ -146,7 +146,10 @@ body {
 @media (max-width: 640px) { .page { width: calc(100% - 32px); padding: 120px 0 70px; } }
 
 /* ---------- Editorial hero (mirrors reference) ---------- */
+/* ---------- Hero: text always above decoration ---------- */
 .hero { position: relative; padding: 60px 0 70px; }
+.hero > * { position: relative; z-index: 1; }
+.hero .orbits { z-index: 0; opacity: 0.4; }
 .hero h1 {
   margin: 0;
   font-size: clamp(38px, 6vw, 74px);
@@ -203,12 +206,12 @@ s, .strike {
   border-radius: 50%;
   animation: circle-orbit linear infinite;
 }
-.orbit.o1 { width: 170px; height: 170px; animation: none; }
-.orbit.o1::before { width: 9px; height: 9px; top: 84px; left: 84px; animation-duration: 26s; }
-.orbit.o2 { width: 330px; height: 330px; }
-.orbit.o2::before { width: 21px; height: 21px; border: 4px solid var(--red); background: #000; top: 164px; left: 164px; animation-duration: 32s; }
-.orbit.o3 { width: 500px; height: 500px; }
-.orbit.o3::before { width: 9px; height: 9px; top: 246px; left: 246px; animation-duration: 40s; }
+.orbit.o1 { width: 150px; height: 150px; animation: none; top: 10px; left: 10px; }
+.orbit.o1::before { width: 7px; height: 7px; top: 74px; left: 74px; animation-duration: 26s; }
+.orbit.o2 { width: 290px; height: 290px; top: 20px; left: -40px; }
+.orbit.o2::before { width: 18px; height: 18px; border: 4px solid var(--red); background: #000; top: 144px; left: 144px; animation-duration: 32s; }
+.orbit.o3 { width: 440px; height: 440px; top: 30px; left: -90px; }
+.orbit.o3::before { width: 7px; height: 7px; top: 218px; left: 218px; animation-duration: 40s; }
 @keyframes circle-orbit {
   from { transform: rotate(0deg) translateX(50%) rotate(0deg); }
   to   { transform: rotate(360deg) translateX(50%) rotate(-360deg); }
