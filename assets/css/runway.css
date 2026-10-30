@@ -184,6 +184,41 @@ body.fs .top-nav,
 body.fs .tab-hint { display: none; }
 body.fs .fs-close { display: flex; }
 
+/* ---------- Demo tab · Venice gondola ASCII scene ---------- */
+.tab-demo { background: transparent; }
+.tab-demo.active { background: transparent; }
+.demo-scene {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px 16px;
+}
+.demo-scene pre {
+  font-family: "JetBrains Mono", "Cascadia Mono", "Fira Code", Consolas, Menlo, monospace;
+  font-size: clamp(11px, 1.4vw, 17px);
+  line-height: 1.3;
+  color: rgba(168, 200, 222, 0.8);
+  text-shadow: 0 0 14px rgba(0, 81, 255, 0.28), 0 0 46px rgba(0, 81, 255, 0.12);
+  display: inline-block;            /* shrink to content so flex centers the whole scene */
+  white-space: pre;
+  margin: 0;
+  text-align: left;
+  animation: gondolaBob 6s ease-in-out infinite;
+}
+@keyframes gondolaBob {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+.demo-caption {
+  font-size: 11px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(150, 182, 202, 0.5);
+}
+
 @media (max-width: 640px) {
   .top-nav { padding: 0 12px; }
   .top-nav .brand span { display: none; }      /* icon-only brand on small screens */

@@ -17,7 +17,8 @@
     { id: "options", label: "Options", src: "Crypto-Dashboard/index.html", dir: "Crypto-Dashboard" },
     { id: "backtest", label: "Backtest", src: "Backtest-Dashboard/index.html", dir: "Backtest-Dashboard" },
     { id: "strategy", label: "Strategy", src: "Strategy-Tester/index.html", dir: "Strategy-Tester" },
-    { id: "situation", label: "Situation", src: "Situation-Monitor/index.html", dir: "Situation-Monitor" }
+    { id: "situation", label: "Situation", src: "Situation-Monitor/index.html", dir: "Situation-Monitor" },
+    { id: "demo", label: "Demo", src: null, dir: "" }
   ];
 
   var MARK = '<svg viewBox="0 0 32 32" fill="none">'
@@ -65,7 +66,7 @@
     tabs.push({
       id: def.id, label: def.label, src: def.src, dir: def.dir,
       el: el, slot: el.querySelector(".tab-slot"),
-      state: def.id === "home" ? "loaded" : "stub",   // stub -> cached -> loaded
+      state: def.src === null ? "loaded" : "stub",   // static tabs (home/demo) always present
       html: null, promise: null
     });
   });
@@ -118,11 +119,11 @@
     return t.promise;
   }
 
-  /* Mount the active tab (or home). Unloads whatever was mounted before. */
+  /* Mount the active tab (or home/demo). Unloads whatever was mounted before. */
   function activate(i) {
-    tabs.forEach(function (t, idx) { if (idx !== i && t.state === "loaded") unload(t); });
+    tabs.forEach(function (t, idx) { if (idx !== i && t.state === "loaded" && t.src) unload(t); });
     var t = tabs[i];
-    if (!t || t.id === "home") return;
+    if (!t || t.id === "home" || t.id === "demo") return;
     if (t.state === "cached") inject(t);
     else if (t.state === "stub") preload(i).then(function () { if (t.state === "cached") inject(t); });
     preload(i - 1);
@@ -165,6 +166,9 @@
     requestAnimationFrame(function () {
       ticking = false;
       var i = Math.max(0, Math.min(tabs.length - 1, Math.round(window.scrollY / window.innerHeight)));
+      /* Demo tab swaps the crypto-particle field for the gondola scene */
+      var pc = document.getElementById("particle-backdrop");
+      if (pc) pc.style.display = tabs[i].id === "demo" ? "none" : "";
       if (i !== active) {
         active = i;
         tabs.forEach(function (t, idx) { t.el.classList.toggle("active", idx === i); });
