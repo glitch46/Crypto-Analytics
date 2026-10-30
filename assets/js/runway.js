@@ -90,6 +90,15 @@
     });
   }
 
+  /* A dashboard whose init is still awaiting when the user scrolls away will
+     throw on its (now removed) elements — harmless. Keep the console clean. */
+  window.addEventListener("unhandledrejection", function (e) {
+    var m = e.reason && (e.reason.message || String(e.reason));
+    if (m && /getElementById|querySelector|appendChild|textContent|innerHTML/.test(m)) {
+      e.preventDefault();
+    }
+  });
+
   function runScripts(code) {
     new Function("window", "document", "globalThis", code).call(window, window, document, globalThis);
   }
