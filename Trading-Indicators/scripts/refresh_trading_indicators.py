@@ -42,9 +42,7 @@ ASSETS = {
 DEPTH_WINDOWS = [0.025, 0.05, 0.10, 0.25]
 SNAPSHOT_RETENTION = 30 * 24 * 4
 HEATMAP_POINTS_PER_SIDE = 6
-# Cap heatmap history: it is the bulk of indicators.json (was ~23MB). ~3.5 days
-# is plenty for the liquidity overlay + wall stats; trimming keeps repo + CI lean.
-HEATMAP_RETENTION = 20000
+HEATMAP_RETENTION = SNAPSHOT_RETENTION * 24
 CVD_GRANULARITY_SECONDS = 900
 
 
