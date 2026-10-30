@@ -4,68 +4,105 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Crypto Analytics — Market Intelligence</title>
-  <meta name="description" content="Crypto market intelligence dashboards: options analytics, orderbook indicators, alt outperformance, backtests and more. Built on free public APIs, refreshed every 4 hours." />
+  <meta name="description" content="Crypto market intelligence, one runway: options analytics, orderbook indicators, alt outperformance, backtests, strategy and macro. Scroll between dashboards, double-click to expand." />
   <link rel="stylesheet" href="assets/css/dashboard.css" />
+  <link rel="stylesheet" href="assets/css/runway.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 </head>
 <body>
-  <main class="page landing">
-    <section class="hero">
-      <span class="hero-kicker">Market Intelligence · Refresh 4h</span>
-      <h1>
-        Read the market the way<br />
-        <b>you actually trade.</b>
-      </h1>
-      <p class="hero-sub">
-        Options positioning, orderbook imbalance, alt momentum and signal accuracy —
-        seven self-contained dashboards built on free public data. No accounts,
-        no algorithms hiding the ball. Every signal carries its own track record.
-      </p>
-      <div class="orbits" style="top: -40px; right: -60px; width: 500px; height: 500px;">
-        <div class="orbit o1"></div>
-        <div class="orbit o2"></div>
-        <div class="orbit o3"></div>
-      </div>
-    </section>
+  <!-- ============ Tab 1 · Home ============ -->
+  <section class="tab tab-home" data-tab="home">
+    <div class="tab-slot">
+      <main class="page landing">
+        <section class="hero">
+          <span class="hero-kicker">Market Intelligence · Refresh 4h</span>
+          <h1>
+            Read the market the way<br />
+            <b>you actually trade.</b>
+          </h1>
+          <p class="hero-sub">
+            Options positioning, orderbook imbalance, alt momentum and signal accuracy —
+            six dashboards on one runway. No accounts, no algorithms hiding the ball;
+            every signal carries its own track record.
+          </p>
+          <div class="orbits" style="top: -40px; right: -60px; width: 500px; height: 500px;">
+            <div class="orbit o1"></div>
+            <div class="orbit o2"></div>
+            <div class="orbit o3"></div>
+          </div>
+        </section>
 
-    <section class="landing-list" data-aos="fade-up">
-      <a class="dash-card" href="Alt-Outperformance/index.html">
-        <span class="dash-card-tag">Momentum</span>
-        <span class="dash-card-title">BTC / Alt Outperformance</span>
-        <span class="dash-card-desc">Which alts are actually beating Bitcoin — 7 / 14 / 30-day relative returns across the top liquid market cap.</span>
-      </a>
-      <a class="dash-card" href="Trading-Indicators/index.html">
-        <span class="dash-card-tag">Orderbook</span>
-        <span class="dash-card-title">Trading Indicators</span>
-        <span class="dash-card-desc">Depth imbalance, flow and positioning for BTC &amp; ETH — with a live, backtested signal-accuracy panel.</span>
-      </a>
-      <a class="dash-card" href="Crypto-Dashboard/index.html">
-        <span class="dash-card-tag">Options</span>
-        <span class="dash-card-title">Options Intelligence</span>
-        <span class="dash-card-desc">Max pain, open interest momentum, expiry pressure and put/call structure from Deribit.</span>
-      </a>
-      <a class="dash-card" href="Backtest-Dashboard/index.html">
-        <span class="dash-card-tag">Verification</span>
-        <span class="dash-card-title">Skew Backtest</span>
-        <span class="dash-card-desc">Does options skew actually lead price? Historical verification of the positioning signals.</span>
-      </a>
-      <a class="dash-card" href="Strategy-Tester/index.html">
-        <span class="dash-card-tag">Simulation</span>
-        <span class="dash-card-title">Strategy Tester</span>
-        <span class="dash-card-desc">Stress-test option strategies and market regimes against historical data.</span>
-      </a>
-      <a class="dash-card" href="Situation-Monitor/index.html">
-        <span class="dash-card-tag">Macro</span>
-        <span class="dash-card-title">The Situation</span>
-        <span class="dash-card-desc">A single screen tying macro, options and market stress together into one read on the tape.</span>
-      </a>
-    </section>
+        <section class="landing-list">
+          <a class="dash-card" href="#alts">
+            <span class="dash-card-tag">Momentum</span>
+            <span class="dash-card-title">BTC / Alt Outperformance</span>
+            <span class="dash-card-desc">Which alts are actually beating Bitcoin — 7 / 14 / 30-day relative returns.</span>
+          </a>
+          <a class="dash-card" href="#indicators">
+            <span class="dash-card-tag">Orderbook</span>
+            <span class="dash-card-title">Trading Indicators</span>
+            <span class="dash-card-desc">Depth imbalance, flow and positioning for BTC &amp; ETH — with backtested signal accuracy.</span>
+          </a>
+          <a class="dash-card" href="#options">
+            <span class="dash-card-tag">Options</span>
+            <span class="dash-card-title">Options Intelligence</span>
+            <span class="dash-card-desc">Max pain, open interest momentum, expiry pressure and put/call structure.</span>
+          </a>
+          <a class="dash-card" href="#backtest">
+            <span class="dash-card-tag">Verification</span>
+            <span class="dash-card-title">Skew Backtest</span>
+            <span class="dash-card-desc">Does options skew actually lead price? Historical verification.</span>
+          </a>
+          <a class="dash-card" href="#strategy">
+            <span class="dash-card-tag">Simulation</span>
+            <span class="dash-card-title">Strategy Tester</span>
+            <span class="dash-card-desc">Stress-test momentum, seasonal and quirky strategies over 3 years.</span>
+          </a>
+          <a class="dash-card" href="#situation">
+            <span class="dash-card-tag">Macro</span>
+            <span class="dash-card-title">The Situation</span>
+            <span class="dash-card-desc">Macro, options and market stress on one screen — the oil-shock transmission tracker.</span>
+          </a>
+        </section>
 
-    <footer class="site-footer">
-      Sources: Binance, Coinbase, Kraken, OKX, Bybit, Deribit, CoinGecko, CFTC. Visual signals only — not financial advice.
-    </footer>
-  </main>
+        <footer class="site-footer">
+          Sources: Binance, Coinbase, Kraken, OKX, Bybit, Deribit, CoinGecko, CFTC. Visual signals only — not financial advice.
+        </footer>
+      </main>
+    </div>
+  </section>
 
-  <script src="assets/js/dashboard.js"></script>
+  <!-- ============ Tab 2 · BTC / Alt ============ -->
+  <section class="tab" data-tab="alts" data-src="Alt-Outperformance/index.html">
+    <div class="tab-slot"></div>
+  </section>
+
+  <!-- ============ Tab 3 · Trading Indicators ============ -->
+  <section class="tab" data-tab="indicators" data-src="Trading-Indicators/index.html">
+    <div class="tab-slot"></div>
+  </section>
+
+  <!-- ============ Tab 4 · Options Intelligence ============ -->
+  <section class="tab" data-tab="options" data-src="Crypto-Dashboard/index.html">
+    <div class="tab-slot"></div>
+  </section>
+
+  <!-- ============ Tab 5 · Skew Backtest ============ -->
+  <section class="tab" data-tab="backtest" data-src="Backtest-Dashboard/index.html">
+    <div class="tab-slot"></div>
+  </section>
+
+  <!-- ============ Tab 6 · Strategy Tester ============ -->
+  <section class="tab" data-tab="strategy" data-src="Strategy-Tester/index.html">
+    <div class="tab-slot"></div>
+  </section>
+
+  <!-- ============ Tab 7 · The Situation ============ -->
+  <section class="tab" data-tab="situation" data-src="Situation-Monitor/index.html">
+    <div class="tab-slot"></div>
+  </section>
+
   <script src="assets/js/particles.js"></script>
+  <script src="assets/js/runway.js"></script>
 </body>
 </html>

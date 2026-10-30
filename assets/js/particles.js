@@ -45,19 +45,19 @@
     densityLoss: 700,            // removed particles at momentum -1
     driftPerMomentum: 0.85,      // px/frame of upward drift per +1 momentum
     swayAmp: 0.35,               // gentle horizontal sway
-    minAlpha: 0.15,              // opacity floor
-    maxAlpha: 0.45,              // opacity ceiling
+    minAlpha: 0.25,              // opacity floor (raised for visibility)
+    maxAlpha: 0.6,               // opacity ceiling (raised for visibility)
     fadeSpeed: 0.035,            // alpha ease toward target
-    sizeMin: 9,                  // font px (normal particles)
-    sizeMax: 13,
+    sizeMin: 12,                 // font px (raised so glyphs are readable)
+    sizeMax: 17,
     clusterEvery: 26,            // avg seconds between big-BTC clusters
     clusterParticles: 22,        // particles that form one big BTC symbol
     clusterGather: 1.8,          // seconds to coalesce
     clusterHold: 3.2,            // seconds to linger
     clusterDissolve: 2.2,        // seconds to dissolve
-    clusterAlpha: 0.26,          // intentionally low contrast
-    clusterSizeMin: 18,
-    clusterSizeMax: 24,
+    clusterAlpha: 0.35,          // low contrast on purpose, but visible
+    clusterSizeMin: 22,
+    clusterSizeMax: 30,
     goldChance: 0.12,            // sparse gold accents
     accentChance: 0.07           // green/red tied to momentum direction
   };
