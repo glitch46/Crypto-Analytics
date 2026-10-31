@@ -68,7 +68,7 @@
       <div class="panel">
         <div class="panel-title">Top Outperformers vs BTC</div>
         <div class="panel-sub" id="topChartSubtitle">Top 10 liquid alts by relative return.</div>
-        <div class="chart-wrap"><canvas id="topChart"></canvas></div>
+        <div class="chart-wrap comparison-chart"><canvas id="topChart"></canvas></div>
       </div>
     </section>
 
@@ -76,7 +76,7 @@
       <div class="panel">
         <div class="panel-title">Worst Underperformers vs BTC</div>
         <div class="panel-sub">Bottom 10 liquid alts by relative return.</div>
-        <div class="chart-wrap"><canvas id="bottomChart"></canvas></div>
+        <div class="chart-wrap comparison-chart"><canvas id="bottomChart"></canvas></div>
       </div>
     </section>
 
@@ -134,8 +134,8 @@
   <script>
     const state = { period: 7, alts: [], meta: null, charts: {} };
 
-    const topColors = ['#0051FF', '#00d26a', '#ffb800', '#7b61ff', '#00e5a0', '#4cc9f0', '#4895ef', '#4361ee', '#ff8e53', '#f43737'];
-    const bottomColors = ['#f43737', '#e63946', '#ff8e53', '#ba181b', '#a4161a', '#9d0208', '#7b2cbf', '#6a040f', '#5f0f40', '#9d4edd'];
+    const topColors = ['#70a0ff', '#41e3a0', '#ffd166', '#b6a1ff', '#81e3d1', '#6ed1f4', '#a9b9ff', '#db9bff', '#ffb77b', '#f98491'];
+    const bottomColors = ['#ff7785', '#ffa27e', '#ffd08c', '#e5a6ff', '#c2a3ff', '#f4a4c7', '#a5baff', '#f798aa', '#f2bc90', '#a9ddf0'];
 
     function fmtNumber(value, suffix = '') {
       if (value === null || value === undefined || Number.isNaN(Number(value))) return '-';
@@ -191,7 +191,7 @@
         data: getWindowedSeries(coin).map((p) => p.relative_pct),
         borderColor: palette[idx % palette.length],
         backgroundColor: 'transparent',
-        borderWidth: 2, tension: 0.3, pointRadius: 0, pointHoverRadius: 3
+        borderWidth: 2.5, tension: 0.3, pointRadius: 0, pointHoverRadius: 4
       }));
       state.charts[key] = new Chart(canvas, {
         type: 'line',
@@ -200,13 +200,13 @@
           responsive: true, maintainAspectRatio: false,
           interaction: { mode: 'nearest', intersect: false },
           plugins: {
-            legend: { labels: { color: '#e8e8ed', boxWidth: 14 } },
+            legend: { labels: { color: '#f0f1f4', boxWidth: 16, padding: 16, font: { size: 12 } } },
             tooltip: { backgroundColor: '#141416', borderColor: '#2e2e33', borderWidth: 1, titleColor: '#fff', bodyColor: '#e8e8ed', displayColors: false,
               callbacks: { label: (ctx) => `${ctx.dataset.label} | ${fmtPercent(ctx.parsed.y)}` } }
           },
           scales: {
-            x: { ticks: { color: '#85858c', maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { color: '#232326' } },
-            y: { ticks: { color: '#85858c', callback: (v) => `${v}%` }, grid: { color: '#232326' } }
+            x: { ticks: { color: '#b8bbc4', maxRotation: 0, autoSkip: true, maxTicksLimit: 8 }, grid: { color: '#33343b' } },
+            y: { ticks: { color: '#b8bbc4', callback: (v) => `${v}%` }, grid: { color: '#33343b' } }
           }
         }
       });

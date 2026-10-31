@@ -24,7 +24,8 @@
     "Strategy-Tester": "strategy",
     "Situation-Monitor": "situation"
   };
-  var P = KNOWN_DIRS.some(function (d) { return location.pathname.indexOf("/" + d + "/") !== -1; }) ? "../" : "";
+  // Resolve once against the script, not the current URL, which changes under PJAX.
+  var siteRoot = new URL("../../", document.currentScript.src);
 
   var MARK = '<svg viewBox="0 0 32 32" fill="none" aria-hidden="true">'
     + '<circle cx="16" cy="16" r="14.5" stroke="#0051FF" stroke-width="2.5"/>'
@@ -64,10 +65,10 @@
   header.className = "site-header";
   var nav = DASHBOARDS.map(function (d) {
     var cls = d.id === activeIdFor() ? "active" : "";
-    return '<a data-id="' + d.id + '" class="' + cls + '" href="' + P + d.href + '">' + d.label + "</a>";
+    return '<a data-id="' + d.id + '" class="' + cls + '" href="' + new URL(d.href, siteRoot).href + '">' + d.label + "</a>";
   }).join("");
   header.innerHTML = '<div class="_container">'
-    + '<a class="brand" href="' + P + 'index.html">' + MARK
+    + '<a class="brand" href="' + new URL('index.html', siteRoot).href + '">' + MARK
     + '<span>Crypto Analytics<span class="brand-sub" style="display:block;">Market Intelligence</span></span></a>'
     + '<nav class="main-nav">' + nav + "</nav>"
     + "</div>";
@@ -101,12 +102,12 @@
 
   /* ---------------- PJAX navigation (keeps canvas + header alive) ---------------- */
   function destroyCharts() {
-    if (window.Chart && Chart.registry) {
-      Chart.registry.getAll().forEach(function (c) { try { c.destroy(); } catch (e) {} });
+    if (window.Chart && Chart.instances) {
+      Object.values(Chart.instances).forEach(function (c) { try { c.destroy(); } catch (e) {} });
     }
   }
 
-  async function loadPage(url) {
+  async function loadPage(url, updateHistory) {
     var res = await fetch(url, { credentials: "same-origin", headers: { "Accept": "text/html" } });
     if (!res.ok) throw new Error("HTTP " + res.status);
     var html = await res.text();
@@ -119,13 +120,13 @@
     cur.className = main.className;
     cur.innerHTML = main.innerHTML;
     if (doc.title) document.title = doc.title;
-    history.pushState({}, "", url);
+    if (updateHistory) history.pushState({}, "", url);
 
     /* Run the new page's inline scripts in a function scope so top-level
        const/let never collide with the previous page's declarations. */
     var scripts = Array.prototype.slice.call(doc.querySelectorAll("script:not([src])"));
     scripts.forEach(function (s) {
-      try { new Function("window", "document", "globalThis", s.textContent)(); }
+      try { new Function("window", "document", "globalThis", s.textContent).call(window, window, document, globalThis); }
       catch (e) { console.error("inline script failed on " + url, e); }
     });
 
@@ -144,18 +145,21 @@
       if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
       var href = a.getAttribute("href");
       if (!href || href.charAt(0) === "#") return;
-      if (/^(javascript:|mailto:|tel:|data:|ftp:|https?:|file:)/i.test(href)) return;
-      if (/^(https?:)?\/\//i.test(href)) return; // absolute URLs → let browser handle
+      if (a.target || a.hasAttribute("download")) return;
+      if (/^(javascript:|mailto:|tel:|data:|ftp:|file:)/i.test(href)) return;
       try {
         var url = new URL(a.href, location.href);
         if (url.origin !== location.origin) return;
+        // The runway is a different shell: let it load normally.
+        if (url.href.split("#")[0] === new URL("index.html", siteRoot).href) return;
+        if (!KNOWN_DIRS.some(function (d) { return url.pathname.indexOf("/" + d + "/") !== -1; })) return;
       } catch (err) { return; }
       e.preventDefault();
-      loadPage(a.href).catch(function () { location.href = a.href; }); // safe fallback
+      loadPage(a.href, true).catch(function () { location.href = a.href; }); // safe fallback
     });
 
     window.addEventListener("popstate", function () {
-      loadPage(location.href).catch(function () { location.reload(); });
+      loadPage(location.href, false).catch(function () { location.reload(); });
     });
   }
   installPJAX();

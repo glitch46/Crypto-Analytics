@@ -43,6 +43,8 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
+  /* Keep the canvas above the body background and below dashboard content. */
+  isolation: isolate;
   font-family: var(--font);
   background: var(--ink);
   color: var(--soft);
@@ -361,6 +363,8 @@ s, .strike {
 .chart-wrap.tall { height: 420px; }
 .chart-wrap.taller { height: 500px; }
 canvas { max-height: 320px; }
+.comparison-chart { height: clamp(440px, 65vh, 680px); }
+.comparison-chart canvas { max-height: none; height: 100% !important; }
 
 .note-box { margin-top: 12px; font-size: 13px; color: var(--gray); line-height: 1.7; }
 .note-box strong { color: var(--soft); }

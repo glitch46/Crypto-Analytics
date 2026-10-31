@@ -102,49 +102,7 @@
     <div class="tab-slot"></div>
   </section>
 
-  <!-- ============ Tab 8 · Demo (Venice gondola ASCII scene) ============ -->
-  <section class="tab tab-demo" data-tab="demo">
-    <div class="tab-slot">
-      <div class="demo-scene">
-        <pre class="gondola-pre" aria-label="ASCII gondola gliding on calm water"></pre>
-        <div class="demo-caption">Venice &middot; Demo</div>
-      </div>
-    </div>
-  </section>
-
   <script src="assets/js/particles.js"></script>
   <script src="assets/js/runway.js"></script>
-  <script>
-    /* Gentle lapping water + bobbing gondola for the Demo tab */
-    (function () {
-      var GONDOLA = [
-        "                             ___",
-        "                        ____| o  \\___",
-        "                       /    |    |    \\",
-        "                      |  o  |    |     |",
-        "                       \\____|____|_____/",
-        "                         |  |   |",
-        "                    _____|__|___|________",
-        "                   |  ____|__|___|______  |",
-        "                    \\_|___|__|___|______|_/",
-        "                     \\____________________/"
-      ];
-      var WATER_FRAMES = [
-        ["                 ~~~   ~~   ~~~   ~~   ~~~", "                ~~   ~~~   ~~   ~~~   ~~   ~~"],
-        ["                ~~   ~~~   ~~   ~~~   ~~   ~~", "                 ~~~   ~~   ~~~   ~~   ~~~"],
-        ["                 ~~~~   ~~~   ~~~~   ~~~   ~~~~", "                ~~~   ~~~~   ~~~   ~~~~   ~~~"],
-        ["                ~~~   ~~   ~~~   ~~   ~~~   ~~", "                 ~~   ~~~   ~~   ~~~   ~~   ~~"]
-      ];
-      var pre = document.querySelector(".gondola-pre");
-      if (!pre) return;
-      var frame = 0;
-      function draw() {
-        pre.textContent = GONDOLA.join("\n") + "\n" + WATER_FRAMES[frame].join("\n");
-        frame = (frame + 1) % WATER_FRAMES.length;
-      }
-      draw();
-      setInterval(draw, 800);
-    })();
-  </script>
 </body>
 </html>

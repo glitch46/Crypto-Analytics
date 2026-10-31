@@ -17,8 +17,7 @@
     { id: "options", label: "Options", src: "Crypto-Dashboard/index.html", dir: "Crypto-Dashboard" },
     { id: "backtest", label: "Backtest", src: "Backtest-Dashboard/index.html", dir: "Backtest-Dashboard" },
     { id: "strategy", label: "Strategy", src: "Strategy-Tester/index.html", dir: "Strategy-Tester" },
-    { id: "situation", label: "Situation", src: "Situation-Monitor/index.html", dir: "Situation-Monitor" },
-    { id: "demo", label: "Demo", src: null, dir: "" }
+    { id: "situation", label: "Situation", src: "Situation-Monitor/index.html", dir: "Situation-Monitor" }
   ];
 
   var MARK = '<svg viewBox="0 0 32 32" fill="none">'
@@ -30,6 +29,35 @@
   var tabs = [];
   var active = 0;
   var fsTab = null;
+  var navigationToken = 0;
+
+  /* A DOM-based perspective ribbon inspired by Expo Mode. Dashboard content
+     remains real HTML and becomes interactive when a section is expanded. */
+  var summaries = {
+    home: "A different perspective on the market",
+    alts: "Relative strength across the crypto market",
+    indicators: "Spot liquidity, flow and positioning",
+    options: "Open interest, strikes and expiries",
+    backtest: "Historical options positioning and outcomes",
+    strategy: "Test an idea against historical BTC prices",
+    situation: "Macro conditions and market stress"
+  };
+  var world = document.createElement("div");
+  world.className = "expo-world";
+  world.setAttribute("aria-hidden", "true");
+  world.innerHTML = '<div class="expo-horizon"></div><div class="expo-track">' + TABS.slice().reverse().map(function (t, index) {
+    return '<div class="expo-tile expo-' + t.id + '" data-expo-id="' + t.id + '"><div class="expo-tile-header"><span>CRYPTO ANALYTICS / ' + String(TABS.length - index).padStart(2, "0") + '</span><span>MARKET INTELLIGENCE</span></div>'
+      + '<div class="expo-tile-copy"><span class="expo-tile-kicker">' + summaries[t.id] + '</span><strong>' + t.label + '</strong>'
+      + '<div class="expo-tile-lines"><span></span><span></span><span></span></div></div><div class="expo-tile-grid"><i></i><i></i><i></i></div></div>';
+  }).join("") + '</div>';
+  body.appendChild(world);
+  var track = world.querySelector(".expo-track");
+
+  function updatePerspective() {
+    // Each tile is 420px in the ribbon's local coordinate system.
+    var progress = Math.max(0, Math.min(TABS.length - 1, window.scrollY / window.innerHeight));
+    track.style.setProperty("--expo-travel", (progress * 420).toFixed(2) + "px");
+  }
 
   /* ---------------- fixed chrome ---------------- */
   var nav = document.createElement("nav");
@@ -66,7 +94,7 @@
     tabs.push({
       id: def.id, label: def.label, src: def.src, dir: def.dir,
       el: el, slot: el.querySelector(".tab-slot"),
-      state: def.src === null ? "loaded" : "stub",   // static tabs (home/demo) always present
+      state: def.src === null ? "loaded" : "stub",   // home is always present
       html: null, promise: null
     });
   });
@@ -122,7 +150,8 @@
   function preload(i) {
     if (i < 0 || i >= tabs.length) return Promise.resolve();
     var t = tabs[i];
-    if (t.id === "home" || t.state === "cached" || t.state === "loaded" || t.promise) return Promise.resolve();
+    if (t.id === "home" || t.state === "cached" || t.state === "loaded") return Promise.resolve();
+    if (t.promise) return t.promise;
     t.state = "loading";
     t.promise = fetch(t.src, { credentials: "same-origin" })
       .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.text(); })
@@ -131,13 +160,13 @@
     return t.promise;
   }
 
-  /* Mount the active tab (or home/demo). Unloads whatever was mounted before. */
+  /* Mount the active tab (or home). Unloads whatever was mounted before. */
   function activate(i) {
     tabs.forEach(function (t, idx) { if (idx !== i && t.state === "loaded" && t.src) unload(t); });
     var t = tabs[i];
-    if (!t || t.id === "home" || t.id === "demo") return;
+    if (!t || t.id === "home") return;
     if (t.state === "cached") inject(t);
-    else if (t.state === "stub") preload(i).then(function () { if (t.state === "cached") inject(t); });
+    else if (t.state !== "loaded") preload(i).then(function () { if (active === i && t.state === "cached") inject(t); });
     preload(i - 1);
     preload(i + 1);
   }
@@ -154,6 +183,23 @@
     tabs[i].el.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 
+  function goAndExpand(idx) {
+    if (fsTab) exitFullscreen();
+    var token = ++navigationToken;
+    goto(idx);
+    var started = performance.now();
+    function expandWhenArrived(now) {
+      if (token !== navigationToken) return;
+      if (Math.abs(window.scrollY - tabs[idx].el.offsetTop) < 3 || now - started > 2500) {
+        active = idx;
+        tabs.forEach(function (t, index) { t.el.classList.toggle("active", index === idx); });
+        activate(idx);
+        setFullscreen(tabs[idx]);
+      } else requestAnimationFrame(expandWhenArrived);
+    }
+    requestAnimationFrame(expandWhenArrived);
+  }
+
   /* ---------------- fullscreen ---------------- */
   function setFullscreen(tab) {
     if (fsTab) return;
@@ -161,26 +207,34 @@
     body.classList.add("fs");
     tab.el.classList.add("fullscreen");
     tab.el.scrollTop = 0;
+    // Charts are initially mounted in a hidden overview; resize after reveal.
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        if (!window.Chart || !Chart.instances) return;
+        Object.values(Chart.instances).forEach(function (chart) {
+          if (chart.canvas && tab.el.contains(chart.canvas)) chart.resize();
+        });
+      });
+    });
   }
   function exitFullscreen() {
     if (!fsTab) return;
     fsTab.el.classList.remove("fullscreen");
     fsTab = null;
     body.classList.remove("fs");
-    window.scrollTo({ top: active * window.innerHeight, behavior: "auto" });
+    window.scrollTo({ top: tabs[active].el.offsetTop, behavior: "instant" });
   }
 
   /* ---------------- active tracking + lifecycle ---------------- */
   var ticking = false;
   function onScroll() {
-    if (ticking) return;
+    if (ticking || fsTab) return;
     ticking = true;
     requestAnimationFrame(function () {
       ticking = false;
+      if (fsTab) return;
+      updatePerspective();
       var i = Math.max(0, Math.min(tabs.length - 1, Math.round(window.scrollY / window.innerHeight)));
-      /* Demo tab swaps the crypto-particle field for the gondola scene */
-      var pc = document.getElementById("particle-backdrop");
-      if (pc) pc.style.display = tabs[i].id === "demo" ? "none" : "";
       if (i !== active) {
         active = i;
         tabs.forEach(function (t, idx) { t.el.classList.toggle("active", idx === i); });
@@ -199,6 +253,12 @@
   /* ---------------- interactions ---------------- */
   document.addEventListener("dblclick", function (e) {
     if (fsTab) { exitFullscreen(); return; }
+    var tile = e.target && e.target.closest ? e.target.closest(".expo-tile") : null;
+    if (tile) {
+      var index = tabs.findIndex(function (t) { return t.id === tile.dataset.expoId; });
+      if (index >= 0) goAndExpand(index);
+      return;
+    }
     var tabEl = e.target && e.target.closest ? e.target.closest(".tab") : null;
     if (!tabEl) return;
     var tab = tabs.find(function (t) { return t.el === tabEl; });
@@ -219,16 +279,14 @@
     if (idx < 0) return;
     e.preventDefault();
     var fromNav = !!a.closest(".top-nav");
-    goto(idx);
     if (fromNav) {
-      var dist = Math.abs(idx - active);
-      var wait = Math.min(1200, 350 + dist * 160);   // let the smooth scroll land
-      setTimeout(function () { if (tabs[idx]) setFullscreen(tabs[idx]); }, wait);
-    }
+      goAndExpand(idx);
+    } else goto(idx);
   });
 
   /* initial state: home is active, prefetch the first dashboard */
   tabs.forEach(function (t, i) { t.el.classList.toggle("active", i === 0); });
   up.disabled = true;
+  updatePerspective();
   preload(1);
 })();
