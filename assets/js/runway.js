@@ -33,31 +33,105 @@
 
   /* A DOM-based perspective ribbon inspired by Expo Mode. Dashboard content
      remains real HTML and becomes interactive when a section is expanded. */
-  var summaries = {
-    home: "A different perspective on the market",
-    alts: "Relative strength across the crypto market",
-    indicators: "Spot liquidity, flow and positioning",
-    options: "Open interest, strikes and expiries",
-    backtest: "Historical options positioning and outcomes",
-    strategy: "Test an idea against historical BTC prices",
-    situation: "Macro conditions and market stress"
+  // Preview labels describe the actual dashboards. Numeric values below are
+  // filled from their existing JSON snapshots, never fabricated market data.
+  var previews = {
+    alts: { title: "BTC / Alt Outperformance", summary: "Relative strength across the crypto market", labels: ["7D leader vs BTC", "7D laggard vs BTC", "Assets in snapshot"], panels: ["Top Outperformers vs BTC", "Worst Underperformers vs BTC"], detail: "7 / 14 / 30-day relative returns" },
+    indicators: { title: "Trading Indicators", summary: "Spot liquidity, flow and positioning", labels: ["Depth windows", "Spot venues", "CFTC updates"], values: ["2.5%–25%", "Up to 5", "Weekly"], panels: ["Orderbook Balance Over Time", "Spot CVD by Exchange"], detail: "Depth, flow and positioning context" },
+    options: { title: "Options Intelligence", summary: "Open interest, strikes and expiries", labels: ["BTC spot", "Options open interest", "Put / call ratio"], panels: ["30-Day Open Interest Momentum", "Max Pain Strike Map"], detail: "BTC & ETH · Deribit options" },
+    backtest: { title: "Skew Backtest", summary: "Historical options positioning and outcomes", labels: ["BTC skew follow", "Months analyzed", "Puts > calls"], panels: ["Skew vs Price Change", "Max Pain Deviations"], detail: "Historical expiry snapshots" },
+    strategy: { title: "Strategy Tester", summary: "Test an idea against historical BTC prices", labels: ["Latest BTC close", "Price observations", "Last price date"], panels: ["BTC Price History", "90-Day Strategy Candlestick View"], detail: "Momentum, seasonal and custom sizing" },
+    situation: { title: "The Situation", summary: "Macro conditions and market stress", labels: ["WTI crude", "Brent crude", "VIX"], panels: ["Oil Price History", "Credit Spread Monitor"], detail: "Oil, yields, credit and equities" }
   };
   var world = document.createElement("div");
   world.className = "expo-world";
-  world.setAttribute("aria-hidden", "true");
-  world.innerHTML = '<div class="expo-horizon"></div><div class="expo-track">' + TABS.slice().reverse().map(function (t, index) {
-    return '<div class="expo-tile expo-' + t.id + '" data-expo-id="' + t.id + '"><div class="expo-tile-header"><span>CRYPTO ANALYTICS / ' + String(TABS.length - index).padStart(2, "0") + '</span><span>MARKET INTELLIGENCE</span></div>'
-      + '<div class="expo-tile-copy"><span class="expo-tile-kicker">' + summaries[t.id] + '</span><strong>' + t.label + '</strong>'
-      + '<div class="expo-tile-lines"><span></span><span></span><span></span></div></div><div class="expo-tile-grid"><i></i><i></i><i></i></div></div>';
+  world.setAttribute("role", "region");
+  world.setAttribute("aria-label", "Dashboard overview");
+  world.innerHTML = '<div class="expo-horizon"></div><div class="expo-track">' + TABS.filter(function (t) { return t.src; }).reverse().map(function (t) {
+    var p = previews[t.id];
+    var number = TABS.findIndex(function (entry) { return entry.id === t.id; });
+    return '<div class="expo-tile expo-' + t.id + '" data-expo-id="' + t.id + '" role="button" tabindex="0" aria-label="Open ' + p.title + ' dashboard"><div class="expo-tile-header"><span>CRYPTO ANALYTICS / ' + String(number).padStart(2, "0") + '</span><span>MARKET INTELLIGENCE</span></div>'
+      + '<div class="expo-tile-copy"><span class="expo-tile-kicker">' + p.summary + '</span><strong>' + p.title + '</strong></div>'
+      + '<div class="expo-page-preview"><div class="expo-preview-bar"><span>PAGE PREVIEW · BTC</span><span data-preview-time>' + (p.values ? 'DASHBOARD FEATURES' : 'LOADING SNAPSHOT') + '</span></div>'
+      + '<div class="expo-preview-stats">' + p.labels.map(function (label, i) { return '<div><span>' + label + '</span><strong data-preview-value="' + i + '">' + (p.values ? p.values[i] : '—') + '</strong></div>'; }).join("") + '</div>'
+      + '<div class="expo-preview-panels">' + p.panels.map(function (label, i) {
+        var chart = i === 0 && (t.id === "alts" || t.id === "strategy")
+          ? '<svg class="expo-preview-chart" data-preview-chart viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><polyline fill="none" stroke="currentColor" stroke-width="1.5" vector-effect="non-scaling-stroke"></polyline></svg>' : "";
+        return '<div><strong>' + label + '</strong>' + chart + '<span>' + (i ? p.detail : (t.id === "alts" ? '7D leader · relative trend' : t.id === "strategy" ? 'Recent BTC closing prices' : 'Open the dashboard for full details')) + '</span></div>';
+      }).join("") + '</div></div></div>';
   }).join("") + '</div>';
   body.appendChild(world);
   var track = world.querySelector(".expo-track");
 
   function updatePerspective() {
-    // Each tile is 420px in the ribbon's local coordinate system.
+    // Home fits all six previews; scrolling forward returns to the closer view.
     var progress = Math.max(0, Math.min(TABS.length - 1, window.scrollY / window.innerHeight));
-    track.style.setProperty("--expo-travel", (progress * 420).toFixed(2) + "px");
+    body.classList.toggle("overview", progress < 0.1);
+    track.style.setProperty("--expo-travel", (Math.max(0, progress - 1) * 420).toFixed(2) + "px");
   }
+
+  var previewRequests = {};
+  function previewJSON(path) {
+    if (!previewRequests[path]) previewRequests[path] = fetch(path, { cache: "no-cache" }).then(function (r) {
+      if (!r.ok) throw new Error("HTTP " + r.status);
+      return r.json();
+    });
+    return previewRequests[path];
+  }
+  function showPreview(id, values, updated) {
+    var tile = world.querySelector('.expo-tile[data-expo-id="' + id + '"]');
+    if (!tile) return;
+    values.forEach(function (value, i) {
+      var el = tile.querySelector('[data-preview-value="' + i + '"]');
+      if (el) el.textContent = value == null ? "—" : String(value);
+    });
+    var time = tile.querySelector("[data-preview-time]");
+    if (time) time.textContent = updated ? "UPDATED " + updated : "SNAPSHOT UNAVAILABLE";
+  }
+  function money(value, compact) {
+    if (typeof value !== "number" || !isFinite(value)) return "—";
+    if (compact && Math.abs(value) >= 1e9) return "$" + (value / 1e9).toFixed(2) + "B";
+    return "$" + value.toLocaleString("en-US", { maximumFractionDigits: 2 });
+  }
+  function percent(value) { return typeof value === "number" && isFinite(value) ? (value * 100).toFixed(1) + "%" : "—"; }
+  function showPreviewChart(id, values) {
+    var line = world.querySelector('.expo-tile[data-expo-id="' + id + '"] [data-preview-chart] polyline');
+    values = values.filter(function (v) { return typeof v === "number" && isFinite(v); });
+    if (!line || values.length < 2) return;
+    var min = Math.min.apply(null, values), max = Math.max.apply(null, values);
+    var range = max - min || 1;
+    line.setAttribute("points", values.map(function (v, i) {
+      return (i * 100 / (values.length - 1)).toFixed(1) + "," + (26 - (v - min) / range * 24).toFixed(1);
+    }).join(" "));
+  }
+  function loadPreviews() {
+    var meta = previewJSON("Crypto-Dashboard/data/metadata.json");
+    Promise.all([previewJSON("Alt-Outperformance/data/alt_performance.json"), previewJSON("Alt-Outperformance/data/metadata.json")]).then(function (results) {
+      var coins = (results[0].alts || []).filter(function (coin) { return typeof coin.relative_7d === "number" && isFinite(coin.relative_7d); });
+      coins.sort(function (a, b) { return b.relative_7d - a.relative_7d; });
+      function relative(coin) { return coin ? coin.symbol + " " + (coin.relative_7d >= 0 ? "+" : "") + coin.relative_7d.toFixed(1) + " pp" : "—"; }
+      showPreview("alts", [relative(coins[0]), relative(coins[coins.length - 1]), coins.length], results[1].last_updated);
+      showPreviewChart("alts", ((coins[0] || {}).daily_relative || []).slice(-8).map(function (row) { return row.relative_pct; }));
+    }).catch(function () { showPreview("alts", [], null); });
+    Promise.all([previewJSON("Crypto-Dashboard/data/options_snapshot.json"), meta]).then(function (results) {
+      var btc = results[0].BTC || {};
+      showPreview("options", [money(btc.spot_price), money(btc.total_oi, true), typeof btc.put_call_ratio === "number" ? btc.put_call_ratio.toFixed(2) : "—"], results[1].last_updated);
+    }).catch(function () { showPreview("options", [], null); });
+    Promise.all([previewJSON("Crypto-Dashboard/data/backtest.json"), meta]).then(function (results) {
+      var summary = ((results[0].BTC || {}).summary || {});
+      showPreview("backtest", [percent(summary.win_rate), summary.months, summary.puts_over_calls], results[1].last_updated);
+    }).catch(function () { showPreview("backtest", [], null); });
+    Promise.all([previewJSON("Crypto-Dashboard/data/strategy_signals.json"), meta]).then(function (results) {
+      var prices = results[0].prices || [], last = prices[prices.length - 1] || {};
+      showPreview("strategy", [money(last.close), prices.length, last.date], results[1].last_updated);
+      showPreviewChart("strategy", prices.slice(-30).map(function (row) { return row.close; }));
+    }).catch(function () { showPreview("strategy", [], null); });
+    previewJSON("Situation-Monitor/data/situation.json").then(function (data) {
+      var kpis = data.kpis || {};
+      showPreview("situation", [money((kpis.wti || {}).current), money((kpis.brent || {}).current), (kpis.vix || {}).current], (data.metadata || {}).last_updated);
+    }).catch(function () { showPreview("situation", [], null); });
+  }
+  loadPreviews();
 
   /* ---------------- fixed chrome ---------------- */
   var nav = document.createElement("nav");
@@ -187,6 +261,8 @@
     if (fsTab) exitFullscreen();
     var token = ++navigationToken;
     goto(idx);
+    // Home is the overview, not a seventh dashboard to expand.
+    if (idx === 0) return;
     var started = performance.now();
     function expandWhenArrived(now) {
       if (token !== navigationToken) return;
@@ -205,6 +281,8 @@
     if (fsTab) return;
     fsTab = tab;
     body.classList.add("fs");
+    world.setAttribute("aria-hidden", "true");
+    world.inert = true;
     tab.el.classList.add("fullscreen");
     tab.el.scrollTop = 0;
     // Charts are initially mounted in a hidden overview; resize after reveal.
@@ -222,6 +300,8 @@
     fsTab.el.classList.remove("fullscreen");
     fsTab = null;
     body.classList.remove("fs");
+    world.removeAttribute("aria-hidden");
+    world.inert = false;
     window.scrollTo({ top: tabs[active].el.offsetTop, behavior: "instant" });
   }
 
@@ -266,7 +346,12 @@
   });
 
   document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") exitFullscreen();
+    if (e.key === "Escape") { exitFullscreen(); return; }
+    if (!fsTab && (e.key === "Enter" || e.key === " ")) {
+      var tile = e.target && e.target.closest ? e.target.closest(".expo-tile") : null;
+      var index = tile ? tabs.findIndex(function (t) { return t.id === tile.dataset.expoId; }) : -1;
+      if (index >= 0) { e.preventDefault(); goAndExpand(index); }
+    }
   });
 
   /* in-tab anchor links (home cards, brand) jump to the matching tab.
