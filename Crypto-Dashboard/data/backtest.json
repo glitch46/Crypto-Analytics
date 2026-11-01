@@ -2,29 +2,11 @@
   "BTC": {
     "summary": {
       "win_rate": 0.625,
-      "months": 10,
+      "months": 9,
       "puts_over_calls": 2,
-      "avg_max_pain_dev": 0.2993495129880197
+      "avg_max_pain_dev": 0.23061502505236853
     },
     "months": [
-      {
-        "month": "2025-10",
-        "expiry": "2025-10-31",
-        "settlement_price": 109491.3399999999,
-        "spot_30d": null,
-        "spot_expiry": null,
-        "put_call": 0.6683077256005193,
-        "call_oi": 72087.59999999996,
-        "put_oi": 48176.69999999997,
-        "max_pain": 210000.0,
-        "max_pain_dev": -100508.6600000001,
-        "max_pain_dev_pct": 0.9179599044088802,
-        "price_change": null,
-        "price_change_pct": null,
-        "skew_direction": "up",
-        "outcome_direction": "flat",
-        "skew_followed": false
-      },
       {
         "month": "2025-11",
         "expiry": "2025-11-30",
@@ -192,29 +174,11 @@
   "ETH": {
     "summary": {
       "win_rate": 0.5,
-      "months": 10,
+      "months": 9,
       "puts_over_calls": 3,
-      "avg_max_pain_dev": 0.5020311919257002
+      "avg_max_pain_dev": 0.3207756498761105
     },
     "months": [
-      {
-        "month": "2025-10",
-        "expiry": "2025-10-31",
-        "settlement_price": 3829.7899999999954,
-        "spot_30d": null,
-        "spot_expiry": null,
-        "put_call": 0.6836526167969651,
-        "call_oi": 381688.0,
-        "put_oi": 260942.0,
-        "max_pain": 12000.0,
-        "max_pain_dev": -8170.210000000005,
-        "max_pain_dev_pct": 2.1333310703720083,
-        "price_change": null,
-        "price_change_pct": null,
-        "skew_direction": "up",
-        "outcome_direction": "flat",
-        "skew_followed": false
-      },
       {
         "month": "2025-11",
         "expiry": "2025-11-30",
