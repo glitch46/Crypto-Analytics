@@ -1,7 +1,7 @@
 {
   "BTC": {
     "peak_expiry": "2026-12-25",
-    "peak_notional": 10468547663.670992,
+    "peak_notional": 10327187599.581999,
     "max_pain": 85000.0,
     "candidates": [
       {
@@ -28,7 +28,7 @@
   },
   "ETH": {
     "peak_expiry": "2026-12-25",
-    "peak_notional": 1349178961.0000002,
+    "peak_notional": 1308843854.5,
     "max_pain": 2600.0,
     "candidates": [
       {
