@@ -1,7 +1,7 @@
 {
   "BTC": {
-    "funding_rate": "0.0065%",
-    "perp_basis": "$15.29",
+    "funding_rate": "0.0033%",
+    "perp_basis": "$12.58",
     "rv_iv": "38.2% / 38.9%",
     "sources": "Deribit + CoinGecko"
   },
