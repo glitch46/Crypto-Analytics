@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-11-17 04:45 UTC",
+    "last_updated": "2026-11-17 08:46 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -41,7 +41,6 @@
     },
     "history": {
       "dates": [
-        "2026-06-17",
         "2026-06-24",
         "2026-07-01",
         "2026-07-08",
@@ -65,7 +64,6 @@
         "2026-11-11"
       ],
       "bullish": [
-        36.6,
         44.9,
         31.4,
         36.3,
@@ -89,7 +87,6 @@
         30.8
       ],
       "neutral": [
-        24.1,
         18.9,
         26.4,
         26.5,
@@ -113,7 +110,6 @@
         17.8
       ],
       "bearish": [
-        39.4,
         36.1,
         42.3,
         37.2,
@@ -137,7 +133,6 @@
         51.4
       ],
       "bull_bear_spread": [
-        -2.8,
         8.8,
         -10.9,
         -0.9,
@@ -688,10 +683,10 @@
     ]
   },
   "threat": {
-    "score": 37.7,
+    "score": 37.1,
     "level": "ELEVATED",
     "components": {
-      "oil": 11.8,
+      "oil": 11.3,
       "volatility": 20,
       "credit": 8.9,
       "equity": 4.2,
@@ -703,21 +698,21 @@
     "fed_watch": "10Y yield at 5.12% \u2014 well above neutral territory. The bond market is pricing persistent inflation or hawkish Fed policy. An oil shock at these levels could force the Fed into a difficult choice between fighting inflation and supporting growth.",
     "credit_signal": "Credit spreads are WIDENING while equities decline \u2014 the transmission chain is active. Investment-grade bonds are pricing in higher risk. This is the confirmation signal the thesis watches for.",
     "historical_analog": "No strong historical analog is active. Markets are in a relatively normal regime. Past episodes to watch if conditions deteriorate: 1990 Gulf War, 2022 Ukraine shock, 2018 Iran sanctions.",
-    "risk_summary": "Composite threat score: 37.7/100 (ELEVATED). 3 of 5 transmission chain links are active. Some warning signals present but chain not fully engaged.",
-    "status_line": "Threat level ELEVATED (score 37.7/100). Active chain links: Bond Yields, Credit Spreads, Equity Valuations."
+    "risk_summary": "Composite threat score: 37.1/100 (ELEVATED). 3 of 5 transmission chain links are active. Some warning signals present but chain not fully engaged.",
+    "status_line": "Threat level ELEVATED (score 37.1/100). Active chain links: Bond Yields, Credit Spreads, Equity Valuations."
   },
   "kpis": {
     "wti": {
-      "current": 85.14,
-      "chg_1d": -3.86,
-      "chg_7d": -1.97,
-      "chg_30d": -13.1
+      "current": 85.49,
+      "chg_1d": -0.27,
+      "chg_7d": -0.64,
+      "chg_30d": -15.7
     },
     "brent": {
-      "current": 91.78,
-      "chg_1d": -4.24,
-      "chg_7d": -0.85,
-      "chg_30d": -13.35
+      "current": 92.16,
+      "chg_1d": -0.3,
+      "chg_7d": 0.73,
+      "chg_30d": -16.11
     },
     "tnx": {
       "current": 5.12,
@@ -726,22 +721,22 @@
       "chg_30d": 0.63
     },
     "vix": {
-      "current": 22.91,
-      "chg_1d": 18.7,
-      "chg_7d": 15.01,
-      "chg_30d": 39.19
+      "current": 23.18,
+      "chg_1d": 1.18,
+      "chg_7d": 19.12,
+      "chg_30d": 15.96
     },
     "gold": {
-      "current": 3870.9,
-      "chg_1d": -0.4,
-      "chg_7d": -5.92,
-      "chg_30d": -7.17
+      "current": 3869.2,
+      "chg_1d": 0.42,
+      "chg_7d": -3.99,
+      "chg_30d": -7.46
     },
     "dxy": {
-      "current": 103.51,
-      "chg_1d": 0.1,
-      "chg_7d": 1.83,
-      "chg_30d": 1.48
+      "current": 103.5,
+      "chg_1d": -0.04,
+      "chg_7d": 1.25,
+      "chg_30d": 1.63
     },
     "spx": {
       "current": 7416.59,
@@ -775,11 +770,11 @@
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 97.55,
-    "wti_sma90": 90.08,
-    "brent_premium": -5.77,
-    "wti_premium": -4.94,
-    "brent_premium_pct": -5.91
+    "brent_sma90": 97.66,
+    "wti_sma90": 90.17,
+    "brent_premium": -5.5,
+    "wti_premium": -4.68,
+    "brent_premium_pct": -5.63
   },
   "credit_spread": {
     "spread_proxy": 1.11,
@@ -1046,9 +1041,9 @@
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.0256,
-    "oil_yield_60d": 0.4473,
-    "oil_yield_100d": 0.8028
+    "oil_yield_30d": 0.1511,
+    "oil_yield_60d": 0.4444,
+    "oil_yield_100d": 0.7927
   },
   "yield_curve": {
     "current": {
@@ -2247,7 +2242,8 @@
         "2026-11-11",
         "2026-11-12",
         "2026-11-13",
-        "2026-11-16"
+        "2026-11-16",
+        "2026-11-17"
       ],
       "brent": [
         112.0999984741211,
@@ -2376,7 +2372,8 @@
         92.76000213623047,
         95.81999969482422,
         95.83999633789062,
-        91.77999877929688
+        92.44000244140625,
+        92.16000366210938
       ],
       "wti": [
         108.66000366210938,
@@ -2505,7 +2502,8 @@
         86.52999877929688,
         88.73999786376953,
         88.55999755859375,
-        85.13999938964844
+        85.72000122070312,
+        85.48999786376953
       ],
       "brent_sma20": [
         112.1,
@@ -2634,7 +2632,8 @@
         106.34,
         105.83,
         105.13,
-        104.24
+        104.28,
+        103.45
       ],
       "wti_sma20": [
         108.66,
@@ -2763,7 +2762,8 @@
         96.84,
         96.37,
         95.73,
-        94.81
+        94.83,
+        94.02
       ],
       "brent_sma90": [
         null,
@@ -2892,7 +2892,8 @@
         96.96,
         97.16,
         97.38,
-        97.55
+        97.56,
+        97.66
       ]
     },
     "oil_vs_yield": {
@@ -3152,7 +3153,7 @@
         92.76000213623047,
         95.81999969482422,
         95.83999633789062,
-        91.77999877929688
+        92.44000244140625
       ],
       "tnx": [
         4.623000144958496,
@@ -4321,7 +4322,8 @@
         "2026-11-11",
         "2026-11-12",
         "2026-11-13",
-        "2026-11-16"
+        "2026-11-16",
+        "2026-11-17"
       ],
       "vix": [
         17.81999969482422,
@@ -4452,7 +4454,8 @@
         17.489999771118164,
         18.700000762939453,
         19.299999237060547,
-        22.90999984741211
+        22.90999984741211,
+        23.18000030517578
       ],
       "gold": [
         4558.0,
@@ -4581,7 +4584,8 @@
         4000.5,
         3885.300048828125,
         3886.300048828125,
-        3870.89990234375
+        3853.0,
+        3869.199951171875
       ]
     },
     "relative_perf": {
@@ -5101,7 +5105,8 @@
         "2026-11-11",
         "2026-11-12",
         "2026-11-13",
-        "2026-11-16"
+        "2026-11-16",
+        "2026-11-17"
       ],
       "wti": [
         108.66000366210938,
@@ -5230,7 +5235,8 @@
         86.52999877929688,
         88.73999786376953,
         88.55999755859375,
-        85.13999938964844
+        85.72000122070312,
+        85.48999786376953
       ],
       "tnx": [
         4.623000144958496,
