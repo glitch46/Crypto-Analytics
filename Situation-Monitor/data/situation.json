@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-11-18 08:47 UTC",
+    "last_updated": "2026-11-18 12:46 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -685,10 +685,10 @@
     ]
   },
   "threat": {
-    "score": 43.8,
+    "score": 41.5,
     "level": "HIGH",
     "components": {
-      "oil": 17.7,
+      "oil": 15.3,
       "volatility": 20,
       "credit": 9.1,
       "equity": 4.2,
@@ -700,21 +700,21 @@
     "fed_watch": "10Y yield at 5.1% \u2014 well above neutral territory. The bond market is pricing persistent inflation or hawkish Fed policy. An oil shock at these levels could force the Fed into a difficult choice between fighting inflation and supporting growth.",
     "credit_signal": "Credit spreads are WIDENING while equities decline \u2014 the transmission chain is active. Investment-grade bonds are pricing in higher risk. This is the confirmation signal the thesis watches for.",
     "historical_analog": "No strong historical analog is active. Markets are in a relatively normal regime. Past episodes to watch if conditions deteriorate: 1990 Gulf War, 2022 Ukraine shock, 2018 Iran sanctions.",
-    "risk_summary": "Composite threat score: 43.8/100 (HIGH). 3 of 5 transmission chain links are active. Key risk indicators elevated \u2014 active monitoring warranted.",
-    "status_line": "Threat level HIGH (score 43.8/100). Active chain links: Bond Yields, Credit Spreads, Equity Valuations."
+    "risk_summary": "Composite threat score: 41.5/100 (HIGH). 3 of 5 transmission chain links are active. Key risk indicators elevated \u2014 active monitoring warranted.",
+    "status_line": "Threat level HIGH (score 41.5/100). Active chain links: Bond Yields, Credit Spreads, Equity Valuations."
   },
   "kpis": {
     "wti": {
-      "current": 82.97,
-      "chg_1d": -3.53,
-      "chg_7d": -4.11,
-      "chg_30d": -19.96
+      "current": 84.19,
+      "chg_1d": -2.12,
+      "chg_7d": -2.7,
+      "chg_30d": -18.78
     },
     "brent": {
-      "current": 89.08,
-      "chg_1d": -4.36,
-      "chg_7d": -3.97,
-      "chg_30d": -18.69
+      "current": 90.24,
+      "chg_1d": -3.11,
+      "chg_7d": -2.72,
+      "chg_30d": -17.63
     },
     "tnx": {
       "current": 5.1,
@@ -723,20 +723,20 @@
       "chg_30d": 0.1
     },
     "vix": {
-      "current": 24.03,
-      "chg_1d": -5.62,
-      "chg_7d": 37.39,
-      "chg_30d": 30.31
+      "current": 24.29,
+      "chg_1d": -4.6,
+      "chg_7d": 38.88,
+      "chg_30d": 31.72
     },
     "gold": {
-      "current": 3768.4,
-      "chg_1d": -2.48,
-      "chg_7d": -5.8,
-      "chg_30d": -9.42
+      "current": 3764.4,
+      "chg_1d": -2.58,
+      "chg_7d": -5.9,
+      "chg_30d": -9.51
     },
     "dxy": {
-      "current": 103.82,
-      "chg_1d": 0.32,
+      "current": 103.83,
+      "chg_1d": 0.33,
       "chg_7d": 0.89,
       "chg_30d": 1.81
     },
@@ -772,11 +772,11 @@
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 97.72,
-    "wti_sma90": 90.21,
-    "brent_premium": -8.64,
-    "wti_premium": -7.24,
-    "brent_premium_pct": -8.84
+    "brent_sma90": 97.73,
+    "wti_sma90": 90.23,
+    "brent_premium": -7.49,
+    "wti_premium": -6.04,
+    "brent_premium_pct": -7.66
   },
   "credit_spread": {
     "spread_proxy": 1.142,
@@ -961,7 +961,7 @@
       0.9532,
       0.9569,
       0.9572,
-      0.9546,
+      0.9547,
       0.9518,
       0.9573,
       0.9555,
@@ -1045,9 +1045,9 @@
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.1575,
-    "oil_yield_60d": 0.3904,
-    "oil_yield_100d": 0.7742
+    "oil_yield_30d": 0.1605,
+    "oil_yield_60d": 0.3933,
+    "oil_yield_100d": 0.7757
   },
   "yield_curve": {
     "current": {
@@ -2387,7 +2387,7 @@
         95.83999633789062,
         92.44000244140625,
         93.13999938964844,
-        89.08000183105469
+        90.23999786376953
       ],
       "wti": [
         108.66000366210938,
@@ -2518,7 +2518,7 @@
         88.55999755859375,
         85.72000122070312,
         86.01000213623047,
-        82.97000122070312
+        84.19000244140625
       ],
       "brent_sma20": [
         112.1,
@@ -2649,7 +2649,7 @@
         105.13,
         104.28,
         103.49,
-        102.51
+        102.57
       ],
       "wti_sma20": [
         108.66,
@@ -2780,7 +2780,7 @@
         95.73,
         94.83,
         94.05,
-        93.34
+        93.4
       ],
       "brent_sma90": [
         null,
@@ -2911,7 +2911,7 @@
         97.38,
         97.56,
         97.67,
-        97.72
+        97.73
       ]
     },
     "oil_vs_yield": {
@@ -4113,7 +4113,7 @@
         -2.901,
         -2.571,
         -2.854,
-        -2.581,
+        -2.58,
         -2.703,
         -3.175,
         -3.259,
@@ -4485,7 +4485,7 @@
         19.299999237060547,
         22.90999984741211,
         25.459999084472656,
-        24.030000686645508
+        24.290000915527344
       ],
       "gold": [
         4558.0,
@@ -4616,7 +4616,7 @@
         3886.300048828125,
         3853.0,
         3864.199951171875,
-        3768.39990234375
+        3764.39990234375
       ]
     },
     "relative_perf": {
@@ -5272,7 +5272,7 @@
         88.55999755859375,
         85.72000122070312,
         86.01000213623047,
-        82.97000122070312
+        84.19000244140625
       ],
       "tnx": [
         4.623000144958496,
