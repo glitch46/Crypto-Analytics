@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "last_updated": "2026-11-22 04:44 UTC",
+    "last_updated": "2026-11-22 08:47 UTC",
     "refresh_cadence": "15 minutes",
     "sources": [
       "Yahoo Finance (yfinance)",
@@ -690,10 +690,10 @@
     ]
   },
   "threat": {
-    "score": 44.1,
+    "score": 49.4,
     "level": "HIGH",
     "components": {
-      "oil": 10.9,
+      "oil": 16.2,
       "volatility": 20,
       "credit": 1.2,
       "equity": 10.9,
@@ -705,21 +705,21 @@
     "fed_watch": "10Y yield at 4.91% \u2014 elevated but not extreme. Further oil-driven inflation could push yields higher and complicate the Fed's rate path. Watch for hawkish rhetoric shifts.",
     "credit_signal": "Credit spreads are WIDENING while equities decline \u2014 the transmission chain is active. Investment-grade bonds are pricing in higher risk. This is the confirmation signal the thesis watches for.",
     "historical_analog": "Elevated VIX without a corresponding oil spike suggests broader market fear \u2014 similar to trade war episodes (2019) or banking stress events. The geopolitical oil thesis may not be the primary driver currently.",
-    "risk_summary": "Composite threat score: 44.1/100 (HIGH). 2 of 5 transmission chain links are active. Key risk indicators elevated \u2014 active monitoring warranted.",
-    "status_line": "Threat level HIGH (score 44.1/100). Active chain links: Bond Yields, Equity Valuations."
+    "risk_summary": "Composite threat score: 49.4/100 (HIGH). 2 of 5 transmission chain links are active. Key risk indicators elevated \u2014 active monitoring warranted.",
+    "status_line": "Threat level HIGH (score 49.4/100). Active chain links: Bond Yields, Equity Valuations."
   },
   "kpis": {
     "wti": {
-      "current": 83.98,
-      "chg_1d": 0.93,
-      "chg_7d": -5.17,
-      "chg_30d": -13.56
+      "current": 83.41,
+      "chg_1d": 0.24,
+      "chg_7d": -5.82,
+      "chg_30d": -14.14
     },
     "brent": {
-      "current": 92.57,
-      "chg_1d": 0.64,
-      "chg_7d": -3.41,
-      "chg_30d": -14.93
+      "current": 89.95,
+      "chg_1d": -2.21,
+      "chg_7d": -6.15,
+      "chg_30d": -17.34
     },
     "tnx": {
       "current": 4.91,
@@ -777,11 +777,11 @@
     }
   },
   "oil_risk_premium": {
-    "brent_sma90": 97.92,
+    "brent_sma90": 97.89,
     "wti_sma90": 90.31,
-    "brent_premium": -5.35,
-    "wti_premium": -6.33,
-    "brent_premium_pct": -5.46
+    "brent_premium": -7.94,
+    "wti_premium": -6.9,
+    "brent_premium_pct": -8.11
   },
   "credit_spread": {
     "spread_proxy": 0.152,
@@ -963,7 +963,7 @@
       0.9532,
       0.9569,
       0.9572,
-      0.9546,
+      0.9547,
       0.9518,
       0.9573,
       0.9555,
@@ -1050,9 +1050,9 @@
     ]
   },
   "correlations": {
-    "oil_yield_30d": 0.0961,
-    "oil_yield_60d": 0.2671,
-    "oil_yield_100d": 0.751
+    "oil_yield_30d": 0.1053,
+    "oil_yield_60d": 0.2693,
+    "oil_yield_100d": 0.7498
   },
   "yield_curve": {
     "current": {
@@ -2138,7 +2138,6 @@
   "charts": {
     "oil_history": {
       "dates": [
-        "2026-05-21",
         "2026-05-22",
         "2026-05-26",
         "2026-05-27",
@@ -2268,7 +2267,6 @@
         "2026-11-20"
       ],
       "brent": [
-        102.58000183105469,
         103.54000091552734,
         99.58000183105469,
         94.29000091552734,
@@ -2395,10 +2393,9 @@
         93.13999938964844,
         91.94999694824219,
         91.9800033569336,
-        92.56999969482422
+        89.94999694824219
       ],
       "wti": [
-        96.3499984741211,
         96.5999984741211,
         93.88999938964844,
         88.68000030517578,
@@ -2525,29 +2522,28 @@
         86.01000213623047,
         83.26000213623047,
         83.20999908447266,
-        83.9800033569336
+        83.41000366210938
       ],
       "brent_sma20": [
-        102.58,
-        103.06,
-        101.9,
-        100.0,
-        98.74,
-        97.63,
-        97.25,
-        97.09,
-        97.17,
-        96.96,
-        96.61,
-        96.41,
-        96.03,
-        95.82,
-        95.46,
+        103.54,
+        101.56,
+        99.14,
+        97.78,
+        96.63,
+        96.36,
+        96.31,
+        96.5,
+        96.33,
+        96.01,
+        95.85,
+        95.48,
+        95.3,
         94.95,
-        94.26,
-        93.41,
-        92.68,
-        92.03,
+        94.44,
+        93.73,
+        92.87,
+        92.13,
+        91.48,
         90.8,
         89.48,
         88.19,
@@ -2655,29 +2651,28 @@
         103.49,
         102.65,
         101.59,
-        100.38
+        100.25
       ],
       "wti_sma20": [
-        96.35,
-        96.47,
-        95.61,
-        93.88,
-        92.88,
-        91.96,
-        91.99,
-        92.21,
-        92.64,
-        92.68,
-        92.48,
-        92.38,
-        92.06,
-        91.92,
-        91.64,
-        91.21,
-        90.6,
-        89.79,
-        89.11,
-        88.48,
+        96.6,
+        95.24,
+        93.06,
+        92.02,
+        91.09,
+        91.27,
+        91.62,
+        92.17,
+        92.27,
+        92.1,
+        92.02,
+        91.7,
+        91.58,
+        91.3,
+        90.87,
+        90.24,
+        89.4,
+        88.7,
+        88.07,
         87.4,
         86.23,
         85.06,
@@ -2785,7 +2780,7 @@
         94.05,
         93.35,
         92.54,
-        91.57
+        91.55
       ],
       "brent_sma90": [
         null,
@@ -2877,7 +2872,6 @@
         null,
         null,
         null,
-        90.17,
         90.18,
         90.17,
         90.2,
@@ -2915,7 +2909,7 @@
         97.67,
         97.75,
         97.83,
-        97.92
+        97.89
       ]
     },
     "oil_vs_yield": {
@@ -3051,7 +3045,6 @@
         "2026-11-20"
       ],
       "brent": [
-        102.58000183105469,
         103.54000091552734,
         99.58000183105469,
         94.29000091552734,
@@ -3178,7 +3171,7 @@
         93.13999938964844,
         91.94999694824219,
         91.9800033569336,
-        92.56999969482422
+        89.94999694824219
       ],
       "tnx": [
         4.572000026702881,
@@ -4499,7 +4492,6 @@
         35.88999938964844
       ],
       "gold": [
-        4542.5,
         4523.2001953125,
         4502.2998046875,
         4448.39990234375,
@@ -5023,7 +5015,6 @@
     },
     "big_picture": {
       "dates": [
-        "2026-05-21",
         "2026-05-22",
         "2026-05-26",
         "2026-05-27",
@@ -5153,7 +5144,6 @@
         "2026-11-20"
       ],
       "wti": [
-        96.3499984741211,
         96.5999984741211,
         93.88999938964844,
         88.68000030517578,
@@ -5280,7 +5270,7 @@
         86.01000213623047,
         83.26000213623047,
         83.20999908447266,
-        83.9800033569336
+        83.41000366210938
       ],
       "tnx": [
         4.572000026702881,
@@ -5409,8 +5399,7 @@
         5.1539998054504395,
         5.120999813079834,
         5.103000164031982,
-        5.065999984741211,
-        5.052000045776367
+        5.065999984741211
       ],
       "spx": [
         7445.72021484375,
@@ -5539,8 +5528,7 @@
         7416.58984375,
         7340.52978515625,
         7323.6298828125,
-        7175.830078125,
-        6910.39013671875
+        7175.830078125
       ]
     },
     "hyg_tlt": {
